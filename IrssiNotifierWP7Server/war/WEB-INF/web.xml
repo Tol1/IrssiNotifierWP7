@@ -6,6 +6,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
-    <url-pattern>/irssinotifierregister</url-pattern>
+    <url-pattern>/client/register</url-pattern>
   </servlet-mapping>
 </web-app>
