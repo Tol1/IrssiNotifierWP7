@@ -3,5 +3,11 @@ version: 1
 runtime: java
 
 handlers:
+- url: /client/login
+  servlet: com.tol1.irssinotifier.server.LoginUser
+  
+- url: /client/login/loginsuccess
+  servlet: com.tol1.irssinotifier.server.LoginSuccess
+  
 - url: /client/register
   servlet: com.tol1.irssinotifier.server.RegisterPhoneClient

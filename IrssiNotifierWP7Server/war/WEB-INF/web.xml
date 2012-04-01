@@ -1,6 +1,22 @@
 <!-- Generated from app.yaml. Do not edit. -->
 <web-app version='2.5' xmlns='http://java.sun.com/xml/ns/javaee'>
   <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.LoginUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
+    <url-pattern>/client/login</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.LoginSuccess</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
+    <url-pattern>/client/login/loginsuccess</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-class>
   </servlet>
