@@ -12,11 +12,14 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Notification;
 using System.Text;
+using Microsoft.Phone.Shell;
+using System.IO.IsolatedStorage;
 
 namespace IrssiNotifier
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
         // Constructor
         public MainPage()
         {
@@ -25,6 +28,10 @@ namespace IrssiNotifier
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+            if (!appSettings.Contains("NotificationChannelUri"))
+            {
+                appSettings.Add("NotificationChannelUri", "");
+            }
             /// Holds the push channel that is created or found.
             HttpNotificationChannel pushChannel;
 
@@ -68,7 +75,11 @@ namespace IrssiNotifier
                 MessageBox.Show(String.Format("Channel Uri is {0}",
                     pushChannel.ChannelUri.ToString()));
                 statustextbox.Text = "Jee";
-                NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                if (!appSettings.Contains("NotificationChannelUri") || pushChannel.ChannelUri.ToString() != appSettings["NotificationChannelUri"].ToString())
+                {
+                    appSettings["NotificationChannelUri"] = pushChannel.ChannelUri.ToString();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
         }
 
@@ -79,7 +90,7 @@ namespace IrssiNotifier
 
         void PushChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
         {
-
+            appSettings["NotificationChannelUri"] = e.ChannelUri.ToString();
             Dispatcher.BeginInvoke(() =>
             {
                 // Display the new URI for testing purposes.   Normally, the URI would be passed back to your web service at this point.

@@ -11,3 +11,6 @@ handlers:
   
 - url: /client/register
   servlet: com.tol1.irssinotifier.server.RegisterPhoneClient
+  
+- url: /API/Message
+  servlet: com.tol1.irssinotifier.server.MessageHandler

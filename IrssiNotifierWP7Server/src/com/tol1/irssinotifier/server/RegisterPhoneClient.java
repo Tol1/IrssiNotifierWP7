@@ -25,9 +25,15 @@ public class RegisterPhoneClient extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-        User user = userService.getCurrentUser();
-        
+
+		User user = userService.getCurrentUser();
         if (user != null) {
+        	String uri = req.getParameter("PushChannelURI");
+			if(uri == null){
+				resp.getWriter().println("Virheellinen pyyntö");
+				resp.getWriter().close();
+				return;
+			}
         	String id = user.getUserId();
         	
         	Key userIdKey = KeyFactory.createKey("User", id);
@@ -40,18 +46,12 @@ public class RegisterPhoneClient extends HttpServlet {
 				datastore.put(databaseUser);
 			}
         	
-			resp.setContentType("application/json");
-			String uri = req.getParameter("PushChannelURI");
-			if(uri != null){
-				databaseUser.setProperty("ChannelURI", uri);
-				datastore.put(databaseUser);
-				resp.getWriter().println("{ \"success\": \"true\" }");
-			}
-			else{
-				resp.getWriter().println("{ \"success\": \"false\" }");
-			}
+        	databaseUser.setProperty("ChannelURI", uri);
+			datastore.put(databaseUser);
+			resp.getWriter().println("{ \"success\": \""+id+"\" }");
+			
         } else {
-            resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
+            resp.sendRedirect("/client/login");
         }
 	}
 

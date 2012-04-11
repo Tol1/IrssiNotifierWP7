@@ -1,5 +1,5 @@
 <!-- Generated from app.yaml. Do not edit. -->
-<web-app version='2.5' xmlns='http://java.sun.com/xml/ns/javaee'>
+<web-app version='2.5' xmlns='http://java.sun.com/xml/ns/javaee' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd'>
   <servlet>
     <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.LoginUser</servlet-class>
@@ -23,5 +23,13 @@
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
     <url-pattern>/client/register</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.MessageHandler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
+    <url-pattern>/API/Message</url-pattern>
   </servlet-mapping>
 </web-app>

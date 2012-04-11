@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 
 namespace IrssiNotifier
 {
@@ -18,7 +19,7 @@ namespace IrssiNotifier
         public LoginPage()
         {
             InitializeComponent();
-            browser.Navigate(new Uri("http://irssinotifierwp.appspot.com/client/login"));
+            browser.Navigate(new Uri(App.BASEADDRESS+"client/login"));
         }
 
         private void browser_Navigating(object sender, NavigatingEventArgs e)
@@ -31,6 +32,9 @@ namespace IrssiNotifier
             if (e.Uri.AbsoluteUri.EndsWith("client/login/loginsuccess"))
             {
                 var cookies = (sender as WebBrowser).GetCookies();
+                var uri = (sender as WebBrowser).Source;
+                PhoneApplicationService.Current.State["cookies"] = cookies;
+                PhoneApplicationService.Current.State["cookiesUri"] = uri;
                 NavigationService.Navigate(new Uri("/Registration.xaml", UriKind.Relative));
             }
         }
