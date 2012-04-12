@@ -54,39 +54,4 @@ public class RegisterPhoneClient extends HttpServlet {
             resp.sendRedirect("/client/login");
         }
 	}
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-        
-		
-		User user = userService.getCurrentUser();
-        if (user != null) {
-        	String uri = req.getParameter("PushChannelURI");
-			if(uri == null){
-				resp.getWriter().println("Virheellinen pyyntö");
-				resp.getWriter().close();
-				return;
-			}
-        	String id = user.getUserId();
-        	
-        	Key userIdKey = KeyFactory.createKey("User", id);
-        	Entity databaseUser;
-        	try {
-				databaseUser = datastore.get(userIdKey);
-			} catch (EntityNotFoundException e) {
-				databaseUser = new Entity(userIdKey);
-				databaseUser.setProperty("ChannelURI", null);
-				datastore.put(databaseUser);
-			}
-        	
-        	databaseUser.setProperty("ChannelURI", uri);
-			datastore.put(databaseUser);
-			resp.getWriter().println("{ \"success\": \"true\" }");
-			
-        } else {
-            resp.sendRedirect("/client/login");
-        }
-	}
-	
 }

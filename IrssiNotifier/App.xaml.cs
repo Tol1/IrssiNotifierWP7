@@ -18,6 +18,7 @@ namespace IrssiNotifier
     public partial class App : Application
     {
 		public static readonly string BASEADDRESS = "http://irssinotifierwp.appspot.com/";
+		public static readonly string CHANNELNAME = "IrssiNotifierChannel";
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>

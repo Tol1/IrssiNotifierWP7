@@ -51,6 +51,7 @@ namespace IrssiNotifier
 			set
 			{
 				_userId = value;
+				IsolatedStorageSettings.ApplicationSettings["userID"] = value;
 				if (PropertyChanged != null)
 				{
 					PropertyChanged(this, new PropertyChangedEventArgs("UserId"));

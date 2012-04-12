@@ -8,7 +8,7 @@
   </resource-files>
   <ssl-enabled>true</ssl-enabled>
   <precompilation-enabled>true</precompilation-enabled>
-  <threadsafe>false</threadsafe>
+  <threadsafe>true</threadsafe>
   <code-lock>false</code-lock>
   <sessions-enabled>false</sessions-enabled>
   <warmup-requests-enabled>false</warmup-requests-enabled>

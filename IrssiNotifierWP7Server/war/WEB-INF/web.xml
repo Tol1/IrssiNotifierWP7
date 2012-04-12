@@ -8,6 +8,15 @@
     <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
     <url-pattern>/client/login</url-pattern>
   </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/login</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
   <servlet>
     <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.LoginSuccess</servlet-class>
@@ -16,6 +25,15 @@
     <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
     <url-pattern>/client/login/loginsuccess</url-pattern>
   </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/login/loginsuccess</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
   <servlet>
     <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-class>
@@ -24,6 +42,15 @@
     <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
     <url-pattern>/client/register</url-pattern>
   </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/register</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
   <servlet>
     <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.MessageHandler</servlet-class>
@@ -32,4 +59,30 @@
     <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
     <url-pattern>/API/Message</url-pattern>
   </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/API/Message</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-name>
+    <url-pattern>/client/update</url-pattern>
+  </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/update</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
 </web-app>

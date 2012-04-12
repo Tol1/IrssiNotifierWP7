@@ -1,16 +1,25 @@
 application: irssinotifierwp
 version: 1
 runtime: java
+threadsafe: true
 
 handlers:
 - url: /client/login
   servlet: com.tol1.irssinotifier.server.LoginUser
+  secure: always
   
 - url: /client/login/loginsuccess
   servlet: com.tol1.irssinotifier.server.LoginSuccess
+  secure: always
   
 - url: /client/register
   servlet: com.tol1.irssinotifier.server.RegisterPhoneClient
+  secure: always
   
 - url: /API/Message
   servlet: com.tol1.irssinotifier.server.MessageHandler
+  secure: always
+  
+- url: /client/update
+  servlet: com.tol1.irssinotifier.server.UpdateClientInfo
+  secure: always
