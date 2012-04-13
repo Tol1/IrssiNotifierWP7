@@ -12,13 +12,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.IO.IsolatedStorage;
 
 namespace IrssiNotifier
 {
     public partial class App : Application
     {
-		public static readonly string BASEADDRESS = "http://irssinotifierwp.appspot.com/";
-		public static readonly string CHANNELNAME = "IrssiNotifierChannel";
+		public static readonly string BASEADDRESS = "https://irssinotifierwp.appspot.com/";
+		public static readonly string CHANNELNAME = "IrssiNotifier";
+
+		public static string AppGuid;
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -58,6 +62,16 @@ namespace IrssiNotifier
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
+
+			if (!IsolatedStorageSettings.ApplicationSettings.Contains("GUID"))
+			{
+				AppGuid = Guid.NewGuid().ToString();
+				IsolatedStorageSettings.ApplicationSettings["GUID"] = AppGuid;
+			}
+			else
+			{
+				AppGuid = IsolatedStorageSettings.ApplicationSettings["GUID"].ToString();
+			}
 
         }
 

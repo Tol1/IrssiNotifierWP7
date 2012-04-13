@@ -69,17 +69,34 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateClientInfo</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-name>
     <url-pattern>/client/update</url-pattern>
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>aname</web-resource-name>
       <url-pattern>/client/update</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateSettings</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.UpdateSettings</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.UpdateSettings</servlet-name>
+    <url-pattern>/client/settings</url-pattern>
+  </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/settings</url-pattern>
     </web-resource-collection>
     <user-data-constraint>
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>

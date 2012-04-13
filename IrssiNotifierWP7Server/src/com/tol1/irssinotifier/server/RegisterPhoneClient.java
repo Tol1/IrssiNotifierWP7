@@ -29,7 +29,8 @@ public class RegisterPhoneClient extends HttpServlet {
 		User user = userService.getCurrentUser();
         if (user != null) {
         	String uri = req.getParameter("PushChannelURI");
-			if(uri == null){
+        	String guid = req.getParameter("guid");
+			if(uri == null || guid == null){
 				resp.getWriter().println("Virheellinen pyyntö");
 				resp.getWriter().close();
 				return;
@@ -43,10 +44,14 @@ public class RegisterPhoneClient extends HttpServlet {
 			} catch (EntityNotFoundException e) {
 				databaseUser = new Entity(userIdKey);
 				databaseUser.setProperty("ChannelURI", null);
+				databaseUser.setProperty("guid", null);
+				databaseUser.setProperty("sendToastNotifications", false);
 				datastore.put(databaseUser);
 			}
         	
         	databaseUser.setProperty("ChannelURI", uri);
+        	databaseUser.setProperty("guid", guid);
+			databaseUser.setProperty("sendToastNotifications", true);
 			datastore.put(databaseUser);
 			resp.getWriter().println("{ \"success\": \""+id+"\" }");
 			

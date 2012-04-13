@@ -1,9 +1,12 @@
 package com.tol1.irssinotifier.server;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -17,9 +20,20 @@ public class IrssiNotifier {
 		writer.close();
 	}
 	
-	/*public static boolean checkAuthentication(Map<String, String> parameters){
-		String userId = parameters.get("apiToken");
-		String oldUrl = parameters.get("oldUrl");
-		return userId != null && oldUrl != null;
-	}*/
+	public static Entity checkAuthentication(String userId, String guid) throws Exception{
+		if(userId == null || guid == null){
+			throw new Exception("Virheellinen pyyntö");
+		}
+		Key userIdKey = KeyFactory.createKey("User", userId);
+		Entity databaseUser;
+		try {
+			databaseUser = IrssiNotifier.datastore.get(userIdKey);
+		} catch (EntityNotFoundException e) {
+			throw new Exception("Virheellinen userid");
+		}
+		if(!databaseUser.getProperty("guid").equals(guid)){
+			throw new Exception("Virheellinen guid");
+		}
+		return databaseUser;
+	}
 }

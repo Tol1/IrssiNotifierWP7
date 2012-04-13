@@ -57,6 +57,7 @@ namespace IrssiNotifier
 
 				// Bind this new channel for toast events.
 				pushChannel.BindToShellToast();
+				pushChannel.BindToShellTile();
 				NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
 			}
 			else
@@ -86,8 +87,16 @@ namespace IrssiNotifier
 			var pushChannel = HttpNotificationChannel.Find(App.CHANNELNAME);
 			if (pushChannel != null)
 			{
-				pushChannel.Close();
+				pushChannel.UnbindToShellTile();
+				pushChannel.UnbindToShellToast();
 			}
+			var webclient = new WebClient();
+			webclient.UploadStringCompleted += (sender1, args) =>
+			{
+				MessageBox.Show("Vastaanotto keskeytetty");
+			};
+			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
+			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/settings"), "POST", "apiToken=" + appSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&enable=false");
         }
 
 		private void LoginClick(object sender, EventArgs e)
@@ -97,17 +106,27 @@ namespace IrssiNotifier
 
         void PushChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
         {
+			Dispatcher.BeginInvoke(() =>
+			{
+				// Display the new URI for testing purposes.   Normally, the URI would be passed back to your web service at this point.
+				System.Diagnostics.Debug.WriteLine(e.ChannelUri.ToString());
+				MessageBox.Show(String.Format("Channel Uri is {0}",
+					e.ChannelUri.ToString()));
+
+			});
 			if (appSettings.Contains("NotificationChannelUri") && appSettings.Contains("userID") && appSettings["NotificationChannelUri"].ToString() != e.ChannelUri.ToString())
 			{
 				var webclient = new WebClient();
 				webclient.UploadStringCompleted += (sender1, args) =>
 				{
 					appSettings["NotificationChannelUri"] = e.ChannelUri.ToString();
-					//TODO virheraportointi?
-
 				};
 				webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-				webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + appSettings["userID"].ToString() + "&oldUrl=" + appSettings["NotificationChannelUri"].ToString() + "&newUrl=" + e.ChannelUri.ToString());
+				webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + appSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&newUrl=" + e.ChannelUri.ToString());
+			}
+			else
+			{
+				appSettings["NotificationChannelUri"] = e.ChannelUri.ToString();
 			}
         }
 
@@ -146,5 +165,17 @@ namespace IrssiNotifier
             Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
 
         }
+
+		private void RefreshClick(object sender, EventArgs e)
+		{
+			var webclient = new WebClient();
+			webclient.UploadStringCompleted += (sender1, args) =>
+			{
+				MessageBox.Show(args.Result);
+
+			};
+			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
+			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + appSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&newUrl=" + appSettings["NotificationChannelUri"]);
+		}
     }
 }

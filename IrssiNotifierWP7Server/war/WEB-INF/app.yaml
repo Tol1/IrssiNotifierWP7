@@ -21,5 +21,9 @@ handlers:
   secure: always
   
 - url: /client/update
-  servlet: com.tol1.irssinotifier.server.UpdateClientInfo
+  servlet: com.tol1.irssinotifier.server.UpdateChannelUrl
+  secure: always
+  
+- url: /client/settings
+  servlet: com.tol1.irssinotifier.server.UpdateSettings
   secure: always

@@ -38,6 +38,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="Logout" Click="LogoutClick"/>
                 <shell:ApplicationBarMenuItem Text="Login" Click="LoginClick"/>
+                <shell:ApplicationBarMenuItem Text="Refresh" Click="RefreshClick"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
