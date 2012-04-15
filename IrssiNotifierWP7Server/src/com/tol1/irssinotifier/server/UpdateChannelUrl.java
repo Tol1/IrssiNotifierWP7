@@ -20,7 +20,7 @@ public class UpdateChannelUrl extends HttpServlet {
 		String newUrl = req.getParameter("newUrl");
 		
 		if(newUrl == null){
-			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");
+			IrssiNotifier.printError(resp.getWriter(), "{ \"success\": false, \"message\": \"Missing url\" }");
 			return;
 		}
 		

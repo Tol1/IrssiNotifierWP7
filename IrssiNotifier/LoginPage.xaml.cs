@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using IrssiNotifier.Views;
 
 namespace IrssiNotifier
 {
@@ -19,10 +20,15 @@ namespace IrssiNotifier
         public LoginPage()
         {
             InitializeComponent();
-            browser.Navigate(new Uri(App.BASEADDRESS+"client/login"));
+			contentBorder.Child = new LoginView(this);
+            //browser.Navigate(new Uri(App.BASEADDRESS+"client/login"));
         }
 
-        private void browser_Navigating(object sender, NavigatingEventArgs e)
+		public void Register()
+		{
+		}
+
+        /*private void browser_Navigating(object sender, NavigatingEventArgs e)
         {
             
         }
@@ -37,6 +43,6 @@ namespace IrssiNotifier
                 PhoneApplicationService.Current.State["cookiesUri"] = uri;
                 NavigationService.Navigate(new Uri("/Registration.xaml", UriKind.Relative));
             }
-        }
+        }*/
     }
 }

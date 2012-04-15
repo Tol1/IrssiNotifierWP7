@@ -1,9 +1,10 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="IrssiNotifier.LoginPage"
+    x:Class="IrssiNotifier.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:views="clr-namespace:IrssiNotifier.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -23,14 +24,12 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="IRSSI NOTIFIER" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="login page" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="asetukset" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Border x:Name="contentBorder"/>
-            <Button x:Name="button" VerticalAlignment="Bottom" Visibility="Collapsed" />
-            <!--phone:WebBrowser Name="browser" IsScriptEnabled="True" Navigated="browser_Navigated" Navigating="browser_Navigating" /-->
+            <views:SettingsView />
         </Grid>
     </Grid>
  

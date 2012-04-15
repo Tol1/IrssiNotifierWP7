@@ -14,21 +14,77 @@ using Microsoft.Phone.Notification;
 using System.Text;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
+using WindowsPhone.Recipes.Push.Client;
+using IrssiNotifier.Views;
 
 namespace IrssiNotifier
 {
     public partial class MainPage : PhoneApplicationPage
     {
+		private static readonly Uri[] AllowedDomains =
+        {
+            new Uri(App.BASEADDRESS)
+        };
         private IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
         // Constructor
         public MainPage()
         {
             InitializeComponent();
+			try
+			{
+				var pushContext = new PushContext(App.CHANNELNAME, App.SERVICENAME, AllowedDomains, Dispatcher);
+			}
+			catch (InvalidOperationException)
+			{
+
+			}
+			if (!appSettings.Contains("userID"))
+			{
+				ShowInitialView();
+			}
+			else
+			{
+				ShowMainView();
+			}
         }
+
+		private void ShowInitialView()
+		{
+			contentBorder.Child = new InitialView();
+			firstButton.Content = "Rekisteröidy";
+			firstButton.Visibility = Visibility.Visible;
+			firstButton.Click += (sender, args) =>
+			{
+				NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+			};
+		}
+
+		private void ShowMainView()
+		{
+			firstButton.Content = "Asetukset";
+			firstButton.Visibility = Visibility.Visible;
+			firstButton.Click += (sender, args) =>
+			{
+				NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative));
+			};
+			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
+			{
+				PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+			}
+		}
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-			OpenChannel();
+			
+			if (PhoneApplicationService.Current.State.ContainsKey("registered"))
+			{
+				while (NavigationService.CanGoBack)
+				{
+					NavigationService.RemoveBackEntry();	//clear backstack
+				}
+				PhoneApplicationService.Current.State.Remove("registered");
+			}
+			//OpenChannel();
         }
 
 		private void OpenChannel()
@@ -73,7 +129,6 @@ namespace IrssiNotifier
 				System.Diagnostics.Debug.WriteLine(pushChannel.ChannelUri.ToString());
 				MessageBox.Show(String.Format("Channel Uri is {0}",
 					pushChannel.ChannelUri.ToString()));
-				statustextbox.Text = "Jee";
 				if (!appSettings.Contains("NotificationChannelUri") || pushChannel.ChannelUri.ToString() != appSettings["NotificationChannelUri"].ToString())
 				{
 					appSettings["NotificationChannelUri"] = pushChannel.ChannelUri.ToString();
@@ -165,17 +220,5 @@ namespace IrssiNotifier
             Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
 
         }
-
-		private void RefreshClick(object sender, EventArgs e)
-		{
-			var webclient = new WebClient();
-			webclient.UploadStringCompleted += (sender1, args) =>
-			{
-				MessageBox.Show(args.Result);
-
-			};
-			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + appSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&newUrl=" + appSettings["NotificationChannelUri"]);
-		}
     }
 }

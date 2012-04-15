@@ -1,5 +1,5 @@
 application: irssinotifierwp
-version: 1
+version: 2
 runtime: java
 threadsafe: true
 

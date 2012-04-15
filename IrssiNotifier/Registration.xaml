@@ -32,8 +32,12 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Text="KäyttäjäID irssi-skriptiä varten:" Grid.Row="0" />
-            <TextBlock Text="{Binding UserId, Mode=TwoWay}" Grid.Row="1" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Rekisteröinti onnistui!" />
+                <TextBlock Text="KäyttäjäID irssi-skriptiä varten:" />
+                <TextBlock Text="{Binding UserId, Mode=TwoWay}" />
+            </StackPanel>
+            
         </Grid>
     </Grid>
  

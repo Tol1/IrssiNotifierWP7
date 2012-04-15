@@ -28,10 +28,9 @@ public class RegisterPhoneClient extends HttpServlet {
 
 		User user = userService.getCurrentUser();
         if (user != null) {
-        	String uri = req.getParameter("PushChannelURI");
         	String guid = req.getParameter("guid");
-			if(uri == null || guid == null){
-				resp.getWriter().println("Virheellinen pyyntö");
+			if(guid == null){
+				resp.getWriter().println("{ \"error\": \"GUID missing\" }");
 				resp.getWriter().close();
 				return;
 			}
@@ -46,12 +45,14 @@ public class RegisterPhoneClient extends HttpServlet {
 				databaseUser.setProperty("ChannelURI", null);
 				databaseUser.setProperty("guid", null);
 				databaseUser.setProperty("sendToastNotifications", false);
+				databaseUser.setProperty("sendTileNotifications", false);
 				datastore.put(databaseUser);
 			}
         	
-        	databaseUser.setProperty("ChannelURI", uri);
+        	databaseUser.setProperty("ChannelURI", null);
         	databaseUser.setProperty("guid", guid);
-			databaseUser.setProperty("sendToastNotifications", true);
+			databaseUser.setProperty("sendToastNotifications", false);
+			databaseUser.setProperty("sendTileNotifications", false);
 			datastore.put(databaseUser);
 			resp.getWriter().println("{ \"success\": \""+id+"\" }");
 			

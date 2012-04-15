@@ -19,6 +19,7 @@ namespace IrssiNotifier
     public partial class App : Application
     {
 		public static readonly string BASEADDRESS = "https://irssinotifierwp.appspot.com/";
+		public static readonly string SERVICENAME = "appengine.google.com";
 		public static readonly string CHANNELNAME = "IrssiNotifier";
 
 		public static string AppGuid;
@@ -72,7 +73,6 @@ namespace IrssiNotifier
 			{
 				AppGuid = IsolatedStorageSettings.ApplicationSettings["GUID"].ToString();
 			}
-
         }
 
         // Code to execute when the application is launching (eg, from Start)
