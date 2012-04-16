@@ -30,7 +30,11 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             
             <Border x:Name="contentBorder" />
-            <Button x:Name="firstButton" VerticalAlignment="Bottom" Visibility="Collapsed" />
+            <StackPanel VerticalAlignment="Bottom">
+                <Button x:Name="firstButton" Visibility="Collapsed" />
+                <Button x:Name="secondButton" Visibility="Collapsed" />
+            </StackPanel>
+            
         </Grid>
     </Grid>
  

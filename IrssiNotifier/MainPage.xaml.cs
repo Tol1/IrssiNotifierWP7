@@ -67,6 +67,11 @@ namespace IrssiNotifier
 			{
 				NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative));
 			};
+			secondButton.Content = "Kirjaudu ulos";
+			secondButton.Visibility = Visibility.Visible;
+			secondButton.Click += (sender, args) =>
+			{
+			};
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
 				PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));

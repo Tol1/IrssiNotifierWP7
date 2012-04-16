@@ -6,26 +6,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 
 @SuppressWarnings("serial")
 public class RegisterPhoneClient extends HttpServlet {
 	
 	private static UserService userService = UserServiceFactory.getUserService();
-	private static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		ObjectifyDAO dao = new ObjectifyDAO();
 		User user = userService.getCurrentUser();
         if (user != null) {
         	String guid = req.getParameter("guid");
@@ -36,7 +30,11 @@ public class RegisterPhoneClient extends HttpServlet {
 			}
         	String id = user.getUserId();
         	
-        	Key userIdKey = KeyFactory.createKey("User", id);
+        	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid);
+        	
+        	dao.ofy().put(iNUser);
+        	
+        	/*Key userIdKey = KeyFactory.createKey("User", id);
         	Entity databaseUser;
         	try {
 				databaseUser = datastore.get(userIdKey);
@@ -53,7 +51,7 @@ public class RegisterPhoneClient extends HttpServlet {
         	databaseUser.setProperty("guid", guid);
 			databaseUser.setProperty("sendToastNotifications", false);
 			databaseUser.setProperty("sendTileNotifications", false);
-			datastore.put(databaseUser);
+			datastore.put(databaseUser);*/
 			resp.getWriter().println("{ \"success\": \""+id+"\" }");
 			
         } else {

@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Entity;
+import com.googlecode.objectify.NotFoundException;
+import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 
 @SuppressWarnings("serial")
 public class UpdateChannelUrl extends HttpServlet {
@@ -24,7 +25,30 @@ public class UpdateChannelUrl extends HttpServlet {
 			return;
 		}
 		
-		Entity databaseUser;
+		if(id == null || guid == null){
+			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");
+			return;
+		}
+		
+		ObjectifyDAO dao = new ObjectifyDAO();
+		try {
+			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+			if(user.guid.equals(guid)){
+				user.ChannelURI = newUrl;
+				dao.ofy().put(user);
+				resp.getWriter().println("{ \"success\": true }");
+				resp.getWriter().close();
+				return;
+			}
+			else{
+				IrssiNotifier.printError(resp.getWriter(), "GUID ei täsmää");
+			}
+		} catch (NotFoundException e) {
+			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
+			return;
+		}
+		
+		/*Entity databaseUser;
 		try {
 			databaseUser = IrssiNotifier.checkAuthentication(id, guid);
 		} catch (Exception e1) {
@@ -36,6 +60,6 @@ public class UpdateChannelUrl extends HttpServlet {
 		IrssiNotifier.datastore.put(databaseUser);
 		resp.getWriter().println("{ \"success\": true }");
 		resp.getWriter().close();
-		return;
+		return;*/
 	}
 }

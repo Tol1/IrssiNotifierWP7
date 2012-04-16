@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -13,50 +14,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
+import com.tol1.irssinotifier.server.datamodels.Message;
 
 @SuppressWarnings("serial")
 public class MessageHandler extends HttpServlet {
-
-	private static DatastoreService datastore = DatastoreServiceFactory
-			.getDatastoreService();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String id = req.getParameter("apiToken");
-		Key userIdKey = KeyFactory.createKey("User", id);
+		
+		ObjectifyDAO dao = new ObjectifyDAO();
+		
+		IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+		
+		URL url = new URL(user.ChannelURI);
+		
+		/*
 		Entity databaseUser;
 		try {
 			databaseUser = datastore.get(userIdKey);
 		} catch (EntityNotFoundException e) {
-			resp.getWriter().println("Virheellinen pyyntö");
+			resp.getWriter().println("Virheellinen pyyntÃ¶");
 			resp.getWriter().close();
 			return;
 		}
-		URL url = new URL((String) databaseUser.getProperty("ChannelURI"));
-		String nick = req.getParameter("nick");
-		String channel = req.getParameter("channel");
-		String message = req.getParameter("message");
-		if(Boolean.parseBoolean(databaseUser.getProperty("sendToastNotifications").toString())){
-			String toastMessage = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-					+ "<wp:Notification xmlns:wp=\"WPNotification\">"
-						+ "<wp:Toast>"
-							+ "<wp:Text1>"
-								+ nick + " - " + channel
-							+ "</wp:Text1>"
-							+ "<wp:Text2>"
-								+ message
-							+ "</wp:Text2>"
-							+ "<wp:Param>/Page2.xaml?NavigatedFrom=Toast Notification</wp:Param>"
-					+ "</wp:Toast> "
-				+ "</wp:Notification>";
-			URLConnection conn = url.openConnection();
+		URL url = new URL((String) databaseUser.getProperty("ChannelURI"));*/
+		
+		Message mess = new Message(req.getParameter("nick"), req.getParameter("channel"), req.getParameter("message"),user);
+		
+		if(user.sendToastNotifications){
+			String toastMessage = mess.GenerateToastNotification();
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 			conn.setUseCaches(false);
 			conn.setRequestProperty("Content-Type", "text/xml");
@@ -75,6 +66,49 @@ public class MessageHandler extends HttpServlet {
 					} catch (IOException logOrIgnore) {
 					}
 			}
+			
+			int status = conn.getResponseCode();
+			String NotificationStatus = conn.getHeaderField("X-NotificationStatus");
+			String DeviceConnectionStatus = conn.getHeaderField("X-DeviceConnectionStatus");
+			String SubscriptionStatus = conn.getHeaderField("X-SubscriptionStatus");
+			switch(status){
+			case 200:
+				if(NotificationStatus.equalsIgnoreCase("Received")){
+					return;
+				}
+				else if(NotificationStatus.equalsIgnoreCase("QueueFull")){
+					resp.getWriter().println("Push channel error: Queue overflow.");
+				}
+				else{
+					resp.getWriter().println("Push channel error: Suppressed.");
+				}
+				break;
+			case 400:
+				resp.getWriter().println("Push channel error: Bad XML.");
+				break;
+			case 404:
+				user.sendToastNotifications = false;
+				dao.ofy().put(user);
+				resp.getWriter().println("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
+				break;
+			case 406:
+				user.sendToastNotifications = false;
+				dao.ofy().put(user);
+				resp.getWriter().println("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
+				break;
+			case 412:
+				user.sendToastNotifications = false;
+				dao.ofy().put(user);
+				resp.getWriter().println("Push channel error: The device is in an inactive state.");
+				break;
+			case 503:
+				resp.getWriter().println("Push channel error: The Push Notification Service is unable to process the request.");
+				break;
+			}	//TODO joku resend sopiviin kohtiin?
+			resp.getWriter().close();
+			/*if(status == 200){
+				
+			}
 	
 			InputStream result = conn.getInputStream();
 	
@@ -88,7 +122,7 @@ public class MessageHandler extends HttpServlet {
 				resp.getWriter().println("Push channel error");
 			}
 			br.close();
-			resp.getWriter().close();
+			resp.getWriter().close();*/
 		}
 	}
 }
