@@ -39,29 +39,44 @@ namespace IrssiNotifier.Views
 				{
 					SettingsView.UpdateSettings("toast", PushContext.Current.IsToastEnabled, Dispatcher);
 				}
+				if (args.PropertyName == "IsTileEnabled")
+				{
+					SettingsView.UpdateSettings("tile", PushContext.Current.IsTileEnabled, Dispatcher);
+				}
 			};
 		}
 
-		public static void RegisterChannelUri(Uri ChannelUri, Dispatcher dispatcher)
+		public static void RegisterChannelUri(Uri ChannelUri, Dispatcher dispatcher, bool ShowMessage = true)
 		{
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
-				dispatcher.BeginInvoke(() => MessageBox.Show(args.Result));
+				if (ShowMessage)
+				{
+					dispatcher.BeginInvoke(() => MessageBox.Show(args.Result));
+				}
+				if(PushContext.Current.IsConnected && PushContext.Current.IsPushEnabled && PushContext.Current.IsTileEnabled)
+				{
+					UpdateSettings("clearcount", true, dispatcher, false);
+				}
+
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&newUrl=" + ChannelUri.ToString());
 		}
 
-		public static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher)
+		private static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher, bool ShowMessage = true)
 		{
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
-				dispatcher.BeginInvoke(() => MessageBox.Show("Vastaanotto keskeytetty"));
+				if (ShowMessage)
+				{
+					dispatcher.BeginInvoke(() => MessageBox.Show(args.Result));
+				}
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&enable=" + enabled);
+			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&"+param+"=" + enabled);
 		}
 	}
 }

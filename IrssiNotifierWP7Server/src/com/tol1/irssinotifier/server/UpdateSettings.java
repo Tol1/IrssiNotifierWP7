@@ -1,6 +1,8 @@
 package com.tol1.irssinotifier.server;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
+import com.tol1.irssinotifier.server.datamodels.Message;
 
 @SuppressWarnings("serial")
 public class UpdateSettings extends HttpServlet {
@@ -28,8 +31,17 @@ public class UpdateSettings extends HttpServlet {
 			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			if(user.guid.equals(guid)){
 				String param;
-				if((param = req.getParameter("enable")) != null){
+				if((param = req.getParameter("toast")) != null){
 					user.sendToastNotifications = Boolean.parseBoolean(param);
+				}
+				if((param = req.getParameter("tile")) != null){
+					user.sendTileNotifications = Boolean.parseBoolean(param);
+				}
+				if((param = req.getParameter("clearcount")) != null){
+					user.tileCount = 0;
+					String clearMessage = Message.GenerateTileNotification(0);
+					HttpURLConnection conn = MessageHandler.DoSend(clearMessage, "token", "1", new URL(user.ChannelURI));
+					MessageHandler.HandleResponse(conn, resp, user, dao);
 				}
 				dao.ofy().put(user);
 				resp.getWriter().println("{ \"success\": true }");

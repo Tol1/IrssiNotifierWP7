@@ -22,6 +22,11 @@ namespace IrssiNotifier
 		public static readonly string SERVICENAME = "appengine.google.com";
 		public static readonly string CHANNELNAME = "IrssiNotifier";
 
+		public static readonly Uri[] AllowedDomains =
+        {
+            new Uri(App.BASEADDRESS)
+        };
+
 		public static string AppGuid;
 
         /// <summary>

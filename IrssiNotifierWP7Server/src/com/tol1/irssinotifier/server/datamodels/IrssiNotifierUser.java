@@ -8,6 +8,7 @@ public class IrssiNotifierUser {
 	public String guid;
 	public boolean sendToastNotifications;
 	public boolean sendTileNotifications;
+	public int tileCount;
 	
 	public IrssiNotifierUser(){}
 	
@@ -15,9 +16,4 @@ public class IrssiNotifierUser {
 		this.UserID = id;
 		this.guid = guid;
 	}
-	
-/*	databaseUser.setProperty("ChannelURI", null);
-	databaseUser.setProperty("guid", null);
-	databaseUser.setProperty("sendToastNotifications", false);
-	databaseUser.setProperty("sendTileNotifications", false);*/
 }

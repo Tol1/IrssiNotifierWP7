@@ -19,18 +19,19 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 
 public class Message {
-	@Id public Long Timestamp;
+	@Id public Long id;
+	public Long timestamp;
 	public String nick;
 	public String channel;
 	public String message;
 	@Parent Key<IrssiNotifierUser> owner;
 	
 	public Message(){
-		this.Timestamp = System.currentTimeMillis();
+		this.timestamp = System.currentTimeMillis();
 	}
 	
 	public Message(String nick, String channel, String message, IrssiNotifierUser user){
-		this.Timestamp = System.currentTimeMillis();
+		this.timestamp = System.currentTimeMillis();
 		this.nick = nick;
 		this.channel = channel;
 		this.message = message;
@@ -93,5 +94,66 @@ public class Message {
 				+ "</wp:Toast> "
 			+ "</wp:Notification>";
 		return toast;
+	}
+	
+	public static String GenerateTileNotification(int count){
+		
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.newDocument();
+			doc.setXmlStandalone(true);
+			Element root = doc.createElement("wp:Notification");
+			root.setAttribute("xmlns:wp", "WPNotification");
+			doc.appendChild(root);
+			Element toast = doc.createElement("wp:Tile");
+			root.appendChild(toast);
+			Element text1 = doc.createElement("wp:BackgroundImage");
+			toast.appendChild(text1);
+			//text1.appendChild(doc.createTextNode("/Images/Tile.png"));
+			Element text2 = doc.createElement("wp:Count");
+			toast.appendChild(text2);
+			if(count == 0){
+				text2.setAttribute("Action", "Clear");
+			}
+			text2.appendChild(doc.createTextNode(count+""));
+			Element param = doc.createElement("wp:Title");
+			toast.appendChild(param);
+			//param.appendChild(doc.createTextNode(""));
+			
+			StringWriter output = new StringWriter();
+
+		    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		    transformer.transform(new DOMSource(doc), new StreamResult(output));
+		    
+		    return output.toString();
+			
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		String title = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<wp:Notification xmlns:wp=\"WPNotification\">"
+					+ "<wp:Tile>"
+						+ "<wp:BackgroundImage>"
+							+ "/Images/Tile.png"
+						+ "</wp:BackgroundImage>"
+						+ "<wp:Count>"
+							+ count
+						+ "</wp:Count>"
+						+ "<wp:Title></wp:Title>"
+				+ "</wp:Tile> "
+			+ "</wp:Notification>";
+		return title;
 	}
 }

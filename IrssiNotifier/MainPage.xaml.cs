@@ -21,10 +21,7 @@ namespace IrssiNotifier
 {
     public partial class MainPage : PhoneApplicationPage
     {
-		private static readonly Uri[] AllowedDomains =
-        {
-            new Uri(App.BASEADDRESS)
-        };
+		
         private IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
         // Constructor
         public MainPage()
@@ -32,7 +29,7 @@ namespace IrssiNotifier
             InitializeComponent();
 			try
 			{
-				var pushContext = new PushContext(App.CHANNELNAME, App.SERVICENAME, AllowedDomains, Dispatcher);
+				var pushContext = new PushContext(App.CHANNELNAME, App.SERVICENAME, App.AllowedDomains, Dispatcher);
 			}
 			catch (InvalidOperationException)
 			{

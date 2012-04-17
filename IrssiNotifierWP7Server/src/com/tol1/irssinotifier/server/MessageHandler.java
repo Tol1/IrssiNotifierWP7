@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,12 +28,16 @@ public class MessageHandler extends HttpServlet {
 		
 		URL url = new URL(user.ChannelURI);
 		
+		String nick = URLDecoder.decode(req.getParameter("nick"),"UTF-8");
+		String channel = URLDecoder.decode(req.getParameter("channel"),"UTF-8");
+		String message = URLDecoder.decode(req.getParameter("message"),"UTF-8");
 		
-		Message mess = new Message(req.getParameter("nick"), req.getParameter("channel"), req.getParameter("message"),user);
+		Message mess = new Message(nick, channel, message, user);
 		
 		if(user.sendToastNotifications){
 			String toastMessage = mess.GenerateToastNotification();
-			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
+			/*HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
 			conn.setUseCaches(false);
@@ -51,13 +56,70 @@ public class MessageHandler extends HttpServlet {
 						writer.close();
 					} catch (IOException logOrIgnore) {
 					}
-			}
+			}*/
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
+			
+		}
+		if(user.sendTileNotifications){
+			String tileMessage = Message.GenerateTileNotification(user.tileCount+1);
+			HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
+			/*HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+			conn.setRequestProperty("Content-Type", "text/xml");
+			conn.setRequestProperty("X-WindowsPhone-Target", "token");
+			conn.setRequestProperty("X-NotificationClass", "1");
+	
+			OutputStreamWriter writer = null;
+			try {
+				writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+				writer.write(tileMessage); // Write POST query string (if any
+											// needed).
+			} finally {
+				if (writer != null)
+					try {
+						writer.close();
+					} catch (IOException logOrIgnore) {
+					}
+			}*/
+			Status responseStatus = HandleResponse(conn, resp, user, dao);
+			if(responseStatus == Status.STATUS_OK){
+				user.tileCount++;
+				dao.ofy().put(user);
+			}
+		}
+		
+		if(user.sendTileNotifications || user.sendToastNotifications){
 			dao.ofy().put(mess);
 		}
 	}
 	
-	private Status HandleResponse(HttpURLConnection conn, HttpServletResponse resp, IrssiNotifierUser user, ObjectifyDAO dao) throws IOException{
+	public static HttpURLConnection DoSend(String payload, String type, String notificationClass, URL url) throws IOException{
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setDoOutput(true);
+		conn.setUseCaches(false);
+		conn.setRequestProperty("Content-Type", "text/xml");
+		conn.setRequestProperty("X-WindowsPhone-Target", type);
+		conn.setRequestProperty("X-NotificationClass", notificationClass);
+
+		OutputStreamWriter writer = null;
+		try {
+			writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+			writer.write(payload); // Write POST query string (if any
+										// needed).
+		} finally {
+			if (writer != null)
+				try {
+					writer.close();
+				} catch (IOException logOrIgnore) {
+				}
+		}
+		return conn;
+	}
+	
+	public static Status HandleResponse(HttpURLConnection conn, HttpServletResponse resp, IrssiNotifierUser user, ObjectifyDAO dao) throws IOException{
 		Status result;
 		int status = conn.getResponseCode();
 		String NotificationStatus = conn.getHeaderField("X-NotificationStatus");

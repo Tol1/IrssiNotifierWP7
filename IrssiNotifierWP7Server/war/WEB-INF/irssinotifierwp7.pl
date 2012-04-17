@@ -3,6 +3,7 @@
 
 use Irssi;
 use POSIX;
+require CGI::Util;
 use vars qw($VERSION %IRSSI);
 
 $VERSION = "1";
@@ -29,7 +30,7 @@ sub private {
     $lastServer = $server;
     $lastNick = $nick;
     $lastAddress = $address;
-    $lastTarget = "!PRIVATE";
+    $lastTarget = "PRIVATE";
 }
 
 sub public {
@@ -102,7 +103,15 @@ sub hilite {
 #        Irssi::print("IrssiNotifier: Set encryption password to send notifications (must be same as in the WP device): /set irssinotifierwp_encryption_password [password]");
 #    }
 
-    my $data = "--post-data=apiToken=$api_token\\&message=$lastMsg\\&channel=$lastTarget\\&nick=$lastNick\\&version=$VERSION";
+#    $lastMsg = uri_escape($lastMsg);
+#    $lastNick = uri_escape($lastNick);
+#    $lastTarget = uri_escape($lastTarget);
+    $lastMsg = CGI::Util::escape($lastMsg);
+    $lastNick = CGI::Util::escape($lastNick);
+    $lastTarget = CGI::Util::escape($lastTarget);
+
+    my $data = "--post-data \"apiToken=$api_token\&message=$lastMsg\&channel=$lastTarget\&nick=$lastNick\&version=$VERSION\"";
+#Irssi::print("`/usr/bin/env wget --no-check-certificate -qO- /dev/null $data https://irssinotifierwp.appspot.com/API/Message`");
     my $result = `/usr/bin/env wget --no-check-certificate -qO- /dev/null $data https://irssinotifierwp.appspot.com/API/Message`;
     if ($? != 0) {
         # Something went wrong, might be network error or authorization issue. Probably no need to alert user, though.
