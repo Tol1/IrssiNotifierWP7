@@ -1,13 +1,9 @@
 package com.tol1.irssinotifier.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,16 +27,6 @@ public class MessageHandler extends HttpServlet {
 		
 		URL url = new URL(user.ChannelURI);
 		
-		/*
-		Entity databaseUser;
-		try {
-			databaseUser = datastore.get(userIdKey);
-		} catch (EntityNotFoundException e) {
-			resp.getWriter().println("Virheellinen pyyntö");
-			resp.getWriter().close();
-			return;
-		}
-		URL url = new URL((String) databaseUser.getProperty("ChannelURI"));*/
 		
 		Message mess = new Message(req.getParameter("nick"), req.getParameter("channel"), req.getParameter("message"),user);
 		
@@ -66,63 +52,66 @@ public class MessageHandler extends HttpServlet {
 					} catch (IOException logOrIgnore) {
 					}
 			}
-			
-			int status = conn.getResponseCode();
-			String NotificationStatus = conn.getHeaderField("X-NotificationStatus");
-			String DeviceConnectionStatus = conn.getHeaderField("X-DeviceConnectionStatus");
-			String SubscriptionStatus = conn.getHeaderField("X-SubscriptionStatus");
-			switch(status){
-			case 200:
-				if(NotificationStatus.equalsIgnoreCase("Received")){
-					return;
-				}
-				else if(NotificationStatus.equalsIgnoreCase("QueueFull")){
-					resp.getWriter().println("Push channel error: Queue overflow.");
-				}
-				else{
-					resp.getWriter().println("Push channel error: Suppressed.");
-				}
-				break;
-			case 400:
-				resp.getWriter().println("Push channel error: Bad XML.");
-				break;
-			case 404:
-				user.sendToastNotifications = false;
-				dao.ofy().put(user);
-				resp.getWriter().println("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
-				break;
-			case 406:
-				user.sendToastNotifications = false;
-				dao.ofy().put(user);
-				resp.getWriter().println("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
-				break;
-			case 412:
-				user.sendToastNotifications = false;
-				dao.ofy().put(user);
-				resp.getWriter().println("Push channel error: The device is in an inactive state.");
-				break;
-			case 503:
-				resp.getWriter().println("Push channel error: The Push Notification Service is unable to process the request.");
-				break;
-			}	//TODO joku resend sopiviin kohtiin?
-			resp.getWriter().close();
-			/*if(status == 200){
-				
-			}
-	
-			InputStream result = conn.getInputStream();
-	
-			BufferedReader br = new BufferedReader(new InputStreamReader(result));
-	
-			String moi = "", errorMessage = "";
-			while (null != (moi = br.readLine())) {
-				errorMessage += moi;
-			}
-			if(errorMessage.length() > 0){
-				resp.getWriter().println("Push channel error");
-			}
-			br.close();
-			resp.getWriter().close();*/
+			Status responseStatus = HandleResponse(conn, resp, user, dao);
+			dao.ofy().put(mess);
 		}
+	}
+	
+	private Status HandleResponse(HttpURLConnection conn, HttpServletResponse resp, IrssiNotifierUser user, ObjectifyDAO dao) throws IOException{
+		Status result;
+		int status = conn.getResponseCode();
+		String NotificationStatus = conn.getHeaderField("X-NotificationStatus");
+		String DeviceConnectionStatus = conn.getHeaderField("X-DeviceConnectionStatus");
+		String SubscriptionStatus = conn.getHeaderField("X-SubscriptionStatus");
+		switch(status){
+		case 200:
+			if(NotificationStatus.equalsIgnoreCase("Received")){
+				result = Status.STATUS_OK;
+			}
+			else if(NotificationStatus.equalsIgnoreCase("QueueFull")){
+				resp.getWriter().println("Push channel error: Queue overflow.");
+				result = Status.STATUS_QUEUEABLE;
+			}
+			else{
+				resp.getWriter().println("Push channel error: Suppressed.");
+				result = Status.STATUS_ERROR;
+			}
+			break;
+		case 400:
+			resp.getWriter().println("Push channel error: Bad XML.");
+			result = Status.STATUS_ERROR;
+			break;
+		case 404:
+			user.sendToastNotifications = false;
+			dao.ofy().put(user);
+			resp.getWriter().println("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
+			result = Status.STATUS_CHANNEL_CLOSED;
+			break;
+		case 406:
+			user.sendToastNotifications = false;
+			dao.ofy().put(user);
+			resp.getWriter().println("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
+			result = Status.STATUS_HOURLY_QUEUEABLE;
+			break;
+		case 412:
+			user.sendToastNotifications = false;
+			dao.ofy().put(user);
+			resp.getWriter().println("Push channel error: The device is in an inactive state.");
+			result = Status.STATUS_HOURLY_QUEUEABLE;
+			break;
+		case 503:
+			resp.getWriter().println("Push channel error: The Push Notification Service is unable to process the request.");
+			result = Status.STATUS_ERROR;
+			break;
+		default:
+			resp.getWriter().println("Push channel error: Unknown error. HTTP status: "+status+", Notification status: "+NotificationStatus
+					+", Device connection status: "+DeviceConnectionStatus+", Subsrciption status: "+SubscriptionStatus);
+			result = Status.STATUS_ERROR;
+		}	//TODO joku resend sopiviin kohtiin?
+		resp.getWriter().close();
+		return result;
+	}
+	private enum Status{
+		STATUS_OK, STATUS_QUEUEABLE, STATUS_HOURLY_QUEUEABLE, STATUS_ERROR, STATUS_CHANNEL_CLOSED
 	}
 }
