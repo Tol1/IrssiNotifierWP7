@@ -102,4 +102,21 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.MessageList</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.MessageList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.tol1.irssinotifier.server.MessageList</servlet-name>
+    <url-pattern>/client/messages</url-pattern>
+  </servlet-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>aname</web-resource-name>
+      <url-pattern>/client/messages</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
 </web-app>

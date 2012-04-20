@@ -9,20 +9,27 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.tol1.irssinotifier.server.datamodels.StatusMessages;
+
+import flexjson.JSONSerializer;
 
 public class IrssiNotifier {
 	
 	public static UserService userService = UserServiceFactory.getUserService();
 	public static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	
+	public static final String HILITEPAGEURL = "/Pages/HilitePage.xaml";
+	
 	public static void printError(PrintWriter writer, String errorMessage){
-		writer.println(errorMessage);
+		StatusMessages.ErrorMessage message = new StatusMessages.ErrorMessage(errorMessage);
+		String json = new JSONSerializer().exclude("class").serialize(message);
+		writer.println(json);
 		writer.close();
 	}
 	
 	public static Entity checkAuthentication(String userId, String guid) throws Exception{
 		if(userId == null || guid == null){
-			throw new Exception("Virheellinen pyyntö");
+			throw new Exception("Virheellinen pyyntÃ¶");
 		}
 		Key userIdKey = KeyFactory.createKey("User", userId);
 		Entity databaseUser;

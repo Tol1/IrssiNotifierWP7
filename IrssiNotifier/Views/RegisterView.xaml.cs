@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using Newtonsoft.Json.Linq;
 using Microsoft.Phone.Shell;
+using IrssiNotifier.Pages;
 
 namespace IrssiNotifier.Views
 {
@@ -64,7 +65,7 @@ namespace IrssiNotifier.Views
 		private void ButtonClick(object sender, EventArgs e)
 		{
 			PhoneApplicationService.Current.State["registered"] = true;
-			FromPage.NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+			FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

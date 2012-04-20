@@ -16,11 +16,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Parent;
+import com.tol1.irssinotifier.server.IrssiNotifier;
 
 public class Message {
 	@Id public Long id;
-	public Long timestamp;
+	@Indexed public Long timestamp;
 	public String nick;
 	public String channel;
 	public String message;
@@ -28,10 +30,12 @@ public class Message {
 	
 	public Message(){
 		this.timestamp = System.currentTimeMillis();
+		this.id = this.timestamp;
 	}
 	
 	public Message(String nick, String channel, String message, IrssiNotifierUser user){
 		this.timestamp = System.currentTimeMillis();
+		this.id = this.timestamp;
 		this.nick = nick;
 		this.channel = channel;
 		this.message = message;
@@ -58,7 +62,7 @@ public class Message {
 			text2.appendChild(doc.createTextNode(this.message));
 			Element param = doc.createElement("wp:Param");
 			toast.appendChild(param);
-			param.appendChild(doc.createTextNode("/Page2.xaml?NavigatedFrom=Toast Notification"));
+			param.appendChild(doc.createTextNode(IrssiNotifier.HILITEPAGEURL+"NavigatedFrom=Toast Notification"));
 			
 			StringWriter output = new StringWriter();
 
@@ -90,13 +94,13 @@ public class Message {
 						+ "<wp:Text2>"
 							+ this.message
 						+ "</wp:Text2>"
-						+ "<wp:Param>/Page2.xaml?NavigatedFrom=Toast Notification</wp:Param>"
+						+ "<wp:Param>"+IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Toast Notification</wp:Param>"
 				+ "</wp:Toast> "
 			+ "</wp:Notification>";
 		return toast;
 	}
 	
-	public static String GenerateTileNotification(int count){
+	public static String GenerateTileNotification(int countValue, String tileUrl){
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -106,19 +110,22 @@ public class Message {
 			Element root = doc.createElement("wp:Notification");
 			root.setAttribute("xmlns:wp", "WPNotification");
 			doc.appendChild(root);
-			Element toast = doc.createElement("wp:Tile");
-			root.appendChild(toast);
-			Element text1 = doc.createElement("wp:BackgroundImage");
-			toast.appendChild(text1);
-			//text1.appendChild(doc.createTextNode("/Images/Tile.png"));
-			Element text2 = doc.createElement("wp:Count");
-			toast.appendChild(text2);
-			if(count == 0){
-				text2.setAttribute("Action", "Clear");
+			Element tile = doc.createElement("wp:Tile");
+			root.appendChild(tile);
+			if(tileUrl != null){
+				tile.setAttribute("Id", tileUrl);
 			}
-			text2.appendChild(doc.createTextNode(count+""));
-			Element param = doc.createElement("wp:Title");
-			toast.appendChild(param);
+			Element bgImage = doc.createElement("wp:BackgroundImage");
+			tile.appendChild(bgImage);
+			//text1.appendChild(doc.createTextNode("/Images/Tile.png"));
+			Element count = doc.createElement("wp:Count");
+			tile.appendChild(count);
+			if(countValue == 0){
+				count.setAttribute("Action", "Clear");
+			}
+			count.appendChild(doc.createTextNode(countValue+""));
+			Element title = doc.createElement("wp:Title");
+			tile.appendChild(title);
 			//param.appendChild(doc.createTextNode(""));
 			
 			StringWriter output = new StringWriter();
@@ -142,18 +149,18 @@ public class Message {
 			e.printStackTrace();
 		} 
 		
-		String title = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+		String tile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 				+ "<wp:Notification xmlns:wp=\"WPNotification\">"
 					+ "<wp:Tile>"
 						+ "<wp:BackgroundImage>"
 							+ "/Images/Tile.png"
 						+ "</wp:BackgroundImage>"
 						+ "<wp:Count>"
-							+ count
+							+ countValue
 						+ "</wp:Count>"
 						+ "<wp:Title></wp:Title>"
 				+ "</wp:Tile> "
 			+ "</wp:Notification>";
-		return title;
+		return tile;
 	}
 }

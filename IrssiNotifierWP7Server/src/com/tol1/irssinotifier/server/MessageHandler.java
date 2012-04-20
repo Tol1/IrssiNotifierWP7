@@ -37,52 +37,14 @@ public class MessageHandler extends HttpServlet {
 		if(user.sendToastNotifications){
 			String toastMessage = mess.GenerateToastNotification();
 			HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
-			/*HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-			conn.setRequestMethod("POST");
-			conn.setDoOutput(true);
-			conn.setUseCaches(false);
-			conn.setRequestProperty("Content-Type", "text/xml");
-			conn.setRequestProperty("X-WindowsPhone-Target", "toast");
-			conn.setRequestProperty("X-NotificationClass", "2");
-	
-			OutputStreamWriter writer = null;
-			try {
-				writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
-				writer.write(toastMessage); // Write POST query string (if any
-											// needed).
-			} finally {
-				if (writer != null)
-					try {
-						writer.close();
-					} catch (IOException logOrIgnore) {
-					}
-			}*/
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
-			
+			if(responseStatus != Status.STATUS_OK){
+				//error
+			}
 		}
 		if(user.sendTileNotifications){
-			String tileMessage = Message.GenerateTileNotification(user.tileCount+1);
+			String tileMessage = Message.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL);
 			HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
-			/*HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-			conn.setRequestMethod("POST");
-			conn.setDoOutput(true);
-			conn.setUseCaches(false);
-			conn.setRequestProperty("Content-Type", "text/xml");
-			conn.setRequestProperty("X-WindowsPhone-Target", "token");
-			conn.setRequestProperty("X-NotificationClass", "1");
-	
-			OutputStreamWriter writer = null;
-			try {
-				writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
-				writer.write(tileMessage); // Write POST query string (if any
-											// needed).
-			} finally {
-				if (writer != null)
-					try {
-						writer.close();
-					} catch (IOException logOrIgnore) {
-					}
-			}*/
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
 			if(responseStatus == Status.STATUS_OK){
 				user.tileCount++;

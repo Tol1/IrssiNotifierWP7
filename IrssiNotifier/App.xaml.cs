@@ -22,6 +22,8 @@ namespace IrssiNotifier
 		public static readonly string SERVICENAME = "appengine.google.com";
 		public static readonly string CHANNELNAME = "IrssiNotifier";
 
+		public static readonly string HILITEPAGEURL = "/Pages/HilitePage.xaml";
+
 		public static readonly Uri[] AllowedDomains =
         {
             new Uri(App.BASEADDRESS)

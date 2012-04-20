@@ -11,7 +11,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 
-namespace IrssiNotifier
+namespace IrssiNotifier.Pages
 {
 	public partial class Settings : PhoneApplicationPage
 	{

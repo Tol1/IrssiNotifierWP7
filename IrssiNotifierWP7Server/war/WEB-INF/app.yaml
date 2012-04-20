@@ -27,3 +27,7 @@ handlers:
 - url: /client/settings
   servlet: com.tol1.irssinotifier.server.UpdateSettings
   secure: always
+  
+- url: /client/messages
+  servlet: com.tol1.irssinotifier.server.MessageList
+  secure: always

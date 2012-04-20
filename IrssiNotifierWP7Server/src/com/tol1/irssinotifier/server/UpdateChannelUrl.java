@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
+import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
+
+import flexjson.JSONSerializer;
 
 @SuppressWarnings("serial")
 public class UpdateChannelUrl extends HttpServlet {
@@ -21,7 +24,7 @@ public class UpdateChannelUrl extends HttpServlet {
 		String newUrl = req.getParameter("newUrl");
 		
 		if(newUrl == null){
-			IrssiNotifier.printError(resp.getWriter(), "{ \"success\": false, \"message\": \"Missing url\" }");
+			IrssiNotifier.printError(resp.getWriter(), "Anna Url");
 			return;
 		}
 		
@@ -36,7 +39,8 @@ public class UpdateChannelUrl extends HttpServlet {
 			if(user.guid.equals(guid)){
 				user.ChannelURI = newUrl;
 				dao.ofy().put(user);
-				resp.getWriter().println("{ \"success\": true }");
+				ChannelStatusMessage message = new ChannelStatusMessage(user.sendToastNotifications, user.sendTileNotifications);
+				resp.getWriter().println(new JSONSerializer().exclude("class").serialize(message));
 				resp.getWriter().close();
 				return;
 			}
