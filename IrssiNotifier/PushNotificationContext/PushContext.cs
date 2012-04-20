@@ -1,27 +1,18 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Notification;
-using System.Windows.Threading;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
 using System.ComponentModel;
+using System.IO.IsolatedStorage;
+using System.Windows.Threading;
+using Microsoft.Phone.Notification;
 
-namespace WindowsPhone.Recipes.Push.Client
+namespace IrssiNotifier.PushNotificationContext
 {
     public sealed class PushContext : INotifyPropertyChanged
     {
         #region Fields
 
-        private readonly IsolatedStorageSettings Settings = IsolatedStorageSettings.ApplicationSettings;
+        private readonly IsolatedStorageSettings _settings = IsolatedStorageSettings.ApplicationSettings;
         private static PushContext _current;
         private bool _isConnected; 
 
@@ -338,7 +329,7 @@ namespace WindowsPhone.Recipes.Push.Client
         private T GetOrCreate<T>(string key, T defaultValue = default(T))
         {
             T value;
-            if (Settings.TryGetValue(key, out value))
+            if (_settings.TryGetValue(key, out value))
             {
                 return value;
             }
@@ -348,7 +339,7 @@ namespace WindowsPhone.Recipes.Push.Client
 
         private void SetOrCreate<T>(string key, T value)
         {
-            Settings[key] = value;
+            _settings[key] = value;
         }
 
         private void NotifyPropertyChanged(string propertyName)

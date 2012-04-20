@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using Microsoft.Phone.Notification;
 
-namespace WindowsPhone.Recipes.Push.Client
+namespace IrssiNotifier.PushNotificationContext
 {
     public class PushContextEventArgs : EventArgs
     {

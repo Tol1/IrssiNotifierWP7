@@ -43,7 +43,7 @@ namespace IrssiNotifier.Views
 			}
 			webclient.Headers["Cookie"] = cookieHeader;
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/register"), "guid=" + App.AppGuid/* + "&PushChannelURI=" + IsolatedStorageSettings.ApplicationSettings["NotificationChannelUri"].ToString()*/);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid/* + "&PushChannelURI=" + IsolatedStorageSettings.ApplicationSettings["NotificationChannelUri"].ToString()*/);
 		}
 		public LoginPage FromPage { get; private set; }
 

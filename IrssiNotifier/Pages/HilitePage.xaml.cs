@@ -9,8 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Controls;
-using WindowsPhone.Recipes.Push.Client;
 using IrssiNotifier.Views;
 using Microsoft.Phone.Shell;
 using System.Collections.ObjectModel;
@@ -28,7 +28,7 @@ namespace IrssiNotifier.Pages
 			DataContext = this;
 			try
 			{
-				var pushContext = new PushContext(App.CHANNELNAME, App.SERVICENAME, App.AllowedDomains, Dispatcher);
+				var pushContext = new PushContext(App.Channelname, App.Servicename, App.AllowedDomains, Dispatcher);
 			}
 			catch (InvalidOperationException)
 			{
@@ -40,12 +40,21 @@ namespace IrssiNotifier.Pages
 		{
 			if (PushContext.Current.IsTileEnabled)
 			{
-				PushContext.Current.Connect(c =>
-				{
-					SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher);
-				});
+				PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
-			FetchHilitesSince(0);
+			long lastFetch = 0;
+			if (IsolatedStorageSettings.ApplicationSettings.Contains("LastHiliteFetch"))
+			{
+				try
+				{
+					lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
+				}
+				catch (FormatException)
+				{
+					lastFetch = 0;
+				}
+			}
+			FetchHilitesSince(lastFetch);
 		}
 
 		public class Hilite
@@ -54,6 +63,7 @@ namespace IrssiNotifier.Pages
 			public string Nick { get; set; }
 			public string Message { get; set; }
 			public string From { get { return Nick + " @ " + Channel; } }
+			public DateTime Timestamp { get; set; }
 		}
 
 		private ObservableCollection<Hilite> _hiliteCollection;
@@ -79,10 +89,18 @@ namespace IrssiNotifier.Pages
 				try
 				{
 					var collection = new ObservableCollection<Hilite>();
-					var result = JArray.Parse(args.Result);
-					foreach(var hiliteRow in result){
-						var hilite = JObject.Parse(hiliteRow.ToString());
-						collection.Add(new Hilite() { Channel = hilite["channel"].ToString(), Nick = hilite["nick"].ToString(), Message = hilite["message"].ToString() });
+					var result = JObject.Parse(args.Result);
+					IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
+					var messages = JArray.Parse(result["messages"].ToString());
+					foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
+					{
+						var hiliteObj = new Hilite
+						             	{
+						             		Channel = hilite["channel"].ToString(),
+						             		Nick = hilite["nick"].ToString(),
+						             		Message = hilite["message"].ToString()
+						             	};
+						collection.Insert(0, hiliteObj);
 					}
 					HiliteCollection = collection;
 				}
@@ -90,7 +108,7 @@ namespace IrssiNotifier.Pages
 				}
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/messages"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid/* + "&since=" + last*/);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/messages"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&since=" + last);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

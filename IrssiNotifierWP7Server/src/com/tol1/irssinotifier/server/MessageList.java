@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.datamodels.*;
+import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
 
 import flexjson.JSONSerializer;
 
@@ -38,8 +39,9 @@ public class MessageList extends HttpServlet {
 					messages = messages.filter("timestamp >", sinceTimestamp);
 				} catch (NumberFormatException e) {}
 			}
+			MessageListResponse response = new MessageListResponse(messages);
 			JSONSerializer serializer = new JSONSerializer();
-			String jsonObject = serializer.exclude("class").serialize(messages);
+			String jsonObject = serializer.include("messages").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
@@ -54,6 +56,7 @@ public class MessageList extends HttpServlet {
 			throws ServletException, IOException {
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
+		resp.setCharacterEncoding("UTF-8");
 		
 		if(id == null || guid == null){
 			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");
@@ -71,8 +74,9 @@ public class MessageList extends HttpServlet {
 					messages = messages.filter("timestamp >", sinceTimestamp);
 				} catch (NumberFormatException e) {}
 			}
+			MessageListResponse response = new MessageListResponse(messages);
 			JSONSerializer serializer = new JSONSerializer();
-			String jsonObject = serializer.exclude("class").serialize(messages);
+			String jsonObject = serializer.include("messages").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();

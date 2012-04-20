@@ -15,12 +15,12 @@ using IrssiNotifier.Views;
 
 namespace IrssiNotifier.Pages
 {
-    public partial class LoginPage : PhoneApplicationPage
-    {
-        public LoginPage()
-        {
-            InitializeComponent();
+	public partial class LoginPage : PhoneApplicationPage
+	{
+		public LoginPage()
+		{
+			InitializeComponent();
 			contentBorder.Child = new LoginView(this);
-        }
-    }
+		}
+	}
 }

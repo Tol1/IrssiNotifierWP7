@@ -1,5 +1,7 @@
 package com.tol1.irssinotifier.server.datamodels;
 
+import com.googlecode.objectify.Query;
+
 public class StatusMessages {
 	public static class StatusMessage{
 		public boolean success;
@@ -29,6 +31,14 @@ public class StatusMessages {
 			super();
 			this.toastStatus = toastEnabled;
 			this.tileStatus = tileEnabled;
+		}
+	}
+	public static class MessageListResponse {
+		public long currentTimestamp;
+		public Query<Message> messages;
+		public MessageListResponse(Query<Message> messages){
+			this.messages = messages;
+			this.currentTimestamp = System.currentTimeMillis();
 		}
 	}
 }

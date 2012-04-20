@@ -9,9 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using WindowsPhone.Recipes.Push.Client;
 using System.IO.IsolatedStorage;
 using System.Windows.Threading;
+using IrssiNotifier.PushNotificationContext;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using Microsoft.Phone.Shell;
@@ -34,7 +34,7 @@ namespace IrssiNotifier.Views
 				if (PushContext.Current.IsToastEnabled != value)
 				{
 					PushContext.Current.IsToastEnabled = value;
-					SettingsView.UpdateSettings("toast", value, Dispatcher);
+					UpdateSettings("toast", value, Dispatcher);
 					NotifyPropertyChanged("IsToastEnabled");
 				}
 			}
@@ -49,37 +49,9 @@ namespace IrssiNotifier.Views
 				{
 					PushContext.Current.IsTileEnabled = value;
 					NotifyPropertyChanged("IsTileEnabled");
-					SettingsView.UpdateSettings("tile", value, Dispatcher, new Action(() => PinTile(value)));
+					UpdateSettings("tile", value, Dispatcher, () => PinTile(value));
 				}
 				
-			}
-		}
-
-		private void PinTile(bool value)
-		{
-			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.HILITEPAGEURL);
-			//var activeTiles = ShellTile.ActiveTiles.ToList();
-			if (value && hiliteTile == null)
-			{
-				var answer = MessageBox.Show("Tämä vaatii tiilen. Ok?", "Vahvista", MessageBoxButton.OKCancel);
-				if (answer == MessageBoxResult.OK)
-				{
-					var NewTileData = new StandardTileData
-					{
-						BackgroundImage = new Uri("/Images/Tile.png", UriKind.Relative),
-						Count = 0
-					};
-					ShellTile.Create(new Uri(App.HILITEPAGEURL, UriKind.Relative), NewTileData);
-				}
-			}
-			else if (!value && hiliteTile != null)
-			{
-				var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
-				if (answer == MessageBoxResult.OK)
-				{
-					hiliteTile.Delete();
-					//activeTiles.First(tile => tile.NavigationUri.ToString().Contains(App.HILITEPAGEURL)).Delete();
-				}
 			}
 		}
 
@@ -91,7 +63,7 @@ namespace IrssiNotifier.Views
 				if (PushContext.Current.IsRawEnabled != value)
 				{
 					PushContext.Current.IsRawEnabled = value;
-					SettingsView.UpdateSettings("raw", value, Dispatcher);
+					UpdateSettings("raw", value, Dispatcher);
 					NotifyPropertyChanged("IsRawEnabled");
 				}
 			}
@@ -106,7 +78,7 @@ namespace IrssiNotifier.Views
 				{
 					if (value)
 					{
-						PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+						PushContext.Current.Connect(c => RegisterChannelUri(c.ChannelUri, Dispatcher));
 					}
 					else
 					{
@@ -126,7 +98,7 @@ namespace IrssiNotifier.Views
 		public event PropertyChangedEventHandler PropertyChanged;
 
 
-		public static void RegisterChannelUri(Uri ChannelUri, Dispatcher dispatcher)
+		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
 		{
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
@@ -138,16 +110,23 @@ namespace IrssiNotifier.Views
 				var result = JObject.Parse(args.Result);
 				if (bool.Parse(result["success"].ToString()))
 				{
-					bool toastStatus = bool.Parse(result["toastStatus"].ToString());
-					bool tileStatus = bool.Parse(result["tileStatus"].ToString());
+					var dirty = false;
+					var toastStatus = bool.Parse(result["toastStatus"].ToString());
+					var tileStatus = bool.Parse(result["tileStatus"].ToString());
 					if (toastStatus != PushContext.Current.IsToastEnabled)
 					{
 						PushContext.Current.IsToastEnabled = toastStatus;
+						dirty = true;
 					}
 					if (tileStatus != PushContext.Current.IsTileEnabled)
 					{
 						PushContext.Current.IsTileEnabled = tileStatus;
-					}//TODO notifikaatio jos muuttuu...
+						dirty = true;
+					}
+					if(dirty)
+					{
+						//TODO notifikaatio jos muuttuu...
+					}
 				}
 				else
 				{
@@ -155,19 +134,19 @@ namespace IrssiNotifier.Views
 				}
 				if (PushContext.Current.IsConnected && PushContext.Current.IsPushEnabled && PushContext.Current.IsTileEnabled)
 				{
-					UpdateSettings("clearcount", true, dispatcher, new Action(() =>
-					{
-						foreach (var tile in ShellTile.ActiveTiles)
-						{
-							tile.Update(new StandardTileData() { Count = 0 });
-						}
-					}));
+					UpdateSettings("clearcount", true, dispatcher, () =>
+					                                               	{
+					                                               		foreach (var tile in ShellTile.ActiveTiles)
+					                                               		{
+					                                               			tile.Update(new StandardTileData() { Count = 0 });
+					                                               		}
+					                                               	});
 
 				}
 
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&newUrl=" + ChannelUri.ToString());
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&newUrl=" + channelUri);
 		}
 
 		private static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher, Action callback = null)
@@ -194,7 +173,33 @@ namespace IrssiNotifier.Views
 				}
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.BASEADDRESS + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"].ToString() + "&guid=" + App.AppGuid + "&"+param+"=" + enabled);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&"+param+"=" + enabled);
+		}
+
+		private static void PinTile(bool value)
+		{
+			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+			if (value && hiliteTile == null)
+			{
+				var answer = MessageBox.Show("Tämä vaatii tiilen. Ok?", "Vahvista", MessageBoxButton.OKCancel);
+				if (answer == MessageBoxResult.OK)
+				{
+					var newTileData = new StandardTileData
+					{
+						BackgroundImage = new Uri("/Images/Tile.png", UriKind.Relative),
+						Count = 0
+					};
+					ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative), newTileData);
+				}
+			}
+			else if (!value && hiliteTile != null)
+			{
+				var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
+				if (answer == MessageBoxResult.OK)
+				{
+					hiliteTile.Delete();
+				}
+			}
 		}
 	}
 }

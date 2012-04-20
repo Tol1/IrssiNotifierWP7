@@ -77,12 +77,12 @@
       <DependentUpon>HilitePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PushContext.cs" />
-    <Compile Include="PushContextErrorEventArgs.cs" />
-    <Compile Include="PushContextEventArgs.cs" />
     <Compile Include="Pages\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PushNotificationContext\PushContext.cs" />
+    <Compile Include="PushNotificationContext\PushContextErrorEventArgs.cs" />
+    <Compile Include="PushNotificationContext\PushContextEventArgs.cs" />
     <Compile Include="Views\InitialView.xaml.cs">
       <DependentUpon>InitialView.xaml</DependentUpon>
     </Compile>

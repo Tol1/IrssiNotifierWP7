@@ -16,60 +16,60 @@ using System.IO.IsolatedStorage;
 
 namespace IrssiNotifier
 {
-    public partial class App : Application
-    {
-		public static readonly string BASEADDRESS = "https://irssinotifierwp.appspot.com/";
-		public static readonly string SERVICENAME = "appengine.google.com";
-		public static readonly string CHANNELNAME = "IrssiNotifier";
+	public partial class App : Application
+	{
+		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
+		public static readonly string Servicename = "appengine.google.com";
+		public static readonly string Channelname = "IrssiNotifier";
 
-		public static readonly string HILITEPAGEURL = "/Pages/HilitePage.xaml";
+		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml";
 
 		public static readonly Uri[] AllowedDomains =
-        {
-            new Uri(App.BASEADDRESS)
-        };
+			{
+				new Uri(Baseaddress)
+			};
 
 		public static string AppGuid;
 
-        /// <summary>
-        /// Provides easy access to the root frame of the Phone Application.
-        /// </summary>
-        /// <returns>The root frame of the Phone Application.</returns>
-        public PhoneApplicationFrame RootFrame { get; private set; }
+		/// <summary>
+		/// Provides easy access to the root frame of the Phone Application.
+		/// </summary>
+		/// <returns>The root frame of the Phone Application.</returns>
+		public PhoneApplicationFrame RootFrame { get; private set; }
 
-        /// <summary>
-        /// Constructor for the Application object.
-        /// </summary>
-        public App()
-        {
-            // Global handler for uncaught exceptions. 
-            UnhandledException += Application_UnhandledException;
+		/// <summary>
+		/// Constructor for the Application object.
+		/// </summary>
+		public App()
+		{
+			// Global handler for uncaught exceptions. 
+			UnhandledException += Application_UnhandledException;
 
-            // Standard Silverlight initialization
-            InitializeComponent();
+			// Standard Silverlight initialization
+			InitializeComponent();
 
-            // Phone-specific initialization
-            InitializePhoneApplication();
+			// Phone-specific initialization
+			InitializePhoneApplication();
 
-            // Show graphics profiling information while debugging.
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+			// Show graphics profiling information while debugging.
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				// Display the current frame rate counters.
+				Application.Current.Host.Settings.EnableFrameRateCounter = true;
 
-                // Show the areas of the app that are being redrawn in each frame.
-                //Application.Current.Host.Settings.EnableRedrawRegions = true;
+				// Show the areas of the app that are being redrawn in each frame.
+				//Application.Current.Host.Settings.EnableRedrawRegions = true;
 
-                // Enable non-production analysis visualization mode, 
-                // which shows areas of a page that are handed off to GPU with a colored overlay.
-                //Application.Current.Host.Settings.EnableCacheVisualization = true;
+				// Enable non-production analysis visualization mode, 
+				// which shows areas of a page that are handed off to GPU with a colored overlay.
+				//Application.Current.Host.Settings.EnableCacheVisualization = true;
 
-                // Disable the application idle detection by setting the UserIdleDetectionMode property of the
-                // application's PhoneApplicationService object to Disabled.
-                // Caution:- Use this under debug mode only. Application that disables user idle detection will continue to run
-                // and consume battery power when the user is not using the phone.
-                PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
-            }
+				// Disable the application idle detection by setting the UserIdleDetectionMode property of the
+				// application's PhoneApplicationService object to Disabled.
+				// Caution:- Use this under debug mode only. Application that disables user idle detection will continue to run
+				// and consume battery power when the user is not using the phone.
+				PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+			}
 
 			if (!IsolatedStorageSettings.ApplicationSettings.Contains("GUID"))
 			{
@@ -80,86 +80,88 @@ namespace IrssiNotifier
 			{
 				AppGuid = IsolatedStorageSettings.ApplicationSettings["GUID"].ToString();
 			}
-        }
 
-        // Code to execute when the application is launching (eg, from Start)
-        // This code will not execute when the application is reactivated
-        private void Application_Launching(object sender, LaunchingEventArgs e)
-        {
-        }
 
-        // Code to execute when the application is activated (brought to foreground)
-        // This code will not execute when the application is first launched
-        private void Application_Activated(object sender, ActivatedEventArgs e)
-        {
-        }
+		}
 
-        // Code to execute when the application is deactivated (sent to background)
-        // This code will not execute when the application is closing
-        private void Application_Deactivated(object sender, DeactivatedEventArgs e)
-        {
-        }
+		// Code to execute when the application is launching (eg, from Start)
+		// This code will not execute when the application is reactivated
+		private void Application_Launching(object sender, LaunchingEventArgs e)
+		{
+		}
 
-        // Code to execute when the application is closing (eg, user hit Back)
-        // This code will not execute when the application is deactivated
-        private void Application_Closing(object sender, ClosingEventArgs e)
-        {
-        }
+		// Code to execute when the application is activated (brought to foreground)
+		// This code will not execute when the application is first launched
+		private void Application_Activated(object sender, ActivatedEventArgs e)
+		{
+		}
 
-        // Code to execute if a navigation fails
-        private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                // A navigation has failed; break into the debugger
-                System.Diagnostics.Debugger.Break();
-            }
-        }
+		// Code to execute when the application is deactivated (sent to background)
+		// This code will not execute when the application is closing
+		private void Application_Deactivated(object sender, DeactivatedEventArgs e)
+		{
+		}
 
-        // Code to execute on Unhandled Exceptions
-        private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
-        {
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                // An unhandled exception has occurred; break into the debugger
-                System.Diagnostics.Debugger.Break();
-            }
-        }
+		// Code to execute when the application is closing (eg, user hit Back)
+		// This code will not execute when the application is deactivated
+		private void Application_Closing(object sender, ClosingEventArgs e)
+		{
+		}
 
-        #region Phone application initialization
+		// Code to execute if a navigation fails
+		private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
+		{
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				// A navigation has failed; break into the debugger
+				System.Diagnostics.Debugger.Break();
+			}
+		}
 
-        // Avoid double-initialization
-        private bool phoneApplicationInitialized = false;
+		// Code to execute on Unhandled Exceptions
+		private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+		{
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				// An unhandled exception has occurred; break into the debugger
+				System.Diagnostics.Debugger.Break();
+			}
+		}
 
-        // Do not add any additional code to this method
-        private void InitializePhoneApplication()
-        {
-            if (phoneApplicationInitialized)
-                return;
+		#region Phone application initialization
 
-            // Create the frame but don't set it as RootVisual yet; this allows the splash
-            // screen to remain active until the application is ready to render.
-            RootFrame = new PhoneApplicationFrame();
-            RootFrame.Navigated += CompleteInitializePhoneApplication;
+		// Avoid double-initialization
+		private bool phoneApplicationInitialized = false;
 
-            // Handle navigation failures
-            RootFrame.NavigationFailed += RootFrame_NavigationFailed;
+		// Do not add any additional code to this method
+		private void InitializePhoneApplication()
+		{
+			if (phoneApplicationInitialized)
+				return;
 
-            // Ensure we don't initialize again
-            phoneApplicationInitialized = true;
-        }
+			// Create the frame but don't set it as RootVisual yet; this allows the splash
+			// screen to remain active until the application is ready to render.
+			RootFrame = new PhoneApplicationFrame();
+			RootFrame.Navigated += CompleteInitializePhoneApplication;
 
-        // Do not add any additional code to this method
-        private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
-        {
-            // Set the root visual to allow the application to render
-            if (RootVisual != RootFrame)
-                RootVisual = RootFrame;
+			// Handle navigation failures
+			RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
-            // Remove this handler since it is no longer needed
-            RootFrame.Navigated -= CompleteInitializePhoneApplication;
-        }
+			// Ensure we don't initialize again
+			phoneApplicationInitialized = true;
+		}
 
-        #endregion
-    }
+		// Do not add any additional code to this method
+		private void CompleteInitializePhoneApplication(object sender, NavigationEventArgs e)
+		{
+			// Set the root visual to allow the application to render
+			if (RootVisual != RootFrame)
+				RootVisual = RootFrame;
+
+			// Remove this handler since it is no longer needed
+			RootFrame.Navigated -= CompleteInitializePhoneApplication;
+		}
+
+		#endregion
+	}
 }

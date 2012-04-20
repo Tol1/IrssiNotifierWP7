@@ -19,12 +19,6 @@ namespace IrssiNotifier.Views
 			InitializeComponent();
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			Page pg = GetDependencyObjectFromVisualTree(this, typeof(Page)) as Page;
-			pg.NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
-		}
-
 		private DependencyObject GetDependencyObjectFromVisualTree(DependencyObject startObject, Type type)
 		{
 			DependencyObject parent = startObject;
