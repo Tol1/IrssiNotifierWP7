@@ -62,7 +62,7 @@ public class Message {
 			text2.appendChild(doc.createTextNode(this.message));
 			Element param = doc.createElement("wp:Param");
 			toast.appendChild(param);
-			param.appendChild(doc.createTextNode(IrssiNotifier.HILITEPAGEURL+"NavigatedFrom=Toast Notification"));
+			param.appendChild(doc.createTextNode(IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Toast"));
 			
 			StringWriter output = new StringWriter();
 
@@ -94,13 +94,13 @@ public class Message {
 						+ "<wp:Text2>"
 							+ this.message
 						+ "</wp:Text2>"
-						+ "<wp:Param>"+IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Toast Notification</wp:Param>"
+						+ "<wp:Param>"+IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Toast</wp:Param>"
 				+ "</wp:Toast> "
 			+ "</wp:Notification>";
 		return toast;
 	}
 	
-	public static String GenerateTileNotification(int countValue, String tileUrl){
+	public String GenerateTileNotification(int countValue, String tileUrl){
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -117,7 +117,6 @@ public class Message {
 			}
 			Element bgImage = doc.createElement("wp:BackgroundImage");
 			tile.appendChild(bgImage);
-			//text1.appendChild(doc.createTextNode("/Images/Tile.png"));
 			Element count = doc.createElement("wp:Count");
 			tile.appendChild(count);
 			if(countValue == 0){
@@ -126,7 +125,6 @@ public class Message {
 			count.appendChild(doc.createTextNode(countValue+""));
 			Element title = doc.createElement("wp:Title");
 			tile.appendChild(title);
-			//param.appendChild(doc.createTextNode(""));
 			
 			StringWriter output = new StringWriter();
 

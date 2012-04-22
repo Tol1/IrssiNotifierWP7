@@ -10,6 +10,10 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
+import com.tol1.irssinotifier.server.datamodels.StatusMessages.RegisterSuccessMessage;
+import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
+
+import flexjson.JSONSerializer;
 
 @SuppressWarnings("serial")
 public class RegisterPhoneClient extends HttpServlet {
@@ -24,8 +28,7 @@ public class RegisterPhoneClient extends HttpServlet {
         if (user != null) {
         	String guid = req.getParameter("guid");
 			if(guid == null){
-				resp.getWriter().println("{ \"error\": \"GUID missing\" }");
-				resp.getWriter().close();
+				IrssiNotifier.printError(resp.getWriter(), "GUID missing");
 				return;
 			}
         	String id = user.getUserId();
@@ -33,26 +36,9 @@ public class RegisterPhoneClient extends HttpServlet {
         	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid);
         	
         	dao.ofy().put(iNUser);
-        	
-        	/*Key userIdKey = KeyFactory.createKey("User", id);
-        	Entity databaseUser;
-        	try {
-				databaseUser = datastore.get(userIdKey);
-			} catch (EntityNotFoundException e) {
-				databaseUser = new Entity(userIdKey);
-				databaseUser.setProperty("ChannelURI", null);
-				databaseUser.setProperty("guid", null);
-				databaseUser.setProperty("sendToastNotifications", false);
-				databaseUser.setProperty("sendTileNotifications", false);
-				datastore.put(databaseUser);
-			}
-        	
-        	databaseUser.setProperty("ChannelURI", null);
-        	databaseUser.setProperty("guid", guid);
-			databaseUser.setProperty("sendToastNotifications", false);
-			databaseUser.setProperty("sendTileNotifications", false);
-			datastore.put(databaseUser);*/
-			resp.getWriter().println("{ \"success\": \""+id+"\" }");
+        	RegisterSuccessMessage message = new RegisterSuccessMessage(id);
+        	resp.getWriter().println(new JSONSerializer().exclude("class").serialize(message));
+			resp.getWriter().close();
 			
         } else {
             resp.sendRedirect("/client/login");

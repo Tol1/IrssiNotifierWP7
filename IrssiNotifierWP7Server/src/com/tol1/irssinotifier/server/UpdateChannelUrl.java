@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
+import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
 
@@ -51,19 +52,5 @@ public class UpdateChannelUrl extends HttpServlet {
 			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
 			return;
 		}
-		
-		/*Entity databaseUser;
-		try {
-			databaseUser = IrssiNotifier.checkAuthentication(id, guid);
-		} catch (Exception e1) {
-			IrssiNotifier.printError(resp.getWriter(), e1.getLocalizedMessage());
-			return;
-		}
-		
-    	databaseUser.setProperty("ChannelURI", newUrl);
-		IrssiNotifier.datastore.put(databaseUser);
-		resp.getWriter().println("{ \"success\": true }");
-		resp.getWriter().close();
-		return;*/
 	}
 }

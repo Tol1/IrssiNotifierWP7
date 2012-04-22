@@ -23,7 +23,7 @@ namespace IrssiNotifier
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
 
-		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml";
+		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml?NavigatedFrom=Tile";
 
 		public static readonly Uri[] AllowedDomains =
 			{

@@ -29,11 +29,19 @@ namespace IrssiNotifier.Views
 			webclient.UploadStringCompleted += (sender, args) =>
 			{
 				var result = args.Result;
-				var parsed = JObject.Parse(result);	//TODO unsuccessful
-				UserId = (string)parsed["success"];
-				FromPage.button.Content = "Jatka";
-				FromPage.button.Visibility = Visibility.Visible;
-				FromPage.button.Click += ButtonClick;
+				var parsed = JObject.Parse(result);	
+				if (bool.Parse(parsed["success"].ToString()))
+				{
+					UserId = (string)parsed["userid"];
+					FromPage.button.Content = "Jatka";
+					FromPage.button.Visibility = Visibility.Visible;
+					FromPage.button.Click += ButtonClick;
+				}
+				else
+				{
+					Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe rekisteröinnissä: " + parsed["errorMessage"]));
+					//TODO unsuccessful
+				}
 			};
 			var cookies = PhoneApplicationService.Current.State["cookies"] as CookieCollection;
 			var cookieHeader = cookies.Cast<Cookie>().Aggregate("", (current, cookie) => current + (cookie.Name + "=" + cookie.Value + "; "));

@@ -12,6 +12,7 @@ import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
 import com.tol1.irssinotifier.server.utils.CustomTimeTransformer;
+import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
 

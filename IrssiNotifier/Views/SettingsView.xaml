@@ -45,7 +45,6 @@
                            Text="Avaa/Sulje notifikaatiokanava kokonaan" />
             </StackPanel>
 
-            <Grid>
                 <StackPanel Margin="16,0,0,0">
                     <toolkit:ToggleSwitch Header="Livetiili"
                                  IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
@@ -67,8 +66,9 @@
                 </StackPanel>
 
                 <!--Border Background="{Binding IsPushEnabled, Converter={StaticResource BoolBrushConverter}}" /-->
-            </Grid>
-
+            <StackPanel>
+                <Button Click="LogoutClick">Kirjaudu ulos</Button>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

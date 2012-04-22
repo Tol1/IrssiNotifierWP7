@@ -9,15 +9,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
+using IrssiNotifier.Views;
 
 namespace IrssiNotifier.Pages
 {
-	public partial class Settings
+	public partial class SettingsPage
 	{
-		public Settings()
+		public SettingsPage()
 		{
 			InitializeComponent();
+			contentBorder.Child = new SettingsView(this);
 		}
 	}
 }

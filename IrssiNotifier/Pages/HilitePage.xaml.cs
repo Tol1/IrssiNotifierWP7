@@ -210,5 +210,17 @@ namespace IrssiNotifier.Pages
 		{
 			Last,All
 		}
+
+		private void BackButtonClick(object sender, RoutedEventArgs e)
+		{
+			if(NavigationContext.QueryString.ContainsKey("NavigatedFrom") || !NavigationService.CanGoBack)
+			{
+				NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+			}
+			else if(NavigationService.CanGoBack)
+			{
+				NavigationService.GoBack();
+			}
+		}
 	}
 }

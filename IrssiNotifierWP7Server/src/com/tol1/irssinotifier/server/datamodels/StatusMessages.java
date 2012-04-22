@@ -9,6 +9,15 @@ public class StatusMessages {
 			this.success = true;
 		}
 	}
+	
+	public static class RegisterSuccessMessage extends StatusMessage{
+		public String userid;
+		public RegisterSuccessMessage(String userid){
+			this.success = true;
+			this.userid = userid;
+		}
+	}
+	
 	public static class ErrorMessage extends StatusMessage{
 		public String errorMessage;
 		public ErrorMessage(){

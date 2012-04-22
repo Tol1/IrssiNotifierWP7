@@ -49,7 +49,7 @@ namespace IrssiNotifier.Pages
 		{
 			firstButton.Content = "Asetukset";
 			firstButton.Visibility = Visibility.Visible;
-			firstButton.Click += (sender, args) => NavigationService.Navigate(new Uri("/Pages/Settings.xaml", UriKind.Relative));
+			firstButton.Click += (sender, args) => NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
 			secondButton.Content = "Hilitet";
 			secondButton.Visibility = Visibility.Visible;
 			secondButton.Click +=
@@ -62,14 +62,14 @@ namespace IrssiNotifier.Pages
 
 		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
 		{
-
-			if (PhoneApplicationService.Current.State.ContainsKey("registered"))
+			if (PhoneApplicationService.Current.State.ContainsKey("registered") || PhoneApplicationService.Current.State.ContainsKey("logout"))
 			{
 				while (NavigationService.CanGoBack)
 				{
 					NavigationService.RemoveBackEntry(); //clear backstack
 				}
 				PhoneApplicationService.Current.State.Remove("registered");
+				PhoneApplicationService.Current.State.Remove("logout");
 			}
 		}
 		/*

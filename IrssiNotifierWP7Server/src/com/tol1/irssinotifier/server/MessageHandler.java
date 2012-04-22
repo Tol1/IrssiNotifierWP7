@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
+import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
 public class MessageHandler extends HttpServlet {
@@ -43,7 +44,7 @@ public class MessageHandler extends HttpServlet {
 			}
 		}
 		if(user.sendTileNotifications){
-			String tileMessage = Message.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL);
+			String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 			HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
 			if(responseStatus == Status.STATUS_OK){
@@ -69,8 +70,7 @@ public class MessageHandler extends HttpServlet {
 		OutputStreamWriter writer = null;
 		try {
 			writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
-			writer.write(payload); // Write POST query string (if any
-										// needed).
+			writer.write(payload);
 		} finally {
 			if (writer != null)
 				try {

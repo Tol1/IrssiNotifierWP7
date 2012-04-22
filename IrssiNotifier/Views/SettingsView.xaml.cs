@@ -8,9 +8,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.IsolatedStorage;
 using System.Windows.Threading;
+using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
@@ -20,11 +22,14 @@ namespace IrssiNotifier.Views
 {
 	public partial class SettingsView : INotifyPropertyChanged
 	{
-		public SettingsView()
+		public SettingsView(SettingsPage fromPage)
 		{
 			DataContext = this;
 			InitializeComponent();//TODO uloskirjautuminen
+			FromPage = fromPage;
 		}
+
+		public SettingsPage FromPage { get; private set; }
 
 		public string UserId
 		{
@@ -214,11 +219,30 @@ namespace IrssiNotifier.Views
 			}
 			else if (!value && hiliteTile != null)
 			{
-				var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
+				/*var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
 					hiliteTile.Delete();
+				}*/
+			}
+		}
+
+		private void LogoutClick(object sender, RoutedEventArgs e)
+		{
+			var answer = MessageBox.Show("Oletko varma että haluat kirjautua ulos?", "Vahvista uloskirjautuminen",
+			                             MessageBoxButton.OKCancel);
+			if(answer == MessageBoxResult.OK)
+			{
+				IsPushEnabled = false;
+				IsTileEnabled = false;
+				IsToastEnabled = false;
+				IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+				while(FromPage.NavigationService.CanGoBack)
+				{
+					FromPage.NavigationService.RemoveBackEntry();
 				}
+				PhoneApplicationService.Current.State["logout"] = true;
+				FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 			}
 		}
 	}
