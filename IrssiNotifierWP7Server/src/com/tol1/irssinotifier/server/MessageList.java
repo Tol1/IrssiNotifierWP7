@@ -11,6 +11,7 @@ import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
+import com.tol1.irssinotifier.server.utils.CustomTimeTransformer;
 
 import flexjson.JSONSerializer;
 
@@ -41,7 +42,7 @@ public class MessageList extends HttpServlet {
 			}
 			MessageListResponse response = new MessageListResponse(messages);
 			JSONSerializer serializer = new JSONSerializer();
-			String jsonObject = serializer.include("messages").exclude("*.class").serialize(response);
+			String jsonObject = serializer.include("messages").transform(new CustomTimeTransformer(), "messages.timestamp").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
@@ -76,7 +77,7 @@ public class MessageList extends HttpServlet {
 			}
 			MessageListResponse response = new MessageListResponse(messages);
 			JSONSerializer serializer = new JSONSerializer();
-			String jsonObject = serializer.include("messages").exclude("*.class").serialize(response);
+			String jsonObject = serializer.include("messages").transform(new CustomTimeTransformer(), "messages.timestamp").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();

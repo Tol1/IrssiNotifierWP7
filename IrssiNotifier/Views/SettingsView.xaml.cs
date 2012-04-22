@@ -26,6 +26,11 @@ namespace IrssiNotifier.Views
 			InitializeComponent();
 		}
 
+		public string UserId
+		{
+			get { return IsolatedStorageSettings.ApplicationSettings["userID"].ToString(); }
+		}
+
 		public bool IsToastEnabled
 		{
 			get { return PushContext.Current.IsToastEnabled; }

@@ -19,34 +19,51 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Margin" Value="16,-38,16,24" />
         </Style>
+        <Style x:Key="ReadOnlyTextBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <ContentPresenter x:Name="ContentElement" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
 
         <StackPanel>
             <StackPanel>
-                <toolkit:ToggleSwitch Header="Push Notifications"
+                <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
                                  IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Turn on/off push notifications." />
+                           Text="Avaa/Sulje notifikaatiokanava kokonaan" />
             </StackPanel>
 
             <Grid>
                 <StackPanel Margin="16,0,0,0">
-                    <toolkit:ToggleSwitch Header="Tile Notifications"
+                    <toolkit:ToggleSwitch Header="Livetiili"
                                  IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Tile push notifications update the application's tile displayed in the Start Screen. The application must be pinned by the user first." />
+                           Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
 
-                    <toolkit:ToggleSwitch Header="Toast Notifications"
+                    <toolkit:ToggleSwitch Header="Ponnahdusviestit"
                                  IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Toast push notifications are system-wide notifications that do not disrupt the user workflow or require intervention to resolve and are displayed in the top of the screen for ten seconds." />
+                           Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
 
-                    <toolkit:ToggleSwitch Header="Raw Notifications"
+                    <!--toolkit:ToggleSwitch Header="Raw Notifications"
                                  IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Raw push notifications are used to send application specific information. The application must be running first." />
+                           Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
+                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
+                    <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
+                               Text="{Binding UserId, Mode=OneTime}" />
                 </StackPanel>
 
                 <!--Border Background="{Binding IsPushEnabled, Converter={StaticResource BoolBrushConverter}}" /-->
