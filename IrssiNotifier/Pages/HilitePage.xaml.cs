@@ -20,27 +20,19 @@ using System.ComponentModel;
 
 namespace IrssiNotifier.Pages
 {
-	public partial class HilitePage : PhoneApplicationPage, INotifyPropertyChanged
+	public partial class HilitePage : INotifyPropertyChanged
 	{
 		public HilitePage()
 		{
 			InitializeComponent();
 			DataContext = this;
-			try
-			{
-				var pushContext = new PushContext(App.Channelname, App.Servicename, App.AllowedDomains, Dispatcher);
-			}
-			catch (InvalidOperationException)
-			{
-
-			}
 			HiliteCollection = new ObservableCollection<Hilite>();
 		}
 		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
 		{
 			if (PushContext.Current.IsTileEnabled)
 			{
-				PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
 			DefaultFetch();
 		}
@@ -130,11 +122,6 @@ namespace IrssiNotifier.Pages
 			}
 
 			public DateTime Timestamp { get; set; }
-			public void TimestampFromMillis(long millis)
-			{
-				var epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
-				Timestamp = epoch.AddSeconds(((double)millis)/1000);
-			}
 		}
 
 		private ObservableCollection<Hilite> _hiliteCollection;

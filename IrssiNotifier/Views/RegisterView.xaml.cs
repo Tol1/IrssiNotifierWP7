@@ -17,7 +17,7 @@ using IrssiNotifier.Pages;
 
 namespace IrssiNotifier.Views
 {
-	public partial class RegisterView : UserControl, INotifyPropertyChanged
+	public partial class RegisterView : INotifyPropertyChanged
 	{
 		public RegisterView(LoginPage page)
 		{
@@ -36,14 +36,10 @@ namespace IrssiNotifier.Views
 				FromPage.button.Click += ButtonClick;
 			};
 			var cookies = PhoneApplicationService.Current.State["cookies"] as CookieCollection;
-			var cookieHeader = "";
-			foreach (Cookie cookie in cookies)
-			{
-				cookieHeader += cookie.Name + "=" + cookie.Value + "; ";
-			}
+			var cookieHeader = cookies.Cast<Cookie>().Aggregate("", (current, cookie) => current + (cookie.Name + "=" + cookie.Value + "; "));
 			webclient.Headers["Cookie"] = cookieHeader;
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid/* + "&PushChannelURI=" + IsolatedStorageSettings.ApplicationSettings["NotificationChannelUri"].ToString()*/);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid);
 		}
 		public LoginPage FromPage { get; private set; }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Phone.Notification;
 
@@ -46,7 +48,7 @@ namespace IrssiNotifier.PushNotificationContext
 
         public bool IsPushEnabled
         {
-            get { return GetOrCreate<bool>("PushContext.IsPushEnabled", false); }
+            get { return GetOrCreate("PushContext.IsPushEnabled", false); }
             set
             {
                 SetOrCreate("PushContext.IsPushEnabled", value);
@@ -57,7 +59,7 @@ namespace IrssiNotifier.PushNotificationContext
 
         public bool IsTileEnabled
         {
-            get { return GetOrCreate<bool>("PushContext.IsTileEnabled", true); }
+            get { return GetOrCreate("PushContext.IsTileEnabled", true); }
             set
             {
                 SetOrCreate("PushContext.IsTileEnabled", value);
@@ -68,7 +70,7 @@ namespace IrssiNotifier.PushNotificationContext
 
         public bool IsToastEnabled
         {
-            get { return GetOrCreate<bool>("PushContext.IsToastEnabled", true); }
+            get { return GetOrCreate("PushContext.IsToastEnabled", true); }
             set
             {
                 SetOrCreate("PushContext.IsToastEnabled", value);
@@ -79,7 +81,7 @@ namespace IrssiNotifier.PushNotificationContext
 
         public bool IsRawEnabled
         {
-            get { return GetOrCreate<bool>("PushContext.IsRawEnabled", true); }
+            get { return GetOrCreate("PushContext.IsRawEnabled", true); }
             set
             {
                 SetOrCreate("PushContext.IsRawEnabled", value);
@@ -97,7 +99,7 @@ namespace IrssiNotifier.PushNotificationContext
 
         #region Ctor
 
-        public PushContext(string channelName, string serviceName, IList<Uri> allowedDomains, Dispatcher dispatcher)
+        public PushContext(string channelName, string serviceName, IList<Uri> allowedDomains)
         {
             if (_current != null)
             {
@@ -107,7 +109,6 @@ namespace IrssiNotifier.PushNotificationContext
             ChannelName = channelName;
             ServiceName = serviceName;
             AllowedDomains = allowedDomains;
-            Dispatcher = dispatcher;
 
             _current = this;
         }
@@ -115,8 +116,9 @@ namespace IrssiNotifier.PushNotificationContext
         #endregion
 
         #region Public Methods
-        public void Connect(Action<HttpNotificationChannel> prepared)
+        public void Connect(Dispatcher dispatcher, Action<HttpNotificationChannel> prepared)
         {
+        	Dispatcher = dispatcher;
             if (IsConnected)
             {
                 prepared(NotificationChannel);

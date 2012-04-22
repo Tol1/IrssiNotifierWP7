@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
@@ -30,6 +31,8 @@ namespace IrssiNotifier
 			};
 
 		public static string AppGuid;
+
+		private static PushContext _pushContext;
 
 		/// <summary>
 		/// Provides easy access to the root frame of the Phone Application.
@@ -88,12 +91,28 @@ namespace IrssiNotifier
 		// This code will not execute when the application is reactivated
 		private void Application_Launching(object sender, LaunchingEventArgs e)
 		{
+			try
+			{
+				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
+			}
+			catch (InvalidOperationException)
+			{
+				_pushContext = PushContext.Current;
+			}
 		}
 
 		// Code to execute when the application is activated (brought to foreground)
 		// This code will not execute when the application is first launched
 		private void Application_Activated(object sender, ActivatedEventArgs e)
 		{
+			try
+			{
+				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
+			}
+			catch (InvalidOperationException)
+			{
+				_pushContext = PushContext.Current;
+			}
 		}
 
 		// Code to execute when the application is deactivated (sent to background)

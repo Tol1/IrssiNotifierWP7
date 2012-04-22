@@ -19,7 +19,7 @@ using IrssiNotifier.Views;
 
 namespace IrssiNotifier.Pages
 {
-	public partial class MainPage : PhoneApplicationPage
+	public partial class MainPage
 	{
 
 		private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
@@ -27,14 +27,6 @@ namespace IrssiNotifier.Pages
 		public MainPage()
 		{
 			InitializeComponent();
-			try
-			{
-				var pushContext = new PushContext(App.Channelname, App.Servicename, App.AllowedDomains, Dispatcher);
-			}
-			catch (InvalidOperationException)
-			{
-
-			}
 			if (!_appSettings.Contains("userID"))
 			{
 				ShowInitialView();
@@ -62,15 +54,9 @@ namespace IrssiNotifier.Pages
 			secondButton.Visibility = Visibility.Visible;
 			secondButton.Click +=
 				(sender, args) => NavigationService.Navigate(new Uri("/Pages/HilitePage.xaml", UriKind.Relative));
-			/*secondButton.Content = "Kirjaudu ulos";
-			secondButton.Visibility = Visibility.Visible;
-			secondButton.Click += (sender, args) =>
-			{
-				//TODO uloskirjautuminen
-			};*/
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
 		}
 
@@ -86,7 +72,7 @@ namespace IrssiNotifier.Pages
 				PhoneApplicationService.Current.State.Remove("registered");
 			}
 		}
-
+		/*
 		private void PushChannel_ShellToastNotificationReceived(object sender, NotificationEventArgs e)
 		{
 			var message = new StringBuilder();
@@ -112,6 +98,6 @@ namespace IrssiNotifier.Pages
 			// Display a dialog of all the fields in the toast.
 			Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
 
-		}
+		}*/
 	}
 }

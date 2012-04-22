@@ -11,6 +11,6 @@
     d:DesignHeight="480" d:DesignWidth="480">
     
     <Grid x:Name="LayoutRoot">
-        <phone:WebBrowser Name="browser" IsScriptEnabled="True" Navigated="browser_Navigated" />
+        <phone:WebBrowser Name="webBrowser" IsScriptEnabled="True" Navigated="BrowserNavigated" />
     </Grid>
 </UserControl>

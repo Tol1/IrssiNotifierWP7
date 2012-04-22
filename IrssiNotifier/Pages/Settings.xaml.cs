@@ -13,7 +13,7 @@ using Microsoft.Phone.Controls;
 
 namespace IrssiNotifier.Pages
 {
-	public partial class Settings : PhoneApplicationPage
+	public partial class Settings
 	{
 		public Settings()
 		{

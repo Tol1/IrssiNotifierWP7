@@ -18,12 +18,12 @@ using Microsoft.Phone.Shell;
 
 namespace IrssiNotifier.Views
 {
-	public partial class SettingsView : UserControl, INotifyPropertyChanged
+	public partial class SettingsView : INotifyPropertyChanged
 	{
 		public SettingsView()
 		{
 			DataContext = this;
-			InitializeComponent();
+			InitializeComponent();//TODO uloskirjautuminen
 		}
 
 		public string UserId
@@ -83,7 +83,7 @@ namespace IrssiNotifier.Views
 				{
 					if (value)
 					{
-						PushContext.Current.Connect(c => RegisterChannelUri(c.ChannelUri, Dispatcher));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher));
 					}
 					else
 					{
@@ -118,19 +118,34 @@ namespace IrssiNotifier.Views
 					var dirty = false;
 					var toastStatus = bool.Parse(result["toastStatus"].ToString());
 					var tileStatus = bool.Parse(result["tileStatus"].ToString());
+					if(tileStatus && PushContext.Current.IsTileEnabled)
+					{
+						var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+						if (hiliteTile == null && PushContext.Current.IsPushEnabled)
+						{
+							dispatcher.BeginInvoke(() =>
+							                       	{
+							                       		MessageBox.Show("Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.");
+							                       		PushContext.Current.IsTileEnabled = false;
+														UpdateSettings("tile", false, dispatcher);
+							                       	});
+						}
+					}
+					else if (tileStatus != PushContext.Current.IsTileEnabled)
+					{
+						PushContext.Current.IsTileEnabled = tileStatus;
+						dirty = true;
+					}
 					if (toastStatus != PushContext.Current.IsToastEnabled)
 					{
 						PushContext.Current.IsToastEnabled = toastStatus;
 						dirty = true;
 					}
-					if (tileStatus != PushContext.Current.IsTileEnabled)
-					{
-						PushContext.Current.IsTileEnabled = tileStatus;
-						dirty = true;
-					}
 					if(dirty)
 					{
-						//TODO notifikaatio jos muuttuu...
+						dispatcher.BeginInvoke( () =>
+							MessageBox.Show("Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. " +
+							                "Tarkista asetukset asetusnäkymässä."));
 					}
 				}
 				else
@@ -143,7 +158,7 @@ namespace IrssiNotifier.Views
 					                                               	{
 					                                               		foreach (var tile in ShellTile.ActiveTiles)
 					                                               		{
-					                                               			tile.Update(new StandardTileData() { Count = 0 });
+					                                               			tile.Update(new StandardTileData { Count = 0 });
 					                                               		}
 					                                               	});
 

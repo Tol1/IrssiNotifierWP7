@@ -12,29 +12,11 @@ using System.Windows.Shapes;
 
 namespace IrssiNotifier.Views
 {
-	public partial class InitialView : UserControl
+	public partial class InitialView
 	{
 		public InitialView()
 		{
 			InitializeComponent();
-		}
-
-		private DependencyObject GetDependencyObjectFromVisualTree(DependencyObject startObject, Type type)
-		{
-			DependencyObject parent = startObject;
-
-			while (parent != null)
-			{
-				if (type.IsInstanceOfType(parent))
-				{
-					break;
-				}
-				else
-				{
-					parent = VisualTreeHelper.GetParent(parent);
-				}
-			}
-			return parent;
 		}
 	}
 }
