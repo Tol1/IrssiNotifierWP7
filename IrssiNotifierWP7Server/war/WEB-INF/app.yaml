@@ -31,3 +31,7 @@ handlers:
 - url: /client/messages
   servlet: com.tol1.irssinotifier.server.MessageList
   secure: always
+  
+- url: /cron/clear
+  servlet: com.tol1.irssinotifier.server.Clear
+  login: admin

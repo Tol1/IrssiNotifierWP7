@@ -1,0 +1,7 @@
+indexes:
+
+- kind: Message
+  ancestor: yes
+  properties:
+  - name: timestamp
+    direction: asc
