@@ -84,9 +84,16 @@ public class MessageHandler extends HttpServlet {
 	public static Status HandleResponse(HttpURLConnection conn, HttpServletResponse resp, IrssiNotifierUser user, ObjectifyDAO dao) throws IOException{
 		Status result;
 		int status = conn.getResponseCode();
-		String NotificationStatus = conn.getHeaderField("X-NotificationStatus");
-		String DeviceConnectionStatus = conn.getHeaderField("X-DeviceConnectionStatus");
-		String SubscriptionStatus = conn.getHeaderField("X-SubscriptionStatus");
+		String NotificationStatus = "n/a";
+		String DeviceConnectionStatus = "n/a";
+		String SubscriptionStatus = "n/a";
+		try{
+			NotificationStatus = conn.getHeaderField("X-NotificationStatus");
+			DeviceConnectionStatus = conn.getHeaderField("X-DeviceConnectionStatus");
+			SubscriptionStatus = conn.getHeaderField("X-SubscriptionStatus");
+		}
+		catch(ArrayIndexOutOfBoundsException aioobe){}
+		
 		switch(status){
 		case 200:
 			if(NotificationStatus.equalsIgnoreCase("Received")){
