@@ -39,6 +39,7 @@ public class RegisterPhoneClient extends HttpServlet {
         	RegisterSuccessMessage message = new RegisterSuccessMessage(id);
         	resp.getWriter().println(new JSONSerializer().exclude("class").serialize(message));
 			resp.getWriter().close();
+			IrssiNotifier.log.info("Rekisteröitiin uusi käyttäjä "+id+" GUID:illa "+guid);
 			
         } else {
             resp.sendRedirect("/client/login");

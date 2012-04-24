@@ -1,5 +1,6 @@
 package com.tol1.irssinotifier.server;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -13,6 +14,7 @@ public class IrssiNotifier {
 	
 	public static UserService userService = UserServiceFactory.getUserService();
 	public static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	public static final Logger log = Logger.getLogger("com.tol1.irssinotifier.server");
 	
 	public static final String HILITEPAGEURL = "/Pages/HilitePage.xaml";
 	
@@ -21,5 +23,6 @@ public class IrssiNotifier {
 		String json = new JSONSerializer().exclude("class").serialize(message);
 		writer.println(json);
 		writer.close();
+		log.severe(errorMessage);
 	}
 }

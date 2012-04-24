@@ -38,6 +38,11 @@ public class UpdateChannelUrl extends HttpServlet {
 		try {
 			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			if(user.guid.equals(guid)){
+				if(user.ChannelURI.equalsIgnoreCase(newUrl)) {
+					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri pysyy muuttumattomana");
+				} else {
+					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri vaihtuu arvosta "+user.ChannelURI+" arvoon "+newUrl);
+				}
 				user.ChannelURI = newUrl;
 				dao.ofy().put(user);
 				ChannelStatusMessage message = new ChannelStatusMessage(user.sendToastNotifications, user.sendTileNotifications);

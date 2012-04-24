@@ -39,7 +39,10 @@ public class MessageHandler extends HttpServlet {
 			String toastMessage = mess.GenerateToastNotification();
 			HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
-			if(responseStatus != Status.STATUS_OK){
+			if(responseStatus == Status.STATUS_OK) {
+				IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
+			} else {
+				IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
 				//error
 			}
 		}
@@ -47,9 +50,14 @@ public class MessageHandler extends HttpServlet {
 			String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 			HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 			Status responseStatus = HandleResponse(conn, resp, user, dao);
+			IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
 			if(responseStatus == Status.STATUS_OK){
+				IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
 				user.tileCount++;
 				dao.ofy().put(user);
+			}
+			else{
+				IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
 			}
 		}
 		

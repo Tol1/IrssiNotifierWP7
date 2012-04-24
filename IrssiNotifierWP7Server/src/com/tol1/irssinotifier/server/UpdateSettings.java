@@ -34,12 +34,15 @@ public class UpdateSettings extends HttpServlet {
 				String param;
 				if((param = req.getParameter("toast")) != null){
 					user.sendToastNotifications = Boolean.parseBoolean(param);
+					IrssiNotifier.log.info("Käyttäjän "+id+" toast notificationien lähetys asetettu arvoon "+Boolean.parseBoolean(param));
 				}
 				if((param = req.getParameter("tile")) != null){
 					user.sendTileNotifications = Boolean.parseBoolean(param);
+					IrssiNotifier.log.info("Käyttäjän "+id+" tile notificationien lähetys asetettu arvoon "+Boolean.parseBoolean(param));
 				}
 				if((param = req.getParameter("clearcount")) != null){
 					user.tileCount = 0;
+					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
 				}
 				dao.ofy().put(user);
 				resp.getWriter().println(new JSONSerializer().exclude("class").serialize(new StatusMessage()));
