@@ -6,7 +6,9 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
+import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
 
@@ -24,5 +26,13 @@ public class IrssiNotifier {
 		writer.println(json);
 		writer.close();
 		log.severe(errorMessage);
+	}
+	
+	public static IrssiNotifierUser getUser(ObjectifyDAO dao, String uuid){
+		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", uuid.trim()).get();
+		if(user == null){
+			//TODO throw exception
+		}
+		return user;
 	}
 }

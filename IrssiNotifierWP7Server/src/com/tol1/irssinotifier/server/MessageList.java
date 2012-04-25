@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
@@ -31,8 +30,13 @@ public class MessageList extends HttpServlet {
 		}
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
-		try {
-			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
+		if(user == null){
+			IrssiNotifier.printError(resp.getWriter(), "Käyttäjää ei löydy");
+			return;
+		}
+		else{
+//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			Query<Message> messages = dao.ofy().query(Message.class).ancestor(user);
 			String since = req.getParameter("since");
 			if(since != null){
@@ -47,9 +51,6 @@ public class MessageList extends HttpServlet {
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
-		} catch (NotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), "Käyttäjää ei löydy");
-			return;
 		}
 	}
 	
@@ -66,8 +67,13 @@ public class MessageList extends HttpServlet {
 		}
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
-		try {
-			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
+		if(user == null){
+			IrssiNotifier.printError(resp.getWriter(), "Käyttäjää ei löydy");
+			return;
+		}
+		else{
+//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			Query<Message> messages = dao.ofy().query(Message.class).ancestor(user);
 			String since = req.getParameter("since");
 			if(since != null){
@@ -82,9 +88,6 @@ public class MessageList extends HttpServlet {
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
-		} catch (NotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), "Käyttäjää ei löydy");
-			return;
 		}
 	}
 

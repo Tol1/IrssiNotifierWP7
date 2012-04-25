@@ -21,11 +21,12 @@ public class MessageHandler extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String id = req.getParameter("apiToken");
+		String id = req.getParameter("apiToken").trim();
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		
-		IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
+//		IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 		
 		URL url = new URL(user.ChannelURI);
 		

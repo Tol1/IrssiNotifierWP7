@@ -1,6 +1,8 @@
 package com.tol1.irssinotifier.server;
 
 import java.io.IOException;
+import java.util.UUID;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,13 +35,15 @@ public class RegisterPhoneClient extends HttpServlet {
 			}
         	String id = user.getUserId();
         	
-        	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid);
+        	UUID uuid = UUID.randomUUID();
+        	
+        	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid, uuid.toString());
         	
         	dao.ofy().put(iNUser);
-        	RegisterSuccessMessage message = new RegisterSuccessMessage(id);
+        	RegisterSuccessMessage message = new RegisterSuccessMessage(uuid.toString());
         	resp.getWriter().println(new JSONSerializer().exclude("class").serialize(message));
 			resp.getWriter().close();
-			IrssiNotifier.log.info("Rekisteröitiin uusi käyttäjä "+id+" GUID:illa "+guid);
+			IrssiNotifier.log.info("Rekisteröitiin uusi käyttäjä "+id+" GUID:illa "+guid+" ja UUID:lla "+uuid);
 			
         } else {
             resp.sendRedirect("/client/login");

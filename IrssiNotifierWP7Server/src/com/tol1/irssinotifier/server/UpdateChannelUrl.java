@@ -36,9 +36,10 @@ public class UpdateChannelUrl extends HttpServlet {
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		try {
-			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+			IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
+//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			if(user.guid.equals(guid)){
-				if(user.ChannelURI.equalsIgnoreCase(newUrl)) {
+				if(user.ChannelURI != null && user.ChannelURI.equalsIgnoreCase(newUrl)) {
 					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri pysyy muuttumattomana");
 				} else {
 					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri vaihtuu arvosta "+user.ChannelURI+" arvoon "+newUrl);

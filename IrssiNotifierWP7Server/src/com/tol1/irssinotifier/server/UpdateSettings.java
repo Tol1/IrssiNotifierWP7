@@ -29,7 +29,8 @@ public class UpdateSettings extends HttpServlet {
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		try {
-			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+			IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
+//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
 			if(user.guid.equals(guid)){
 				String param;
 				if((param = req.getParameter("toast")) != null){

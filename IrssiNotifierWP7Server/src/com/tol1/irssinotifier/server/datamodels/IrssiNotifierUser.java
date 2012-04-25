@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 public class IrssiNotifierUser {
 	@Id public String UserID;
+	public String UUID;
 	public String ChannelURI;
 	public String guid;
 	public boolean sendToastNotifications;
@@ -12,8 +13,9 @@ public class IrssiNotifierUser {
 	
 	public IrssiNotifierUser(){}
 	
-	public IrssiNotifierUser(String id, String guid){
+	public IrssiNotifierUser(String id, String guid, String uuid){
 		this.UserID = id;
 		this.guid = guid;
+		this.UUID = uuid;
 	}
 }
