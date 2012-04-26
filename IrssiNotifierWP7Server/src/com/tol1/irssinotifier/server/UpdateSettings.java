@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.StatusMessage;
+import com.tol1.irssinotifier.server.exception.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
@@ -29,8 +29,8 @@ public class UpdateSettings extends HttpServlet {
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		try {
-			IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
-//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+			IrssiNotifierUser user = IrssiNotifier.getUser(dao, id);
+			
 			if(user.guid.equals(guid)){
 				String param;
 				if((param = req.getParameter("toast")) != null){
@@ -53,7 +53,7 @@ public class UpdateSettings extends HttpServlet {
 			else{
 				IrssiNotifier.printError(resp.getWriter(), "GUID ei täsmää");
 			}
-		} catch (NotFoundException e) {
+		} catch (UserNotFoundException e) {
 			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
 			return;
 		}

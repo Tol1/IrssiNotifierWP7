@@ -8,6 +8,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
+import com.tol1.irssinotifier.server.exception.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
@@ -28,10 +29,10 @@ public class IrssiNotifier {
 		log.severe(errorMessage);
 	}
 	
-	public static IrssiNotifierUser getUser(ObjectifyDAO dao, String uuid){
+	public static IrssiNotifierUser getUser(ObjectifyDAO dao, String uuid) throws UserNotFoundException{
 		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", uuid.trim()).get();
 		if(user == null){
-			//TODO throw exception
+			throw new UserNotFoundException();
 		}
 		return user;
 	}

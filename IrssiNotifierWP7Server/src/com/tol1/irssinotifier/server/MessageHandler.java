@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
+import com.tol1.irssinotifier.server.exception.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
@@ -25,45 +26,48 @@ public class MessageHandler extends HttpServlet {
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		
-		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
-//		IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
-		
-		URL url = new URL(user.ChannelURI);
-		
-		String nick = URLDecoder.decode(req.getParameter("nick"),"UTF-8");
-		String channel = URLDecoder.decode(req.getParameter("channel"),"UTF-8");
-		String message = URLDecoder.decode(req.getParameter("message"),"UTF-8");
-		
-		Message mess = new Message(nick, channel, message, user);
-		
-		if(user.sendToastNotifications){
-			String toastMessage = mess.GenerateToastNotification();
-			HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
-			Status responseStatus = HandleResponse(conn, resp, user, dao);
-			if(responseStatus == Status.STATUS_OK) {
-				IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
-			} else {
-				IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-				//error
+		try {
+			IrssiNotifierUser user = IrssiNotifier.getUser(dao, id);
+			
+			URL url = new URL(user.ChannelURI);
+			
+			String nick = URLDecoder.decode(req.getParameter("nick"),"UTF-8");
+			String channel = URLDecoder.decode(req.getParameter("channel"),"UTF-8");
+			String message = URLDecoder.decode(req.getParameter("message"),"UTF-8");
+			
+			Message mess = new Message(nick, channel, message, user);
+			
+			if(user.sendToastNotifications){
+				String toastMessage = mess.GenerateToastNotification();
+				HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
+				Status responseStatus = HandleResponse(conn, resp, user, dao);
+				if(responseStatus == Status.STATUS_OK) {
+					IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
+				} else {
+					IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
+					//error
+				}
 			}
-		}
-		if(user.sendTileNotifications){
-			String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
-			HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
-			Status responseStatus = HandleResponse(conn, resp, user, dao);
-			IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
-			if(responseStatus == Status.STATUS_OK){
-				IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
-				user.tileCount++;
-				dao.ofy().put(user);
+			if(user.sendTileNotifications){
+				String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
+				HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
+				Status responseStatus = HandleResponse(conn, resp, user, dao);
+				IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
+				if(responseStatus == Status.STATUS_OK){
+					IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
+					user.tileCount++;
+					dao.ofy().put(user);
+				}
+				else{
+					IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
+				}
 			}
-			else{
-				IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
+			
+			if(user.sendTileNotifications || user.sendToastNotifications){
+				dao.ofy().put(mess);
 			}
-		}
-		
-		if(user.sendTileNotifications || user.sendToastNotifications){
-			dao.ofy().put(mess);
+		} catch (UserNotFoundException e) {
+			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
 		}
 	}
 	

@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
+import com.tol1.irssinotifier.server.exception.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
@@ -36,8 +36,8 @@ public class UpdateChannelUrl extends HttpServlet {
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
 		try {
-			IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", id).get();
-//			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, id);
+			IrssiNotifierUser user = IrssiNotifier.getUser(dao, id);
+			
 			if(user.guid.equals(guid)){
 				if(user.ChannelURI != null && user.ChannelURI.equalsIgnoreCase(newUrl)) {
 					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri pysyy muuttumattomana");
@@ -54,7 +54,7 @@ public class UpdateChannelUrl extends HttpServlet {
 			else{
 				IrssiNotifier.printError(resp.getWriter(), "GUID ei täsmää");
 			}
-		} catch (NotFoundException e) {
+		} catch (UserNotFoundException e) {
 			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
 			return;
 		}
