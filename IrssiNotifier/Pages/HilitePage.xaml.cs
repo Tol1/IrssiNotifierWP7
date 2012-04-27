@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Controls;
@@ -26,15 +27,14 @@ namespace IrssiNotifier.Pages
 		{
 			InitializeComponent();
 			DataContext = this;
-			HiliteCollection = new ObservableCollection<Hilite>();
 		}
-		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			if (PushContext.Current.IsTileEnabled)
+			if (!PushContext.Current.IsConnected && PushContext.Current.IsTileEnabled)
 			{
 				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
-			DefaultFetch();
+			DefaultFetch(e.NavigationMode == NavigationMode.New);
 		}
 
 		private CurrentView _currentState;
@@ -59,22 +59,26 @@ namespace IrssiNotifier.Pages
 
 		private long _lastFetch;
 
-		private void DefaultFetch()
+		private void DefaultFetch(bool ignoreCache)
 		{
-			long lastFetch = 0;
-			if (IsolatedStorageSettings.ApplicationSettings.Contains("LastHiliteFetch"))
+			if (ignoreCache || HiliteCollection == null)
 			{
-				try
+				HiliteCollection = new ObservableCollection<Hilite>();
+				long lastFetch = 0;
+				if (IsolatedStorageSettings.ApplicationSettings.Contains("LastHiliteFetch"))
 				{
-					lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
+					try
+					{
+						lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
+					}
+					catch (FormatException)
+					{
+						lastFetch = 0;
+					}
 				}
-				catch (FormatException)
-				{
-					lastFetch = 0;
-				}
+				_lastFetch = lastFetch;
+				FetchHilites(lastFetch);
 			}
-			_lastFetch = lastFetch;
-			FetchHilites(lastFetch);
 			CurrentState = CurrentView.Last;
 		}
 
@@ -94,34 +98,6 @@ namespace IrssiNotifier.Pages
 		public bool IsListEnabled
 		{
 			get { return !IsBusy; }
-		}
-
-		public class Hilite
-		{
-			public string Channel { get; set; }
-			public string Nick { get; set; }
-			public string Message { get; set; }
-			public string From { get { return "["+Timestamp.ToShortDateString()+" "+Timestamp.ToShortTimeString()+"] "+Nick + " @ " + Channel; } }
-			private string _timestampString;
-
-			public string TimestampString
-			{
-				get { return _timestampString; }
-				set
-				{
-					_timestampString = value;
-					try
-					{
-						Timestamp = DateTime.Parse(value);
-					}
-					catch (FormatException)
-					{
-
-					}
-				}
-			}
-
-			public DateTime Timestamp { get; set; }
 		}
 
 		private ObservableCollection<Hilite> _hiliteCollection;
@@ -206,21 +182,57 @@ namespace IrssiNotifier.Pages
 			}
 		}
 
-		public enum CurrentView
+		private void RefreshButtonClick(object sender, EventArgs e)
 		{
-			Last,All
+			switch (CurrentState)
+			{
+				case CurrentView.Last:
+					_lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
+					FetchHilites(_lastFetch);
+					break;
+				case CurrentView.All:
+					FetchHilites();
+					break;
+			}
 		}
 
-		private void BackButtonClick(object sender, RoutedEventArgs e)
+		private void SettingsButtonClick(object sender, EventArgs e)
 		{
-			if(NavigationContext.QueryString.ContainsKey("NavigatedFrom") || !NavigationService.CanGoBack)
+			NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
+		}
+
+		public class Hilite
+		{
+			public string Channel { get; set; }
+			public string Nick { get; set; }
+			public string Message { get; set; }
+			public string From { get { return "["+Timestamp.ToShortDateString()+" "+Timestamp.ToShortTimeString()+"] "+Nick + " @ " + Channel; } }
+			private string _timestampString;
+
+			public string TimestampString
 			{
-				NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+				get { return _timestampString; }
+				set
+				{
+					_timestampString = value;
+					try
+					{
+						Timestamp = DateTime.Parse(value);
+					}
+					catch (FormatException)
+					{
+
+					}
+				}
 			}
-			else if(NavigationService.CanGoBack)
-			{
-				NavigationService.GoBack();
-			}
+
+			public DateTime Timestamp { get; set; }
+		}
+
+		public enum CurrentView
+		{
+			Last,
+			All
 		}
 	}
 }

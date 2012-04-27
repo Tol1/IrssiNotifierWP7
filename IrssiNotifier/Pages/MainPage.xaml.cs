@@ -43,16 +43,14 @@ namespace IrssiNotifier.Pages
 			firstButton.Content = "Rekisteröidy";
 			firstButton.Visibility = Visibility.Visible;
 			firstButton.Click += (sender, args) => NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
+			ApplicationBar.IsVisible = false;
 		}
 
 		private void ShowMainView()
 		{
-			firstButton.Content = "Asetukset";
+			firstButton.Content = "Hilitet";
 			firstButton.Visibility = Visibility.Visible;
-			firstButton.Click += (sender, args) => NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
-			secondButton.Content = "Hilitet";
-			secondButton.Visibility = Visibility.Visible;
-			secondButton.Click +=
+			firstButton.Click +=
 				(sender, args) => NavigationService.Navigate(new Uri("/Pages/HilitePage.xaml", UriKind.Relative));
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
@@ -99,5 +97,10 @@ namespace IrssiNotifier.Pages
 			Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
 
 		}*/
+
+		private void SettingsButtonClick(object sender, EventArgs e)
+		{
+			NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
+		}
 	}
 }

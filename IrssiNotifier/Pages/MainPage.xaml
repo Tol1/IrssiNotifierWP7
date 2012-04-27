@@ -6,7 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -32,21 +32,16 @@
             <Border x:Name="contentBorder" />
             <StackPanel VerticalAlignment="Bottom">
                 <Button x:Name="firstButton" Visibility="Collapsed" />
-                <Button x:Name="secondButton" Visibility="Collapsed" />
             </StackPanel>
             
         </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
-    <!--phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Logout" Click="LogoutClick"/>
-                <shell:ApplicationBarMenuItem Text="Login" Click="LoginClick"/>
-                <shell:ApplicationBarMenuItem Text="Refresh" Click="RefreshClick"/>
-            </shell:ApplicationBar.MenuItems>
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.feature.settings.rest.png" Text="Asetukset" Click="SettingsButtonClick"/>
         </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar-->
+    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>
