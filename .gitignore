@@ -26,8 +26,10 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-appengine-java-sdk-1.6.3.1/
+appengine-java-sdk*
 .metadata/
 IrssiNotifier_Android/
 *.class
 IrssiNotifierWP7Server/war/WEB-INF/classes/
+appengine-generated
+testi/*

@@ -1,88 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using IrssiNotifier.Model;
 using IrssiNotifier.PushNotificationContext;
-using Microsoft.Phone.Controls;
 using IrssiNotifier.Views;
-using Microsoft.Phone.Shell;
-using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
-using System.IO.IsolatedStorage;
-using System.ComponentModel;
 
 namespace IrssiNotifier.Pages
 {
 	public partial class HilitePage : INotifyPropertyChanged
 	{
+		private ObservableCollection<Hilite> _hiliteCollection;
+		private bool _isBusy;
+		private long _lastFetch;
+
 		public HilitePage()
 		{
 			InitializeComponent();
 			DataContext = this;
 		}
-		protected override void OnNavigatedTo(NavigationEventArgs e)
-		{
-			if (!PushContext.Current.IsConnected && PushContext.Current.IsTileEnabled)
-			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
-			}
-			DefaultFetch(e.NavigationMode == NavigationMode.New);
-		}
-
-		private CurrentView _currentState;
-
-		public CurrentView CurrentState
-		{
-			get { return _currentState; }
-			set
-			{
-				_currentState = value;
-				switch (value)
-				{
-					case CurrentView.Last:
-						ToggleButton.Content = "Näytä kaikki";
-						break;
-					case CurrentView.All:
-						ToggleButton.Content = "Näytä uudet";
-						break;
-				}
-			}
-		}
-
-		private long _lastFetch;
-
-		private void DefaultFetch(bool ignoreCache)
-		{
-			if (ignoreCache || HiliteCollection == null)
-			{
-				HiliteCollection = new ObservableCollection<Hilite>();
-				long lastFetch = 0;
-				if (IsolatedStorageSettings.ApplicationSettings.Contains("LastHiliteFetch"))
-				{
-					try
-					{
-						lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
-					}
-					catch (FormatException)
-					{
-						lastFetch = 0;
-					}
-				}
-				_lastFetch = lastFetch;
-				FetchHilites(lastFetch);
-			}
-			CurrentState = CurrentView.Last;
-		}
-
-		private bool _isBusy;
 
 		public bool IsBusy
 		{
@@ -100,7 +41,6 @@ namespace IrssiNotifier.Pages
 			get { return !IsBusy; }
 		}
 
-		private ObservableCollection<Hilite> _hiliteCollection;
 		public ObservableCollection<Hilite> HiliteCollection
 		{
 			get { return _hiliteCollection; }
@@ -108,6 +48,62 @@ namespace IrssiNotifier.Pages
 			{
 				_hiliteCollection = value;
 				NotifyPropertyChanged("HiliteCollection");
+				NotifyPropertyChanged("NewHilites");
+			}
+		}
+
+		public ObservableCollection<Hilite> NewHilites
+		{
+			get
+			{
+				return HiliteCollection != null
+				       	? new ObservableCollection<Hilite>(HiliteCollection.Where(hilite => hilite.Id > _lastFetch))
+				       	: new ObservableCollection<Hilite>();
+			}
+		}
+
+		#region INotifyPropertyChanged Members
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void NotifyPropertyChanged(string property)
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(property));
+			}
+		}
+
+		#endregion
+
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			if (!PushContext.Current.IsConnected && PushContext.Current.IsTileEnabled)
+			{
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+			}
+			Fetch(e.NavigationMode == NavigationMode.New);
+		}
+
+		private void Fetch(bool ignoreCache)
+		{
+			if (ignoreCache || HiliteCollection == null)
+			{
+				HiliteCollection = new ObservableCollection<Hilite>();
+				long lastFetch = 0;
+				if (IsolatedStorageSettings.ApplicationSettings.Contains("LastHiliteFetch"))
+				{
+					try
+					{
+						lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
+					}
+					catch (FormatException)
+					{
+						lastFetch = 0;
+					}
+				}
+				_lastFetch = lastFetch;
+				FetchHilites();
 			}
 		}
 
@@ -119,14 +115,15 @@ namespace IrssiNotifier.Pages
 				var result = JObject.Parse(response);
 				IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
 				var messages = JArray.Parse(result["messages"].ToString());
-				foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
+				foreach (JObject hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
 				{
 					var hiliteObj = new Hilite
 					                	{
 					                		Channel = hilite["channel"].ToString(),
 					                		Nick = hilite["nick"].ToString(),
 					                		Message = hilite["message"].ToString(),
-											TimestampString = hilite["timestamp"].ToString()
+					                		TimestampString = hilite["timestamp"].ToString(),
+					                		Id = long.Parse(hilite["id"].ToString())
 					                	};
 					collection.Insert(0, hiliteObj);
 				}
@@ -134,105 +131,39 @@ namespace IrssiNotifier.Pages
 			}
 			catch (Exception e)
 			{
-				Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa: "+e));
+				Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa: " + e));
 			}
 			IsBusy = false;
 		}
 
-		private void FetchHilites(long last = 0)
+		private void FetchHilites()
 		{
 			IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
-			{
-				if (args.Error != null)
-				{
-					IsBusy = false;
-					Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa"));
-					return;
-				}
-				ParseResult(args.Result);
-				
-			};
+			                                   	{
+			                                   		if (args.Error != null)
+			                                   		{
+			                                   			IsBusy = false;
+			                                   			Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa"));
+			                                   			return;
+			                                   		}
+			                                   		ParseResult(args.Result);
+			                                   	};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/messages"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&since=" + last);
-		}
-
-		public void NotifyPropertyChanged(string property)
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(property));
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void ToggleButtonClick(object sender, RoutedEventArgs e)
-		{
-			if(CurrentState == CurrentView.Last)
-			{
-				FetchHilites();
-				CurrentState = CurrentView.All;
-			}
-			else
-			{
-				FetchHilites(_lastFetch);
-				CurrentState = CurrentView.Last;
-			}
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/messages"), "POST",
+			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                            App.AppGuid /*+ "&since=" + last*/);
 		}
 
 		private void RefreshButtonClick(object sender, EventArgs e)
 		{
-			switch (CurrentState)
-			{
-				case CurrentView.Last:
-					_lastFetch = long.Parse(IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"].ToString());
-					FetchHilites(_lastFetch);
-					break;
-				case CurrentView.All:
-					FetchHilites();
-					break;
-			}
+			Fetch(true);
 		}
 
 		private void SettingsButtonClick(object sender, EventArgs e)
 		{
 			NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
-		}
-
-		public class Hilite
-		{
-			public string Channel { get; set; }
-			public string Nick { get; set; }
-			public string Message { get; set; }
-			public string From { get { return "["+Timestamp.ToShortDateString()+" "+Timestamp.ToShortTimeString()+"] "+Nick + " @ " + Channel; } }
-			private string _timestampString;
-
-			public string TimestampString
-			{
-				get { return _timestampString; }
-				set
-				{
-					_timestampString = value;
-					try
-					{
-						Timestamp = DateTime.Parse(value);
-					}
-					catch (FormatException)
-					{
-
-					}
-				}
-			}
-
-			public DateTime Timestamp { get; set; }
-		}
-
-		public enum CurrentView
-		{
-			Last,
-			All
 		}
 	}
 }
