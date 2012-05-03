@@ -8,6 +8,10 @@ handlers:
   servlet: com.tol1.irssinotifier.server.LoginUser
   secure: always
   
+- url: /client/logout
+  servlet: com.tol1.irssinotifier.server.LogoutUser
+  secure: always
+  
 - url: /client/login/loginsuccess
   servlet: com.tol1.irssinotifier.server.LoginSuccess
   secure: always

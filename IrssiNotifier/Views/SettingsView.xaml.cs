@@ -14,6 +14,7 @@ using System.IO.IsolatedStorage;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
+using Microsoft.Phone.Controls;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using Microsoft.Phone.Shell;
@@ -238,16 +239,21 @@ namespace IrssiNotifier.Views
 			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
-				IsPushEnabled = false;
-				IsTileEnabled = false;
-				IsToastEnabled = false;
-				IsolatedStorageSettings.ApplicationSettings.Remove("userID");
-				while(FromPage.NavigationService.CanGoBack)
-				{
-					FromPage.NavigationService.RemoveBackEntry();
-				}
-				PhoneApplicationService.Current.State["logout"] = true;
-				FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+				var browser = new WebBrowser();
+				browser.Navigated += (o, args) =>
+				                     	{
+				                     		IsPushEnabled = false;
+				                     		IsTileEnabled = false;
+				                     		IsToastEnabled = false;
+				                     		IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+				                     		while (FromPage.NavigationService.CanGoBack)
+				                     		{
+				                     			FromPage.NavigationService.RemoveBackEntry();
+				                     		}
+				                     		PhoneApplicationService.Current.State["logout"] = true;
+				                     		FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+				                     	};
+				browser.NavigateToString(App.Baseaddress+"client/logout");
 			}
 		}
 	}
