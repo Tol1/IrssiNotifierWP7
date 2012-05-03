@@ -150,12 +150,12 @@ namespace IrssiNotifier
 		#region Phone application initialization
 
 		// Avoid double-initialization
-		private bool phoneApplicationInitialized = false;
+		private bool _phoneApplicationInitialized = false;
 
 		// Do not add any additional code to this method
 		private void InitializePhoneApplication()
 		{
-			if (phoneApplicationInitialized)
+			if (_phoneApplicationInitialized)
 				return;
 
 			// Create the frame but don't set it as RootVisual yet; this allows the splash
@@ -167,7 +167,7 @@ namespace IrssiNotifier
 			RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
 			// Ensure we don't initialize again
-			phoneApplicationInitialized = true;
+			_phoneApplicationInitialized = true;
 		}
 
 		// Do not add any additional code to this method

@@ -44,6 +44,8 @@ public class StatusMessages {
 	}
 	public static class MessageListResponse {
 		public long currentTimestamp;
+		public Message nextMessage;
+		public boolean isNextFetch;
 		public Query<Message> messages;
 		public MessageListResponse(Query<Message> messages){
 			this.messages = messages;

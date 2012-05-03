@@ -62,6 +62,8 @@ namespace IrssiNotifier.Pages
 			}
 		}
 
+		private Hilite _nextHilite;
+
 		#region INotifyPropertyChanged Members
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -113,9 +115,16 @@ namespace IrssiNotifier.Pages
 			{
 				var collection = new ObservableCollection<Hilite>();
 				var result = JObject.Parse(response);
-				IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
+				if (!bool.Parse(result["isNextFetch"].ToString()))
+				{
+					IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
+				}
+				else
+				{
+					collection = HiliteCollection;
+				}
 				var messages = JArray.Parse(result["messages"].ToString());
-				foreach (JObject hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
+				foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
 				{
 					var hiliteObj = new Hilite
 					                	{
@@ -125,7 +134,27 @@ namespace IrssiNotifier.Pages
 					                		TimestampString = hilite["timestamp"].ToString(),
 					                		Id = long.Parse(hilite["id"].ToString())
 					                	};
-					collection.Insert(0, hiliteObj);
+					collection.Add(hiliteObj);
+				}
+				if(result["nextMessage"].Type != JTokenType.Null)
+				{
+					var nextHilite = JObject.Parse(result["nextMessage"].ToString());
+					_nextHilite = new Hilite
+					              	{
+					              		Channel = nextHilite["channel"].ToString(),
+					              		Nick = nextHilite["nick"].ToString(),
+					              		Message = nextHilite["message"].ToString(),
+					              		TimestampString = nextHilite["timestamp"].ToString(),
+					              		Id = long.Parse(nextHilite["id"].ToString())
+					              	};
+					AllMore.Visibility = Visibility.Visible;
+					NewMore.Visibility = _nextHilite.Id > _lastFetch ? Visibility.Visible : Visibility.Collapsed;
+				}
+				else
+				{
+					_nextHilite = null;
+					AllMore.Visibility = Visibility.Collapsed;
+					NewMore.Visibility = Visibility.Collapsed;
 				}
 				HiliteCollection = collection;
 			}
@@ -136,7 +165,7 @@ namespace IrssiNotifier.Pages
 			IsBusy = false;
 		}
 
-		private void FetchHilites()
+		private void FetchHilites(long starting = 0)
 		{
 			IsBusy = true;
 			var webclient = new WebClient();
@@ -150,10 +179,15 @@ namespace IrssiNotifier.Pages
 			                                   		}
 			                                   		ParseResult(args.Result);
 			                                   	};
+			var postMessage = "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                  App.AppGuid;
+			if(starting != 0)
+			{
+				postMessage += "&starting=" + starting;
+			}
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/messages"), "POST",
-			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
-			                            App.AppGuid /*+ "&since=" + last*/);
+			                            postMessage);
 		}
 
 		private void RefreshButtonClick(object sender, EventArgs e)
@@ -164,6 +198,11 @@ namespace IrssiNotifier.Pages
 		private void SettingsButtonClick(object sender, EventArgs e)
 		{
 			NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
+		}
+
+		private void MoreClick(object sender, RoutedEventArgs e)
+		{
+			FetchHilites(_nextHilite.Id);
 		}
 	}
 }

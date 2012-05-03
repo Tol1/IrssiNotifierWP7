@@ -4,4 +4,4 @@ indexes:
   ancestor: yes
   properties:
   - name: timestamp
-    direction: asc
+    direction: desc

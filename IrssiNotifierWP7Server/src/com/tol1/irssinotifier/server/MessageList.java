@@ -18,6 +18,7 @@ import flexjson.JSONSerializer;
 
 @SuppressWarnings("serial")
 public class MessageList extends HttpServlet {
+	private final int LIMIT = 20;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -43,15 +44,28 @@ public class MessageList extends HttpServlet {
 		ObjectifyDAO dao = new ObjectifyDAO();
 		try {
 			IrssiNotifierUser user = IrssiNotifier.getUser(dao, id);
-			Query<Message> messages = dao.ofy().query(Message.class).ancestor(user);
-			String since = req.getParameter("since");
-			if(since != null){
-				try {
-					long sinceTimestamp = Long.parseLong(since);
-					messages = messages.filter("timestamp >", sinceTimestamp);
-				} catch (NumberFormatException e) {}
+			Query<Message> messages = dao.ofy().query(Message.class).order("-timestamp").ancestor(user).limit(LIMIT+1);
+			String starting = req.getParameter("starting");
+			if(starting != null){
+				try{
+					long startingTimestamp = Long.parseLong(starting);
+					messages = messages.filter("timestamp <=", startingTimestamp);
+				}catch(NumberFormatException e){}
 			}
-			MessageListResponse response = new MessageListResponse(messages);
+			
+			Message next = null;
+			if(messages.count() == LIMIT+1){
+				IrssiNotifier.log.info("Lisää viestejä on saatavilla");
+				next = messages.list().get(LIMIT);
+			}
+			else{
+				IrssiNotifier.log.info("Sisältää viestihistorian viimeiset viestit");
+			}
+			
+			MessageListResponse response = new MessageListResponse(messages.limit(LIMIT));
+			response.nextMessage = next;
+			response.isNextFetch = starting != null;
+			
 			JSONSerializer serializer = new JSONSerializer();
 			String jsonObject = serializer.include("messages").transform(new CustomTimeTransformer(), "messages.timestamp").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");

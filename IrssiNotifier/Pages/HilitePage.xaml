@@ -30,12 +30,10 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
-                    <Grid Grid.Row="0">
-                        <ListBox ItemsSource="{Binding NewHilites, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
-                    </Grid>
+                    <ListBox x:Name="newListBox" ItemsSource="{Binding NewHilites, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
+                    <Button Grid.Row="1" x:Name="NewMore" Visibility="Collapsed" Click="MoreClick">Lisää</Button>
                 </Grid>
             </controls:PivotItem>
             
@@ -44,12 +42,10 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
-                    <Grid Grid.Row="0">
-                        <ListBox ItemsSource="{Binding HiliteCollection, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
-                    </Grid>
+                    <ListBox x:Name="allListBox" ItemsSource="{Binding HiliteCollection, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
+                    <Button Grid.Row="1" x:Name="AllMore" Visibility="Collapsed" Click="MoreClick">Lisää</Button>
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
