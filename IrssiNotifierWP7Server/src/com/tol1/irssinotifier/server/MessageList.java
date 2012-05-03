@@ -67,7 +67,7 @@ public class MessageList extends HttpServlet {
 			response.isNextFetch = starting != null;
 			
 			JSONSerializer serializer = new JSONSerializer();
-			String jsonObject = serializer.include("messages").transform(new CustomTimeTransformer(), "messages.timestamp").exclude("*.class").serialize(response);
+			String jsonObject = serializer.include("messages").transform(new CustomTimeTransformer(), "messages.timestamp").transform(new CustomTimeTransformer(), "nextMessage.timestamp").exclude("*.class").serialize(response);
 			resp.setHeader("Content-Type", "application/json");
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
