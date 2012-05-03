@@ -193,6 +193,7 @@ namespace IrssiNotifier.Pages
 		private void RefreshButtonClick(object sender, EventArgs e)
 		{
 			Fetch(true);
+			SettingsView.ClearTileCount(Dispatcher);
 		}
 
 		private void SettingsButtonClick(object sender, EventArgs e)

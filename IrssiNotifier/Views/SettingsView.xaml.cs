@@ -157,7 +157,16 @@ namespace IrssiNotifier.Views
 				{
 					dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
 				}
-				if (PushContext.Current.IsConnected && PushContext.Current.IsPushEnabled && PushContext.Current.IsTileEnabled)
+				ClearTileCount(dispatcher);
+
+			};
+			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&newUrl=" + channelUri);
+		}
+
+		public static void ClearTileCount(Dispatcher dispatcher)
+		{
+			if (PushContext.Current.IsConnected && PushContext.Current.IsPushEnabled && PushContext.Current.IsTileEnabled)
 				{
 					UpdateSettings("clearcount", true, dispatcher, () =>
 					                                               	{
@@ -168,10 +177,6 @@ namespace IrssiNotifier.Views
 					                                               	});
 
 				}
-
-			};
-			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&newUrl=" + channelUri);
 		}
 
 		private static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher, Action callback = null)
