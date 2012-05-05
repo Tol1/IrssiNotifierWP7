@@ -212,7 +212,7 @@ namespace IrssiNotifier.Views
 			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 			if (value && hiliteTile == null)
 			{
-				var answer = MessageBox.Show("Tämä vaatii tiilen. Ok?", "Vahvista", MessageBoxButton.OKCancel);
+				var answer = MessageBox.Show("Käyttääksesi livetiilitoimintoa sinun on kiinnitettävä tiili aloitusnäyttöön. Hyväksytkö tiilen lisäyksen?", "Vahvista", MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
 					var newTileData = new StandardTileData
