@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO.IsolatedStorage;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Controls;
-using Newtonsoft.Json.Linq;
-using System.ComponentModel;
 using Microsoft.Phone.Shell;
+using Newtonsoft.Json.Linq;
 
 namespace IrssiNotifier.Views
 {
@@ -44,6 +36,21 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsToastEnabled != value)
 				{
+					if (value && !IsolatedStorageSettings.ApplicationSettings.Contains("UserAllowedToast"))
+					{
+						var answer = MessageBox.Show("Haluatko antaa sovelluksen käyttää ponnahdusviestipalvelua?",
+						                             "Salli ponnahdusviestit",
+						                             MessageBoxButton.OKCancel);
+						if (answer == MessageBoxResult.OK)
+						{
+							IsolatedStorageSettings.ApplicationSettings["UserAllowedToast"] = true;
+						}
+						else
+						{
+							NotifyPropertyChanged("IsToastEnabled");
+							return;
+						}
+					}
 					PushContext.Current.IsToastEnabled = value;
 					UpdateSettings("toast", value, Dispatcher);
 					NotifyPropertyChanged("IsToastEnabled");
