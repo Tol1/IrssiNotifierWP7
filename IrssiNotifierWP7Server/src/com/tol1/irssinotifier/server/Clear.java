@@ -19,7 +19,7 @@ public class Clear extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		ObjectifyDAO dao = new ObjectifyDAO();
-		QueryResultIterable<Key<Message>> messages = dao.ofy().query(Message.class).filter("timestamp <", System.currentTimeMillis()-5*24*60*60*1000).fetchKeys();
+		QueryResultIterable<Key<Message>> messages = dao.ofy().query(Message.class).filter("timestamp <", System.currentTimeMillis()-7*24*60*60*1000).fetchKeys();
 		dao.ofy().delete(messages);
 		IrssiNotifier.log.info("Siivottiin vanhat viestit tietokannasta");
 	}
