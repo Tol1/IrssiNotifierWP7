@@ -18,7 +18,7 @@ namespace IrssiNotifier.Views
 		public SettingsView(SettingsPage fromPage)
 		{
 			DataContext = this;
-			InitializeComponent();//TODO uloskirjautuminen
+			InitializeComponent();
 			FromPage = fromPage;
 		}
 

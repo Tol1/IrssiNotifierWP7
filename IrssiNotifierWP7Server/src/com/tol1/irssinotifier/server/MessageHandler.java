@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.*;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
 import com.tol1.irssinotifier.server.exception.UserNotFoundException;
@@ -35,9 +38,18 @@ public class MessageHandler extends HttpServlet {
 			String channel = URLDecoder.decode(req.getParameter("channel"),"UTF-8");
 			String message = URLDecoder.decode(req.getParameter("message"),"UTF-8");
 			
+			int retries = 0;
+			if(req.getParameter("retries") != null){
+				try {
+					retries = Integer.parseInt(req.getParameter("retries"));
+				} catch (NumberFormatException e) {}
+			}
+			String tileRetry = req.getParameter("tileRetry");
+			String toastRetry = req.getParameter("toastRetry");
+			
 			Message mess = new Message(nick, channel, message, user);
 			
-			if(user.sendToastNotifications){
+			if(user.sendToastNotifications && (retries == 0 || toastRetry != null)){
 				String toastMessage = mess.GenerateToastNotification();
 				HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 				Status responseStatus = HandleResponse(conn, resp, user, dao);
@@ -45,21 +57,46 @@ public class MessageHandler extends HttpServlet {
 					IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
 				} else {
 					IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-					//error
+					try {
+						if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+							Queue queue = QueueFactory.getQueue("minutequeue");
+							queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
+									.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
+									.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
+									.param("toastRetry", "true"));
+							
+						}
+					} catch (Exception e) {
+						IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+					}
 				}
 			}
-			if(user.sendTileNotifications){
+			
+			if(user.sendTileNotifications && (retries == 0 || tileRetry != null)){
 				String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 				HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 				Status responseStatus = HandleResponse(conn, resp, user, dao);
 				IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
-				if(responseStatus == Status.STATUS_OK){
+				String jee = req.getParameter("retries");
+				if(responseStatus == Status.STATUS_OK && jee != null && jee.equals("3")){
 					IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
 					user.tileCount++;
 					dao.ofy().put(user);
 				}
 				else{
 					IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
+					try {
+						if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+							Queue queue = QueueFactory.getQueue("minutequeue");
+							queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
+									.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
+									.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
+									.param("tileRetry", "true"));
+							
+						}
+					} catch (Exception e) {
+						IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+					}
 				}
 			}
 			
@@ -145,7 +182,7 @@ public class MessageHandler extends HttpServlet {
 			break;
 		case 503:
 			resp.getWriter().println("Push channel error: The Push Notification Service is unable to process the request.");
-			result = Status.STATUS_ERROR;
+			result = Status.STATUS_QUEUEABLE;
 			break;
 		default:
 			resp.getWriter().println("Push channel error: Unknown error. HTTP status: "+status+", Notification status: "+NotificationStatus

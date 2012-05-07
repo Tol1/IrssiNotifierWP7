@@ -1,0 +1,3 @@
+queue:
+- name: minutequeue
+  rate: 1/s
