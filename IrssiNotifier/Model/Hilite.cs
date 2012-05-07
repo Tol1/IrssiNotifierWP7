@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel;
+using System.Windows;
 
 namespace IrssiNotifier.Model
 {
-	public class Hilite
+	public class Hilite : INotifyPropertyChanged
 	{
 		public long Id { get; set; }
 		public string Channel { get; set; }
@@ -29,5 +31,32 @@ namespace IrssiNotifier.Model
 		}
 
 		public DateTime Timestamp { get; set; }
+
+		private bool _isLast;
+
+		public bool IsLast
+		{
+			get { return _isLast; }
+			set
+			{
+				_isLast = value;
+				NotifyPropertyChanged("IsLast");
+				NotifyPropertyChanged("ButtonVisibility");
+			}
+		}
+
+		public Visibility ButtonVisibility
+		{
+			get { return IsLast ? Visibility.Visible : Visibility.Collapsed; }
+		}
+
+		private void NotifyPropertyChanged(string property)
+		{
+			if(PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(property));
+			}
+		}
+		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

@@ -19,6 +19,13 @@
             <StackPanel>
                 <TextBlock TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Text="{Binding From}" />
                 <TextBlock TextWrapping="Wrap" Text="{Binding Message}" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                <Button Visibility="{Binding ButtonVisibility}" Click="MoreClick">Lisää...</Button>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ButtonlessHiliteTemplate">
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Text="{Binding From}" />
+                <TextBlock TextWrapping="Wrap" Text="{Binding Message}" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}" />
             </StackPanel>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
@@ -32,8 +39,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
-                    <ListBox x:Name="newListBox" ItemsSource="{Binding NewHilites, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
-                    <Button Grid.Row="1" x:Name="NewMore" Visibility="Collapsed" Click="MoreClick">Lisää</Button>
+                    <ListBox x:Name="newListBox" ItemsSource="{Binding NewHilites, Mode=TwoWay}" ItemTemplate="{StaticResource ButtonlessHiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
                 </Grid>
             </controls:PivotItem>
             
@@ -45,7 +51,6 @@
                     </Grid.RowDefinitions>
                     <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
                     <ListBox x:Name="allListBox" ItemsSource="{Binding HiliteCollection, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
-                    <Button Grid.Row="1" x:Name="AllMore" Visibility="Collapsed" Click="MoreClick">Lisää</Button>
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>

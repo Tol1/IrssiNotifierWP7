@@ -56,6 +56,14 @@ namespace IrssiNotifier.Pages
 		{
 			get
 			{
+				if(_nextHilite != null && _nextHilite.Id < _lastFetch)
+				{
+					newListBox.ItemTemplate = (DataTemplate) Resources["ButtonlessHiliteTemplate"];
+				}
+				else
+				{
+					newListBox.ItemTemplate = (DataTemplate) Resources["HiliteTemplate"];
+				}
 				return HiliteCollection != null
 				       	? new ObservableCollection<Hilite>(HiliteCollection.Where(hilite => hilite.Id > _lastFetch))
 				       	: new ObservableCollection<Hilite>();
@@ -122,6 +130,11 @@ namespace IrssiNotifier.Pages
 				else
 				{
 					collection = HiliteCollection;
+					var last = collection.LastOrDefault();
+					if(last != null)
+					{
+						last.IsLast = false;
+					}
 				}
 				var messages = JArray.Parse(result["messages"].ToString());
 				foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
@@ -147,14 +160,20 @@ namespace IrssiNotifier.Pages
 					              		TimestampString = nextHilite["timestamp"].ToString(),
 					              		Id = long.Parse(nextHilite["id"].ToString())
 					              	};
-					AllMore.Visibility = Visibility.Visible;
-					NewMore.Visibility = _nextHilite.Id > _lastFetch ? Visibility.Visible : Visibility.Collapsed;
+					var last = collection.LastOrDefault();
+					if(last!=null)
+					{
+						last.IsLast = true;
+					}
 				}
 				else
 				{
 					_nextHilite = null;
-					AllMore.Visibility = Visibility.Collapsed;
-					NewMore.Visibility = Visibility.Collapsed;
+					var last = collection.LastOrDefault();
+					if (last != null)
+					{
+						last.IsLast = false;
+					}
 				}
 				HiliteCollection = collection;
 			}
