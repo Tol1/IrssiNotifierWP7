@@ -77,8 +77,7 @@ public class MessageHandler extends HttpServlet {
 				HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 				Status responseStatus = HandleResponse(conn, resp, user, dao);
 				IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
-				String jee = req.getParameter("retries");
-				if(responseStatus == Status.STATUS_OK && jee != null && jee.equals("3")){
+				if(responseStatus == Status.STATUS_OK){
 					IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
 					user.tileCount++;
 					dao.ofy().put(user);
