@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.IsolatedStorage;
-using System.Windows;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Views;
 using Microsoft.Phone.Shell;
@@ -27,23 +26,18 @@ namespace IrssiNotifier.Pages
 
 		private void ShowInitialView()
 		{
-			contentBorder.Child = new InitialView();
-			firstButton.Content = "Rekisteröidy";
-			firstButton.Visibility = Visibility.Visible;
-			firstButton.Click += (sender, args) => NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
+			contentBorder.Child = new InitialView(this);
 			ApplicationBar.IsVisible = false;
 		}
 
 		private void ShowMainView()
 		{
-			firstButton.Content = "Hilitet";
-			firstButton.Visibility = Visibility.Visible;
-			firstButton.Click +=
-				(sender, args) => NavigationService.Navigate(new Uri("/Pages/HilitePage.xaml", UriKind.Relative));
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
 				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
+			contentBorder.Child = new HiliteView(this);
+			
 		}
 
 		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -88,7 +82,12 @@ namespace IrssiNotifier.Pages
 
 		private void SettingsButtonClick(object sender, EventArgs e)
 		{
-			NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
+			((HiliteView) contentBorder.Child).SettingsButtonClick(sender, e);
+		}
+
+		private void RefreshButtonClick(object sender, EventArgs e)
+		{
+			((HiliteView) contentBorder.Child).RefreshButtonClick(sender, e);
 		}
 	}
 }

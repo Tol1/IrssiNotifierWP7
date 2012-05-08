@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="IrssiNotifier.Views.HiliteView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls" mc:Ignorable="d"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="HiliteTemplate">
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Text="{Binding From}" />
+                <TextBlock TextWrapping="Wrap" Text="{Binding Message}" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                <Button Visibility="{Binding ButtonVisibility}" Click="MoreClick">Lisää...</Button>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ButtonlessHiliteTemplate">
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Text="{Binding From}" />
+                <TextBlock TextWrapping="Wrap" Text="{Binding Message}" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid x:Name="LayoutRoot">
+        <controls:Pivot Title="IRSSI NOTIFIER - hailaitteja &lt;3">
+            <controls:PivotItem Header="Uudet">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
+                    <ListBox x:Name="newListBox" ItemsSource="{Binding NewHilites, Mode=TwoWay}" ItemTemplate="{StaticResource ButtonlessHiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
+                </Grid>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="Kaikki">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
+                    <ListBox x:Name="allListBox" ItemsSource="{Binding HiliteCollection, Mode=TwoWay}" ItemTemplate="{StaticResource HiliteTemplate}" IsEnabled="{Binding IsListEnabled}" />
+                </Grid>
+            </controls:PivotItem>
+        </controls:Pivot>
+    </Grid>
+</UserControl>

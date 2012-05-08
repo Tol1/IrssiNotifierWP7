@@ -85,6 +85,9 @@
     <Compile Include="PushNotificationContext\PushContext.cs" />
     <Compile Include="PushNotificationContext\PushContextErrorEventArgs.cs" />
     <Compile Include="PushNotificationContext\PushContextEventArgs.cs" />
+    <Compile Include="Views\HiliteView.xaml.cs">
+      <DependentUpon>HiliteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InitialView.xaml.cs">
       <DependentUpon>InitialView.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HiliteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

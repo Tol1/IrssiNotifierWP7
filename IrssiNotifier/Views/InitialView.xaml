@@ -8,15 +8,37 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DesignHeight="480" d:DesignWidth="480">
-    
-    <Grid x:Name="LayoutRoot">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Tervetuloa" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
-        <TextBlock Text="Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi.
-Rekisteröimiseen ja sovelluksen käyttämiseen tarvitset Google-tunnukset.
-Klikkaa &quot;Rekisteröidy&quot; jatkaaksesi." Grid.Row="1" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}" />
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="IRSSI NOTIFIER" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="Etusivu" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Tervetuloa" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
+                <TextBlock Text="Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi.
+        Rekisteröimiseen ja sovelluksen käyttämiseen tarvitset Google-tunnukset.
+        Klikkaa &quot;Rekisteröidy&quot; jatkaaksesi." Grid.Row="1" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}" />
+            </Grid>
+            <StackPanel VerticalAlignment="Bottom">
+                <Button x:Name="RegisterButton" Click="RegisterButtonClick" >Rekisteröidy</Button>
+            </StackPanel>
+
+        </Grid>
     </Grid>
+
+    
 </UserControl>
