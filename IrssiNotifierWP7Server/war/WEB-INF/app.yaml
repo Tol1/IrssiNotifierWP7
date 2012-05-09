@@ -1,41 +1,44 @@
 application: irssinotifierwp
-version: 2
+version: 1
 runtime: java
 threadsafe: true
 
 handlers:
 - url: /client/login
-  servlet: com.tol1.irssinotifier.server.LoginUser
+  servlet: com.tol1.irssinotifier.server.login.LoginUser
   secure: always
   
 - url: /client/logout
-  servlet: com.tol1.irssinotifier.server.LogoutUser
+  servlet: com.tol1.irssinotifier.server.login.LogoutUser
   secure: always
   
 - url: /client/login/loginsuccess
-  servlet: com.tol1.irssinotifier.server.LoginSuccess
+  servlet: com.tol1.irssinotifier.server.login.LoginSuccess
   secure: always
   
 - url: /client/register
-  servlet: com.tol1.irssinotifier.server.RegisterPhoneClient
+  servlet: com.tol1.irssinotifier.server.api.RegisterPhoneClient
   secure: always
   
-- url: /API/Message
-  servlet: com.tol1.irssinotifier.server.MessageHandler
+- url: /irssi/message
+  servlet: com.tol1.irssinotifier.server.api.MessageHandler
   secure: always
   
 - url: /client/update
-  servlet: com.tol1.irssinotifier.server.UpdateChannelUrl
+  servlet: com.tol1.irssinotifier.server.api.UpdateChannelUrl
   secure: always
   
 - url: /client/settings
-  servlet: com.tol1.irssinotifier.server.UpdateSettings
+  servlet: com.tol1.irssinotifier.server.api.UpdateSettings
   secure: always
   
 - url: /client/messages
-  servlet: com.tol1.irssinotifier.server.MessageList
+  servlet: com.tol1.irssinotifier.server.api.MessageList
   secure: always
   
 - url: /cron/clear
-  servlet: com.tol1.irssinotifier.server.Clear
+  servlet: com.tol1.irssinotifier.server.cron.Clear
   login: admin
+  
+env_variables:
+  DEFAULT_ENCODING: UTF-8

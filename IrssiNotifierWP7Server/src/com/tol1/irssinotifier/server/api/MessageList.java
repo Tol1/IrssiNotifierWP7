@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server;
+package com.tol1.irssinotifier.server.api;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.Query;
+import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
 import com.tol1.irssinotifier.server.exception.UserNotFoundException;

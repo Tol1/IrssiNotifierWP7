@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server;
+package com.tol1.irssinotifier.server.api;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.RegisterSuccessMessage;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;

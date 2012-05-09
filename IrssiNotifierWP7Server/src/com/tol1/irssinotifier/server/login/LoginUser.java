@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server;
+package com.tol1.irssinotifier.server.login;
 
 import java.io.IOException;
 
@@ -12,19 +12,19 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
-public class LoginSuccess extends HttpServlet {
-
+public class LoginUser extends HttpServlet {
+	
 	private static UserService userService = UserServiceFactory.getUserService();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		User user = userService.getCurrentUser();
 
 		if (user != null) {
-			resp.getWriter().println("Login Successful");
+			resp.sendRedirect(req.getRequestURI()+"/loginsuccess");
 		} else {
-			resp.sendRedirect("/client/login");
+			resp.sendRedirect(userService.createLoginURL(req.getRequestURI()+"/loginsuccess"));
 		}
 	}
-
 }

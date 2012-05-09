@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server;
+package com.tol1.irssinotifier.server.api;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.*;
+
+import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
 import com.tol1.irssinotifier.server.exception.UserNotFoundException;

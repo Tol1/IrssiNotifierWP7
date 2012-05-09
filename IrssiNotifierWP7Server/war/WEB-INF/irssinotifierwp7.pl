@@ -14,7 +14,7 @@ $VERSION = "2";
     description => "Send notifications about irssi highlights to server",
     license     => "Apache License, version 2.0",
     url         => "http://irssinotifierwp.appspot.com",
-    changed     => "2012-04-10"
+    changed     => "2012-05-09"
 );
 
 my $lastMsg;
@@ -30,7 +30,7 @@ sub private {
     $lastServer = $server;
     $lastNick = $nick;
     $lastAddress = $address;
-    $lastTarget = "-PRIVATE-";
+    $lastTarget = "PRIVATE";
 }
 
 sub public {
@@ -96,7 +96,7 @@ sub hilite {
 
     my $data = "--post-data \"apiToken=$api_token\&message=$lastMsg\&channel=$lastTarget\&nick=$lastNick\&version=$VERSION\"";
 	
-    my $result = `/usr/bin/env wget --no-check-certificate -qO- /dev/null $data https://irssinotifierwp.appspot.com/API/Message`;
+    my $result = `/usr/bin/env wget --no-check-certificate -qO- /dev/null $data https://irssinotifierwp.appspot.com/irssi/message`;
     if ($? != 0) {
         # Something went wrong, might be network error or authorization issue. Probably no need to alert user, though.
         # Irssi::print("IrssiNotifier: Sending hilight to server failed, check http://irssinotifierwp.appspot.com for updates");

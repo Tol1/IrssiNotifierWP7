@@ -1,11 +1,11 @@
 <!-- Generated from app.yaml. Do not edit. -->
 <web-app version='2.5' xmlns='http://java.sun.com/xml/ns/javaee' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd'>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.LoginUser</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.login.LoginUser</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LoginUser</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.LoginUser</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.login.LoginUser</servlet-name>
     <url-pattern>/client/login</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -18,11 +18,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.LogoutUser</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.LogoutUser</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.login.LogoutUser</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LogoutUser</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.LogoutUser</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.login.LogoutUser</servlet-name>
     <url-pattern>/client/logout</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -35,11 +35,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.LoginSuccess</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.LoginSuccess</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-name>
     <url-pattern>/client/login/loginsuccess</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -52,11 +52,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.RegisterPhoneClient</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-name>
     <url-pattern>/client/register</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -69,28 +69,28 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.MessageHandler</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageHandler</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.MessageHandler</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.MessageHandler</servlet-name>
-    <url-pattern>/API/Message</url-pattern>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageHandler</servlet-name>
+    <url-pattern>/irssi/message</url-pattern>
   </servlet-mapping>
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>aname</web-resource-name>
-      <url-pattern>/API/Message</url-pattern>
+      <url-pattern>/irssi/message</url-pattern>
     </web-resource-collection>
     <user-data-constraint>
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateChannelUrl</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-name>
     <url-pattern>/client/update</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -103,11 +103,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateSettings</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.UpdateSettings</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.UpdateSettings</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-name>
     <url-pattern>/client/settings</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -120,11 +120,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.MessageList</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.MessageList</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageList</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.MessageList</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.MessageList</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageList</servlet-name>
     <url-pattern>/client/messages</url-pattern>
   </servlet-mapping>
   <security-constraint>
@@ -137,11 +137,11 @@
     </user-data-constraint>
   </security-constraint>
   <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.Clear</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.Clear</servlet-class>
+    <servlet-name>com.tol1.irssinotifier.server.cron.Clear</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.cron.Clear</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>com.tol1.irssinotifier.server.Clear</servlet-name>
+    <servlet-name>com.tol1.irssinotifier.server.cron.Clear</servlet-name>
     <url-pattern>/cron/clear</url-pattern>
   </servlet-mapping>
   <security-constraint>

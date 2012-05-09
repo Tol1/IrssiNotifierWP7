@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server;
+package com.tol1.irssinotifier.server.cron;
 
 import java.io.IOException;
 
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Key;
+import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.Message;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
