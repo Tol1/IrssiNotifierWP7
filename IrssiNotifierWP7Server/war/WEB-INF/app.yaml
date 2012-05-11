@@ -42,3 +42,7 @@ handlers:
   
 env_variables:
   DEFAULT_ENCODING: UTF-8
+  
+welcome_files:
+  - index.jsp
+  - index.html

@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+body {
+	background-color: black;
+	color: #555555;
+	font-family: Courier;
+	font-weight: bold;
+}
+
+a:LINK {
+	color: #55ffff;
+}
+
+a:VISITED {
+	color: #00aaaa;
+}
+
+.root{
+	width: 550px;
+	margin-left: 100px;
+}

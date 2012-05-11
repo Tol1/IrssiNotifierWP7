@@ -140,7 +140,7 @@ namespace IrssiNotifier.Views
 							                       	{
 							                       		MessageBox.Show("Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.");
 							                       		PushContext.Current.IsTileEnabled = false;
-														UpdateSettings("tile", false, dispatcher);
+							                       		UpdateSettings("tile", false, dispatcher);
 							                       	});
 						}
 					}
