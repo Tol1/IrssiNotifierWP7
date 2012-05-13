@@ -20,12 +20,18 @@ public class StatusMessages {
 	
 	public static class ErrorMessage extends StatusMessage{
 		public String errorMessage;
+		public String exceptionType;
 		public ErrorMessage(){
 			this.success = false;
 		}
 		public ErrorMessage(String message){
 			this.success = false;
 			this.errorMessage = message;
+		}
+		public ErrorMessage(String message, String exceptionType){
+			this.success = false;
+			this.errorMessage = message;
+			this.exceptionType = exceptionType;
 		}
 	}
 	public static class ChannelStatusMessage extends StatusMessage{

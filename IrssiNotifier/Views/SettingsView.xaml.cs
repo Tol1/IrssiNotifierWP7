@@ -4,6 +4,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
@@ -96,7 +97,7 @@ namespace IrssiNotifier.Views
 				{
 					if (value)
 					{
-						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
 					}
 					else
 					{
@@ -116,7 +117,7 @@ namespace IrssiNotifier.Views
 		public event PropertyChangedEventHandler PropertyChanged;
 
 
-		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
+		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher, Page currentPage)
 		{
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
@@ -163,7 +164,17 @@ namespace IrssiNotifier.Views
 				}
 				else
 				{
-					dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
+					if(result["exceptionType"].ToString() == "UserNotFoundException")
+					{
+						dispatcher.BeginInvoke(
+							() => MessageBox.Show("Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen."));
+						//TODO uloskirjautuminen sovelluksessa
+						currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+					}
+					else
+					{
+						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
+					}
 				}
 				ClearTileCount(dispatcher);
 

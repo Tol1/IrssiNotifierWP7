@@ -25,7 +25,7 @@ namespace IrssiNotifier.Views
 			FromPage = fromPage;
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
 			}
 			Fetch(true);
 		}
@@ -36,7 +36,7 @@ namespace IrssiNotifier.Views
 			DataContext = this;
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
 			}
 			Fetch(true);
 		}

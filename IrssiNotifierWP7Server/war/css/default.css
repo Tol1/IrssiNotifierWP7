@@ -2,20 +2,26 @@
 
 body {
 	background-color: black;
-	color: #555555;
+	color: #BBBBBB;
 	font-family: Courier;
 	font-weight: bold;
 }
 
 a:LINK {
-	color: #55ffff;
+	color: #55FFFF;
 }
 
 a:VISITED {
-	color: #00aaaa;
+	color: #00BBBB;
 }
 
 .root{
 	width: 550px;
 	margin-left: 100px;
+}
+
+.uuid {
+	background-color: #0000BB;
+	display: inline-block;
+	padding: 3px;
 }

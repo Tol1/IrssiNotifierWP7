@@ -56,7 +56,7 @@ public class UpdateChannelUrl extends HttpServlet {
 				IrssiNotifier.printError(resp.getWriter(), "GUID ei täsmää");
 			}
 		} catch (UserNotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
+			IrssiNotifier.printError(resp.getWriter(), e);
 			return;
 		}
 	}
