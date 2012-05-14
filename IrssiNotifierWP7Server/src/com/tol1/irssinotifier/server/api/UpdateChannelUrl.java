@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
-import com.tol1.irssinotifier.server.exception.UserNotFoundException;
+import com.tol1.irssinotifier.server.exceptions.*;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
@@ -53,7 +53,7 @@ public class UpdateChannelUrl extends HttpServlet {
 				return;
 			}
 			else{
-				IrssiNotifier.printError(resp.getWriter(), "GUID ei täsmää");
+				IrssiNotifier.printError(resp.getWriter(), new InvalidGUIDException());
 			}
 		} catch (UserNotFoundException e) {
 			IrssiNotifier.printError(resp.getWriter(), e);

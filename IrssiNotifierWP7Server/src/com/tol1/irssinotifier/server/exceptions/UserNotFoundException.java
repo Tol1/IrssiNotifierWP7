@@ -1,4 +1,4 @@
-package com.tol1.irssinotifier.server.exception;
+package com.tol1.irssinotifier.server.exceptions;
 
 @SuppressWarnings("serial")
 public class UserNotFoundException extends Exception {

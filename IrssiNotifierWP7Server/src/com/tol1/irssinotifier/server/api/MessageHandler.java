@@ -18,7 +18,7 @@ import static com.google.appengine.api.taskqueue.TaskOptions.Builder.*;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
-import com.tol1.irssinotifier.server.exception.UserNotFoundException;
+import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
@@ -105,7 +105,7 @@ public class MessageHandler extends HttpServlet {
 				dao.ofy().put(mess);
 			}
 		} catch (UserNotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
+			IrssiNotifier.printError(resp.getWriter(), e);
 		}
 	}
 	

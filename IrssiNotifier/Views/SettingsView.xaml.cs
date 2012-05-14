@@ -168,7 +168,16 @@ namespace IrssiNotifier.Views
 					{
 						dispatcher.BeginInvoke(
 							() => MessageBox.Show("Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen."));
-						//TODO uloskirjautuminen sovelluksessa
+						PushContext.Current.Disconnect();
+						PushContext.Current.IsPushEnabled = false;
+						PushContext.Current.IsTileEnabled = false;
+						PushContext.Current.IsToastEnabled = false;
+						IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+						while (currentPage.NavigationService.CanGoBack)
+						{
+							currentPage.NavigationService.RemoveBackEntry();
+						}
+						PhoneApplicationService.Current.State["logout"] = true;
 						currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 					}
 					else

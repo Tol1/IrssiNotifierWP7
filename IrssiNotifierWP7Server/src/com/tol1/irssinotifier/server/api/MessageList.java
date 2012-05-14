@@ -11,7 +11,7 @@ import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
-import com.tol1.irssinotifier.server.exception.UserNotFoundException;
+import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.CustomTimeTransformer;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -73,7 +73,7 @@ public class MessageList extends HttpServlet {
 			resp.getWriter().println(jsonObject);
 			resp.getWriter().close();
 		} catch (UserNotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), e.getLocalizedMessage());
+			IrssiNotifier.printError(resp.getWriter(), e);
 		}
 	}
 }
