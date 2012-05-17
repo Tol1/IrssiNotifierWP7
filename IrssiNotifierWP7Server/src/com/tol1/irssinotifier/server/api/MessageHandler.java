@@ -59,17 +59,25 @@ public class MessageHandler extends HttpServlet {
 					IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
 				} else {
 					IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-					try {
-						if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
-							Queue queue = QueueFactory.getQueue("minutequeue");
-							queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
-									.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
-									.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-									.param("toastRetry", "true"));
-							
+					if(responseStatus == Status.STATUS_ERROR){
+						user.errorOccurred = true;
+						user.sendToastNotifications = false;
+						dao.ofy().put(user);
+						IrssiNotifier.log.severe("Toast notificationit poistettu käytöstä virheestä johtuen");
+					}
+					else{
+						try {
+							if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+								Queue queue = QueueFactory.getQueue("minutequeue");
+								queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
+										.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
+										.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
+										.param("toastRetry", "true"));
+								
+							}
+						} catch (Exception e) {
+							IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
 						}
-					} catch (Exception e) {
-						IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
 					}
 				}
 			}
@@ -86,17 +94,25 @@ public class MessageHandler extends HttpServlet {
 				}
 				else{
 					IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
-					try {
-						if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
-							Queue queue = QueueFactory.getQueue("minutequeue");
-							queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
-									.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
-									.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-									.param("tileRetry", "true"));
-							
+					if(responseStatus == Status.STATUS_ERROR){
+						user.errorOccurred = true;
+						user.sendTileNotifications = false;
+						dao.ofy().put(user);
+						IrssiNotifier.log.severe("Tile notificationit poistettu käytöstä virheestä johtuen");
+					}
+					else{
+						try {
+							if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+								Queue queue = QueueFactory.getQueue("minutequeue");
+								queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
+										.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
+										.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
+										.param("tileRetry", "true"));
+								
+							}
+						} catch (Exception e) {
+							IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
 						}
-					} catch (Exception e) {
-						IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
 					}
 				}
 			}

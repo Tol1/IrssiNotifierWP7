@@ -37,15 +37,18 @@ public class StatusMessages {
 	public static class ChannelStatusMessage extends StatusMessage{
 		public boolean toastStatus;
 		public boolean tileStatus;
+		public boolean errorStatus;
 		public ChannelStatusMessage(){
 			super();
 			this.toastStatus = false;
 			this.tileStatus = false;
+			this.errorStatus = false;
 		}
-		public ChannelStatusMessage(boolean toastEnabled, boolean tileEnabled){
+		public ChannelStatusMessage(boolean toastEnabled, boolean tileEnabled, boolean errorStatus){
 			super();
 			this.toastStatus = toastEnabled;
 			this.tileStatus = tileEnabled;
+			this.errorStatus = errorStatus;
 		}
 	}
 	public static class MessageListResponse {

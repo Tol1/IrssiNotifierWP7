@@ -129,7 +129,6 @@ namespace IrssiNotifier.Views
 				var result = JObject.Parse(args.Result);
 				if (bool.Parse(result["success"].ToString()))
 				{
-					var dirty = false;
 					var toastStatus = bool.Parse(result["toastStatus"].ToString());
 					var tileStatus = bool.Parse(result["tileStatus"].ToString());
 					if(tileStatus && PushContext.Current.IsTileEnabled)
@@ -148,14 +147,12 @@ namespace IrssiNotifier.Views
 					else if (tileStatus != PushContext.Current.IsTileEnabled)
 					{
 						PushContext.Current.IsTileEnabled = tileStatus;
-						dirty = true;
 					}
 					if (toastStatus != PushContext.Current.IsToastEnabled)
 					{
 						PushContext.Current.IsToastEnabled = toastStatus;
-						dirty = true;
 					}
-					if(dirty)
+					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
 							MessageBox.Show("Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. " +

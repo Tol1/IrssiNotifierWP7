@@ -9,6 +9,7 @@ public class IrssiNotifierUser {
 	public String guid;
 	public boolean sendToastNotifications;
 	public boolean sendTileNotifications;
+	public boolean errorOccurred;
 	public int tileCount;
 	
 	public IrssiNotifierUser(){}
