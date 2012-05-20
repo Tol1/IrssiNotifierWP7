@@ -6,7 +6,7 @@ use POSIX;
 require CGI::Util;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "2";
+$VERSION = "1";
 %IRSSI = (
     authors     => "Tomi \'Tol1\' Nokkala, Lauri \'murgo\' Härsilä",
     contact     => "tol1\@iki.fi",

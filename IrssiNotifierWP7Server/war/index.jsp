@@ -53,8 +53,9 @@
 	<div class="root">
 		<h1>Tervetuloa!</h1>
 		<%
+			IrssiNotifierUser inUser = null;
 			try {
-				IrssiNotifierUser inUser = IrssiNotifier.getUser(dao, user);
+				inUser = IrssiNotifier.getUser(dao, user);
 				%>
 				<p>
 					Puhelimesi on rekisteröity palveluun, ja sen yksilöllinen tunnus on <span class="uuid"><%=inUser.UUID %></span>.
@@ -74,7 +75,28 @@
 		<%
 			}
 		%>
-		<a href="/script/irssinotifierwp7.pl">Lataa irssiskripti</a>
+		<p>
+			<a href="/script/irssinotifierwp7.pl">Lataa irssiskripti</a>
+		</p>
+		<p>
+			Palvelun käyttöönottoohjeet:
+		</p>
+		<ol>
+			<li>Asenna IrssiNotifier-sovellus Windows Phone 7 -puhelimeesi.</li>
+			<li>Käynnistä sovellus. Ensimmäisellä käynnistyskerralla sovellus pyytää rekisteröitymään palveluun</li>
+		<% if(inUser == null) { %>
+			<li>Suoritettuasi rekisteröinnin päivitä tämä sivu nähdäksesi skriptin asennus- ja määrittelyohjeet</li>
+		<% }
+			else {%>
+			<li>Asenna skripti irssiin kirjoittamalla seuraavat komennot shelliin (ei siis irssiin)
+				<code style="display: block">
+					mkdir -p ~/.irssi/scripts/autorun;
+					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts//irssinotifierwp7.pl;
+					ln -s ~/.irssi/scripts/irssinotifier.pl ~/.irssi/scripts/autorun/irssinotifier.pl;
+				</code>
+			 </li>
+		<% } %>
+		</ol>
 	</div>
 	<%
 		}

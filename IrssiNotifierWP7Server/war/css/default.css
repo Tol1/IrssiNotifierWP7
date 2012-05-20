@@ -16,7 +16,7 @@ a:VISITED {
 }
 
 .root{
-	width: 550px;
+	width: 650px;
 	margin-left: 100px;
 }
 
@@ -24,4 +24,11 @@ a:VISITED {
 	background-color: #0000BB;
 	display: inline-block;
 	padding: 3px;
+}
+
+code {
+	background-color: #0000BB;
+	display: inline-block;
+	padding: 3px;
+	margin-left: 20px;
 }
