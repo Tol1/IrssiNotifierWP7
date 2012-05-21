@@ -51,12 +51,14 @@ public class MessageHandler extends HttpServlet {
 			
 			Message mess = new Message(nick, channel, message, user);
 			
-			if(user.sendToastNotifications && (retries == 0 || toastRetry != null)){
+			if(user.sendToastNotifications && (retries == 0 || toastRetry != null) && ((System.currentTimeMillis() - user.lastToastNotificationSent) > (user.toastNotificationOffset*1000))){
 				String toastMessage = mess.GenerateToastNotification();
 				HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 				Status responseStatus = HandleResponse(conn, resp, user, dao);
 				if(responseStatus == Status.STATUS_OK) {
 					IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
+					user.lastToastNotificationSent = System.currentTimeMillis();
+					dao.ofy().put(user);
 				} else {
 					IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
 					if(responseStatus == Status.STATUS_ERROR){
