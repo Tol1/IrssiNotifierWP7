@@ -22,6 +22,8 @@ public class IrssiNotifier {
 	
 	public static final String HILITEPAGEURL = "/Pages/HilitePage.xaml";
 	
+	public static final int VERSION = 1;
+	
 	public static void printError(PrintWriter writer, String errorMessage){
 		StatusMessages.ErrorMessage message = new StatusMessages.ErrorMessage(errorMessage);
 		writeError(writer, message);
@@ -53,5 +55,18 @@ public class IrssiNotifier {
 			throw new UserNotFoundException();
 		}
 		return user;
+	}
+	
+	public static boolean versionCheck(String versionString){
+		if(versionString == null){
+			return false;
+		}
+		try{
+			int version = Integer.parseInt(versionString);
+			return VERSION <= version;
+		}
+		catch(NumberFormatException nfe){
+			return false;
+		}
 	}
 }

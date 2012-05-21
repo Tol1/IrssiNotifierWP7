@@ -27,6 +27,10 @@ public class MessageHandler extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
+			IrssiNotifier.printError(resp.getWriter(), "Käytössäsi on vanha versio");
+			return;
+		}
 		String id = req.getParameter("apiToken").trim();
 		
 		ObjectifyDAO dao = new ObjectifyDAO();
