@@ -58,7 +58,7 @@
 				inUser = IrssiNotifier.getUser(dao, user);
 				%>
 				<p>
-					Puhelimesi on rekisteröity palveluun, ja sen yksilöllinen tunnus on <span class="uuid"><%=inUser.UUID %></span>.
+					Puhelimesi on rekisteröity palveluun, ja sen yksilöllinen tunnus on <span class="emphasis"><%=inUser.UUID %></span>.
 					Tätä tunnusta tarvitset määrittäessäsi asetuksia irssiskriptille.
 				</p>
 				<p>
@@ -82,21 +82,31 @@
 			Palvelun käyttöönottoohjeet:
 		</p>
 		<ol>
-			<li>Asenna IrssiNotifier-sovellus Windows Phone 7 -puhelimeesi.</li>
-			<li>Käynnistä sovellus. Ensimmäisellä käynnistyskerralla sovellus pyytää rekisteröitymään palveluun</li>
-		<% if(inUser == null) { %>
-			<li>Suoritettuasi rekisteröinnin päivitä tämä sivu nähdäksesi skriptin asennus- ja määrittelyohjeet</li>
-		<% }
-			else {%>
-			<li>Asenna skripti irssiin kirjoittamalla seuraavat komennot shelliin (ei siis irssiin)
-				<code style="display: block">
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Asenna IrssiNotifier-sovellus Windows Phone 7 -puhelimeesi.</li>
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Käynnistä sovellus. Ensimmäisellä käynnistyskerralla sovellus pyytää rekisteröitymään palveluun</li>
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Suoritettuasi rekisteröinnin päivitä tämä sivu nähdäksesi skriptin asennus- ja määrittelyohjeet</li>
+		 
+		<%	if(inUser != null) {%>
+			<li>Asenna irssiskripti kirjoittamalla seuraavat komennot shelliin (ei siis irssiin)
+				<code class="emphasis">
 					mkdir -p ~/.irssi/scripts/autorun;
-					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts//irssinotifierwp7.pl;
+					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts/irssinotifierwp7.pl;
 					ln -s ~/.irssi/scripts/irssinotifier.pl ~/.irssi/scripts/autorun/irssinotifier.pl;
 				</code>
 			 </li>
+			 <li>Lataa skripti irssiin komennolla <span class="emphasis">/script load irssinotifierwp7.pl</span></li>
+			 <li>Määritä API key komennolla <span class="emphasis">/set irssinotifierwp_api_token <%=inUser.UUID %></span></li>
 		<% } %>
 		</ol>
+		
+		<p>
+			Skriptin asetukset:
+		</p>
+		<ul>
+			<li>/set irssinotifierwp_away_only [ON/OFF] - Kun päällä, notifikaatio lähetetään puhelimelle vain jos olet /away</li>
+			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - Kun päällä, notifikaatioita ei lähetetä kanavalta, joka irssissä on auki.</li>
+			<li>/set irssinotifierwp_require_idle_seconds [num] - Nollaa suurempi arvo määrittelee, montako sekuntia irssin pitää olla käyttämättömänä, ennen kuin notifikaatioita lähetetään.</li>
+		</ul>
 	</div>
 	<%
 		}

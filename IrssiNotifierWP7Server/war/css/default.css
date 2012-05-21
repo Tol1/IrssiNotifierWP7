@@ -20,15 +20,8 @@ a:VISITED {
 	margin-left: 100px;
 }
 
-.uuid {
+.emphasis {
 	background-color: #0000BB;
 	display: inline-block;
 	padding: 3px;
-}
-
-code {
-	background-color: #0000BB;
-	display: inline-block;
-	padding: 3px;
-	margin-left: 20px;
 }
