@@ -51,12 +51,13 @@ public class StatusMessages {
 			this.errorStatus = errorStatus;
 		}
 	}
-	public static class MessageListResponse {
+	public static class MessageListResponse extends StatusMessage {
 		public long currentTimestamp;
 		public Message nextMessage;
 		public boolean isNextFetch;
 		public Query<Message> messages;
 		public MessageListResponse(Query<Message> messages){
+			super();
 			this.messages = messages;
 			this.currentTimestamp = System.currentTimeMillis();
 		}

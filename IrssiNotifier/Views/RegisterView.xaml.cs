@@ -40,7 +40,7 @@ namespace IrssiNotifier.Views
 			var cookieHeader = cookies.Cast<Cookie>().Aggregate("", (current, cookie) => current + (cookie.Name + "=" + cookie.Value + "; "));
 			webclient.Headers["Cookie"] = cookieHeader;
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid + "&version=" + App.Version);
 		}
 		public LoginPage FromPage { get; private set; }
 

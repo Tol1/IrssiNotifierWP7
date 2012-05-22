@@ -11,6 +11,7 @@ import com.googlecode.objectify.Query;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.*;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.MessageListResponse;
+import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.CustomTimeTransformer;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
@@ -33,9 +34,13 @@ public class MessageList extends HttpServlet {
 		listMessages(req, resp);
 	}
 	private void listMessages(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		resp.setCharacterEncoding("UTF-8");
+		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
+			IrssiNotifier.printError(resp.getWriter(), new OldVersionException());
+			return;
+		}
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
-		resp.setCharacterEncoding("UTF-8");
 		
 		if(id == null || guid == null){
 			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");

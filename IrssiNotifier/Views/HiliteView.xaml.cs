@@ -132,59 +132,66 @@ namespace IrssiNotifier.Views
 			{
 				var collection = new ObservableCollection<Hilite>();
 				var result = JObject.Parse(response);
-				if (!bool.Parse(result["isNextFetch"].ToString()))
+				if (!bool.Parse(result["success"].ToString()))
 				{
-					IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
+					Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
 				}
 				else
 				{
-					collection = HiliteCollection;
-					var last = collection.LastOrDefault();
-					if (last != null)
+					if (!bool.Parse(result["isNextFetch"].ToString()))
 					{
-						last.IsLast = false;
+						IsolatedStorageSettings.ApplicationSettings["LastHiliteFetch"] = result["currentTimestamp"].ToString();
 					}
-				}
-				var messages = JArray.Parse(result["messages"].ToString());
-				foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
-				{
-					var hiliteObj = new Hilite
+					else
 					{
-						Channel = hilite["channel"].ToString(),
-						Nick = hilite["nick"].ToString(),
-						Message = hilite["message"].ToString(),
-						TimestampString = hilite["timestamp"].ToString(),
-						Id = long.Parse(hilite["id"].ToString())
-					};
-					collection.Add(hiliteObj);
-				}
-				if (result["nextMessage"].Type != JTokenType.Null)
-				{
-					var nextHilite = JObject.Parse(result["nextMessage"].ToString());
-					_nextHilite = new Hilite
-					{
-						Channel = nextHilite["channel"].ToString(),
-						Nick = nextHilite["nick"].ToString(),
-						Message = nextHilite["message"].ToString(),
-						TimestampString = nextHilite["timestamp"].ToString(),
-						Id = long.Parse(nextHilite["id"].ToString())
-					};
-					var last = collection.LastOrDefault();
-					if (last != null)
-					{
-						last.IsLast = true;
+						collection = HiliteCollection;
+						var last = collection.LastOrDefault();
+						if (last != null)
+						{
+							last.IsLast = false;
+						}
 					}
-				}
-				else
-				{
-					_nextHilite = null;
-					var last = collection.LastOrDefault();
-					if (last != null)
+					var messages = JArray.Parse(result["messages"].ToString());
+					foreach (var hilite in messages.Select(hiliteRow => JObject.Parse(hiliteRow.ToString())))
 					{
-						last.IsLast = false;
+						var hiliteObj = new Hilite
+						                	{
+						                		Channel = hilite["channel"].ToString(),
+						                		Nick = hilite["nick"].ToString(),
+						                		Message = hilite["message"].ToString(),
+						                		TimestampString = hilite["timestamp"].ToString(),
+						                		Id = long.Parse(hilite["id"].ToString())
+						                	};
+						collection.Add(hiliteObj);
 					}
+					if (result["nextMessage"].Type != JTokenType.Null)
+					{
+						var nextHilite = JObject.Parse(result["nextMessage"].ToString());
+						_nextHilite = new Hilite
+						              	{
+						              		Channel = nextHilite["channel"].ToString(),
+						              		Nick = nextHilite["nick"].ToString(),
+						              		Message = nextHilite["message"].ToString(),
+						              		TimestampString = nextHilite["timestamp"].ToString(),
+						              		Id = long.Parse(nextHilite["id"].ToString())
+						              	};
+						var last = collection.LastOrDefault();
+						if (last != null)
+						{
+							last.IsLast = true;
+						}
+					}
+					else
+					{
+						_nextHilite = null;
+						var last = collection.LastOrDefault();
+						if (last != null)
+						{
+							last.IsLast = false;
+						}
+					}
+					HiliteCollection = collection;
 				}
-				HiliteCollection = collection;
 			}
 			catch (Exception e)
 			{
@@ -208,7 +215,7 @@ namespace IrssiNotifier.Views
 				ParseResult(args.Result);
 			};
 			var postMessage = "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
-							  App.AppGuid;
+			                  App.AppGuid + "&version=" + App.Version;
 			if (starting != 0)
 			{
 				postMessage += "&starting=" + starting;

@@ -180,7 +180,9 @@ namespace IrssiNotifier.Views
 				PushContext.Current.IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&newUrl=" + channelUri);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
+			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
 		}
 
 		public static void ClearTileCount(Dispatcher dispatcher)
@@ -224,7 +226,9 @@ namespace IrssiNotifier.Views
 				PushContext.Current.IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&"+param+"=" + enabled);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST",
+			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                            App.AppGuid + "&" + param + "=" + enabled + "&version=" + App.Version);
 		}
 
 		private static void PinTile(bool value)

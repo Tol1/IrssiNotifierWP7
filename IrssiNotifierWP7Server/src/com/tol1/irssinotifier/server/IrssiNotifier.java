@@ -23,6 +23,16 @@ public class IrssiNotifier {
 	
 	public static final String HILITEPAGEURL = "/Pages/HilitePage.xaml";
 	
+	public static void printErrorForIrssi(PrintWriter writer, String errorMessage){
+		writer.print(errorMessage);
+		writer.close();
+		log.severe(errorMessage);
+	}
+	
+	public static void printErrorForIrssi(PrintWriter writer, Exception exception){
+		printErrorForIrssi(writer, exception.getLocalizedMessage());
+	}
+	
 	public static void printError(PrintWriter writer, String errorMessage){
 		StatusMessages.ErrorMessage message = new StatusMessages.ErrorMessage(errorMessage);
 		writeError(writer, message);
@@ -35,7 +45,7 @@ public class IrssiNotifier {
 	
 	private static void writeError(PrintWriter writer, StatusMessages.ErrorMessage message){
 		String json = new JSONSerializer().exclude("class").serialize(message);
-		writer.println(json);
+		writer.print(json);
 		writer.close();
 		log.severe(message.errorMessage);
 	}

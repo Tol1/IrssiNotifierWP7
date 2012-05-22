@@ -21,6 +21,11 @@ public class UpdateChannelUrl extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
+		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
+			IrssiNotifier.printError(resp.getWriter(), new OldVersionException());
+			return;
+		}
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
 		String newUrl = req.getParameter("newUrl");

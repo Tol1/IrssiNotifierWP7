@@ -13,6 +13,7 @@ namespace IrssiNotifier
 		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
+		public static readonly int Version = 1;
 
 		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml?NavigatedFrom=Tile";
 

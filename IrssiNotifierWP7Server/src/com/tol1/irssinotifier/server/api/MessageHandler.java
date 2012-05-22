@@ -13,11 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.apphosting.api.ApiProxy;
+
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.*;
 
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
+import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -27,8 +30,9 @@ public class MessageHandler extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
 		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
-			IrssiNotifier.printError(resp.getWriter(), "Käytössäsi on vanha versio");
+			IrssiNotifier.printErrorForIrssi(resp.getWriter(), new OldVersionException("Käytössäsi on vanhentunuy skriptiversio. Päivitä skripti osoitteessa https://"+ApiProxy.getCurrentEnvironment().getAttributes().get("com.google.appengine.runtime.default_version_hostname")));
 			return;
 		}
 		String id = req.getParameter("apiToken").trim();
@@ -127,7 +131,7 @@ public class MessageHandler extends HttpServlet {
 				dao.ofy().put(mess);
 			}
 		} catch (UserNotFoundException e) {
-			IrssiNotifier.printError(resp.getWriter(), e);
+			IrssiNotifier.printErrorForIrssi(resp.getWriter(), e);
 		}
 	}
 	
@@ -173,42 +177,42 @@ public class MessageHandler extends HttpServlet {
 				result = Status.STATUS_OK;
 			}
 			else if(NotificationStatus.equalsIgnoreCase("QueueFull")){
-				resp.getWriter().println("Push channel error: Queue overflow.");
+				resp.getWriter().print("Push channel error: Queue overflow.");
 				result = Status.STATUS_QUEUEABLE;
 			}
 			else{
-				resp.getWriter().println("Push channel error: Suppressed.");
+				resp.getWriter().print("Push channel error: Suppressed.");
 				result = Status.STATUS_ERROR;
 			}
 			break;
 		case 400:
-			resp.getWriter().println("Push channel error: Bad XML.");
+			resp.getWriter().print("Push channel error: Bad XML.");
 			result = Status.STATUS_ERROR;
 			break;
 		case 404:
 			user.sendToastNotifications = false;
 			dao.ofy().put(user);
-			resp.getWriter().println("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
+			resp.getWriter().print("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
 			result = Status.STATUS_CHANNEL_CLOSED;
 			break;
 		case 406:
 			user.sendToastNotifications = false;
 			dao.ofy().put(user);
-			resp.getWriter().println("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
+			resp.getWriter().print("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
 			result = Status.STATUS_HOURLY_QUEUEABLE;
 			break;
 		case 412:
 			user.sendToastNotifications = false;
 			dao.ofy().put(user);
-			resp.getWriter().println("Push channel error: The device is in an inactive state.");
+			resp.getWriter().print("Push channel error: The device is in an inactive state.");
 			result = Status.STATUS_HOURLY_QUEUEABLE;
 			break;
 		case 503:
-			resp.getWriter().println("Push channel error: The Push Notification Service is unable to process the request.");
+			resp.getWriter().print("Push channel error: The Push Notification Service is unable to process the request.");
 			result = Status.STATUS_QUEUEABLE;
 			break;
 		default:
-			resp.getWriter().println("Push channel error: Unknown error. HTTP status: "+status+", Notification status: "+NotificationStatus
+			resp.getWriter().print("Push channel error: Unknown error. HTTP status: "+status+", Notification status: "+NotificationStatus
 					+", Device connection status: "+DeviceConnectionStatus+", Subsrciption status: "+SubscriptionStatus);
 			result = Status.STATUS_ERROR;
 		}	//TODO joku resend sopiviin kohtiin?
