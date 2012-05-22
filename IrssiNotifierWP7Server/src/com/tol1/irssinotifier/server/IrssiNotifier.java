@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.apphosting.api.ApiProxy;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
@@ -21,8 +22,6 @@ public class IrssiNotifier {
 	public static final Logger log = Logger.getLogger("com.tol1.irssinotifier.server");
 	
 	public static final String HILITEPAGEURL = "/Pages/HilitePage.xaml";
-	
-	public static final int VERSION = 1;
 	
 	public static void printError(PrintWriter writer, String errorMessage){
 		StatusMessages.ErrorMessage message = new StatusMessages.ErrorMessage(errorMessage);
@@ -57,13 +56,22 @@ public class IrssiNotifier {
 		return user;
 	}
 	
+	public static int getCurrentVersion(){
+		try {
+			return Integer.parseInt(ApiProxy.getCurrentEnvironment().getVersionId().split("\\.")[0]);
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+	
 	public static boolean versionCheck(String versionString){
 		if(versionString == null){
 			return false;
 		}
 		try{
+			int serviceVersion = getCurrentVersion();
 			int version = Integer.parseInt(versionString);
-			return VERSION <= version;
+			return serviceVersion <= version;
 		}
 		catch(NumberFormatException nfe){
 			return false;
