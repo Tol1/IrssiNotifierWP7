@@ -116,9 +116,9 @@ namespace IrssiNotifier.Views
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-
 		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher, Page currentPage)
 		{
+			PushContext.Current.IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
@@ -144,14 +144,8 @@ namespace IrssiNotifier.Views
 							                       	});
 						}
 					}
-					else if (tileStatus != PushContext.Current.IsTileEnabled)
-					{
-						PushContext.Current.IsTileEnabled = tileStatus;
-					}
-					if (toastStatus != PushContext.Current.IsToastEnabled)
-					{
-						PushContext.Current.IsToastEnabled = toastStatus;
-					}
+					PushContext.Current.IsTileEnabled = tileStatus;
+					PushContext.Current.IsToastEnabled = toastStatus;
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
@@ -183,7 +177,7 @@ namespace IrssiNotifier.Views
 					}
 				}
 				ClearTileCount(dispatcher);
-
+				PushContext.Current.IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&newUrl=" + channelUri);
@@ -206,6 +200,7 @@ namespace IrssiNotifier.Views
 
 		private static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher, Action callback = null)
 		{
+			PushContext.Current.IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
@@ -226,6 +221,7 @@ namespace IrssiNotifier.Views
 						callback();
 					}
 				}
+				PushContext.Current.IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST", "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" + App.AppGuid + "&"+param+"=" + enabled);

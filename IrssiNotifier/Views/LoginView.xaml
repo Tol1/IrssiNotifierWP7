@@ -4,13 +4,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    mc:Ignorable="d"
+             xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+             mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DesignHeight="480" d:DesignWidth="480">
     
     <Grid x:Name="LayoutRoot">
-        <phone:WebBrowser Name="webBrowser" IsScriptEnabled="True" Navigated="BrowserNavigated" />
+        <phone:WebBrowser Name="webBrowser" IsScriptEnabled="True" Navigating="WebBrowserNavigating" Navigated="BrowserNavigated" />
+        <toolkit:PerformanceProgressBar x:Name="progressBar" IsIndeterminate="True"/>
     </Grid>
 </UserControl>

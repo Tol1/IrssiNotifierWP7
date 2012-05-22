@@ -4,15 +4,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    mc:Ignorable="d"
+             xmlns:PushNotificationContext="clr-namespace:IrssiNotifier.PushNotificationContext" mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DesignHeight="640" d:DesignWidth="480">
     
     <UserControl.Resources>
-        <!--converters:BoolBrushConverter x:Key="BoolBrushConverter" /-->
-
+        <PushNotificationContext:PushContextWrapper x:Key="pushContext" />
         <Style x:Key="DescTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="Silver" />
@@ -36,7 +35,6 @@
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
-
         <StackPanel>
             <StackPanel>
                 <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
@@ -45,30 +43,29 @@
                            Text="Avaa/Sulje notifikaatiokanava kokonaan" />
             </StackPanel>
 
-                <StackPanel Margin="16,0,0,0">
-                    <toolkit:ToggleSwitch Header="Livetiili"
-                                 IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
+            <StackPanel Margin="16,0,0,0">
+                <toolkit:ToggleSwitch Header="Livetiili"
+                                IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource DescTextStyle}"
+                        Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
 
-                    <toolkit:ToggleSwitch Header="Ponnahdusviestit"
-                                 IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
+                <toolkit:ToggleSwitch Header="Ponnahdusviestit"
+                                IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource DescTextStyle}"
+                        Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
 
-                    <!--toolkit:ToggleSwitch Header="Raw Notifications"
-                                 IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
-                           Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
-                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
-                    <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
-                               Text="{Binding UserId, Mode=OneTime}" />
-                </StackPanel>
-
-                <!--Border Background="{Binding IsPushEnabled, Converter={StaticResource BoolBrushConverter}}" /-->
+                <!--toolkit:ToggleSwitch Header="Raw Notifications"
+                                IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource DescTextStyle}"
+                        Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
+                <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
+                            Text="{Binding UserId, Mode=OneTime}" />
+            </StackPanel>
             <StackPanel>
                 <Button Click="LogoutClick">Kirjaudu ulos</Button>
             </StackPanel>
         </StackPanel>
+        <toolkit:PerformanceProgressBar VerticalAlignment="Top" IsIndeterminate="{Binding Path=IsBusy, Source={StaticResource pushContext}}" />
     </Grid>
 </UserControl>
