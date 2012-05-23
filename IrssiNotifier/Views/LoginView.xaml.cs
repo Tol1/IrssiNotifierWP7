@@ -11,7 +11,7 @@ namespace IrssiNotifier.Views
 		{
 			InitializeComponent();
 			FromPage = page;
-			webBrowser.Navigate(new Uri(App.Baseaddress + "client/login"));
+			webBrowser.Navigate(new Uri(App.Baseaddress + "client/login?version="+App.Version));
 		}
 
 		public LoginPage FromPage { get; private set; }

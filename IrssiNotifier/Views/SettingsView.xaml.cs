@@ -103,6 +103,7 @@ namespace IrssiNotifier.Views
 					{
 						PushContext.Current.Disconnect();
 					}
+					PushContext.Current.IsPushEnabled = value;
 					NotifyPropertyChanged("IsPushEnabled");
 				}
 			}
@@ -170,18 +171,21 @@ namespace IrssiNotifier.Views
 												"Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.");
 											break;
 									}
+									PushContext.Current.Disconnect();
+									PushContext.Current.IsPushEnabled = false;
+									PushContext.Current.IsTileEnabled = false;
+									PushContext.Current.IsToastEnabled = false;
+									IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+									App.AppGuid = Guid.NewGuid().ToString();
+									IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
+									while (currentPage.NavigationService.CanGoBack)
+									{
+										currentPage.NavigationService.RemoveBackEntry();
+									}
+									PhoneApplicationService.Current.State["logout"] = true;
+									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 								});
-						PushContext.Current.Disconnect();
-						PushContext.Current.IsPushEnabled = false;
-						PushContext.Current.IsTileEnabled = false;
-						PushContext.Current.IsToastEnabled = false;
-						IsolatedStorageSettings.ApplicationSettings.Remove("userID");
-						while (currentPage.NavigationService.CanGoBack)
-						{
-							currentPage.NavigationService.RemoveBackEntry();
-						}
-						PhoneApplicationService.Current.State["logout"] = true;
-						currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+						return;
 					}
 					else
 					{
@@ -278,7 +282,6 @@ namespace IrssiNotifier.Views
 				PushContext.Current.IsBusy = true;
 				FromPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
 				var browser = (WebBrowser) FromPage.contentBorder.Child;
-//				var browser = new WebBrowser { IsScriptEnabled = true, IsEnabled = false };
 				browser.Navigated += (o, args) =>
 				                     	{
 											if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
@@ -287,6 +290,8 @@ namespace IrssiNotifier.Views
 												IsTileEnabled = false;
 												IsToastEnabled = false;
 												IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+												App.AppGuid = Guid.NewGuid().ToString();
+												IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
 												while (FromPage.NavigationService.CanGoBack)
 												{
 													FromPage.NavigationService.RemoveBackEntry();

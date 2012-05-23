@@ -1,18 +1,18 @@
 ﻿
 using System;
-using IrssiNotifier.Pages;
+using System.Windows.Controls;
 
 namespace IrssiNotifier.Views
 {
 	public partial class InitialView
 	{
-		public InitialView(MainPage fromPage)
+		public InitialView(Page fromPage)
 		{
 			InitializeComponent();
 			FromPage = fromPage;
 		}
 
-		public MainPage FromPage { get; private set; }
+		public Page FromPage { get; private set; }
 
 		private void RegisterButtonClick(object sender, System.Windows.RoutedEventArgs e)
 		{
