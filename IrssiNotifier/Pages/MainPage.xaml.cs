@@ -50,6 +50,10 @@ namespace IrssiNotifier.Pages
 				}
 				PhoneApplicationService.Current.State.Remove("registered");
 				PhoneApplicationService.Current.State.Remove("logout");
+				foreach (var tile in ShellTile.ActiveTiles)
+				{
+					tile.Update(new StandardTileData { Count = 0 });
+				}
 			}
 		}
 		/*
