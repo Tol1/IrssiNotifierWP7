@@ -14,6 +14,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.RegisterSuccessMessage;
+import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 import flexjson.JSONSerializer;
@@ -26,11 +27,16 @@ public class RegisterPhoneClient extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
+		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
+			IrssiNotifier.printError(resp.getWriter(), new OldVersionException());
+			return;
+		}
 		ObjectifyDAO dao = new ObjectifyDAO();
 		User user = userService.getCurrentUser();
         if (user != null) {
         	String guid = req.getParameter("guid");
-			if(guid == null){
+			if(guid == null || guid.equals("")){
 				IrssiNotifier.printError(resp.getWriter(), "GUID missing");
 				return;
 			}

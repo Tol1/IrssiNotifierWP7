@@ -155,10 +155,22 @@ namespace IrssiNotifier.Views
 				}
 				else
 				{
-					if(result["exceptionType"].ToString() == "UserNotFoundException")
+					if (result["exceptionType"].ToString() == "UserNotFoundException" || result["exceptionType"].ToString() == "InvalidGUIDException")
 					{
 						dispatcher.BeginInvoke(
-							() => MessageBox.Show("Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen."));
+							() =>
+								{
+									switch (result["exceptionType"].ToString())
+									{
+										case "UserNotFoundException":
+											MessageBox.Show("Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen.");
+											break;
+										case "InvalidGUIDException":
+											MessageBox.Show(
+												"Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.");
+											break;
+									}
+								});
 						PushContext.Current.Disconnect();
 						PushContext.Current.IsPushEnabled = false;
 						PushContext.Current.IsTileEnabled = false;
@@ -263,21 +275,28 @@ namespace IrssiNotifier.Views
 			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
-				var browser = new WebBrowser();
+				PushContext.Current.IsBusy = true;
+				FromPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
+				var browser = (WebBrowser) FromPage.contentBorder.Child;
+//				var browser = new WebBrowser { IsScriptEnabled = true, IsEnabled = false };
 				browser.Navigated += (o, args) =>
 				                     	{
-				                     		IsPushEnabled = false;
-				                     		IsTileEnabled = false;
-				                     		IsToastEnabled = false;
-				                     		IsolatedStorageSettings.ApplicationSettings.Remove("userID");
-				                     		while (FromPage.NavigationService.CanGoBack)
-				                     		{
-				                     			FromPage.NavigationService.RemoveBackEntry();
-				                     		}
-				                     		PhoneApplicationService.Current.State["logout"] = true;
-				                     		FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+											if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
+											{
+												IsPushEnabled = false;
+												IsTileEnabled = false;
+												IsToastEnabled = false;
+												IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+												while (FromPage.NavigationService.CanGoBack)
+												{
+													FromPage.NavigationService.RemoveBackEntry();
+												}
+												PushContext.Current.IsBusy = false;
+												PhoneApplicationService.Current.State["logout"] = true;
+												FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+											}
 				                     	};
-				browser.NavigateToString(App.Baseaddress+"client/logout");
+				browser.Navigate(new Uri(App.Baseaddress+"client/logout"));
 			}
 		}
 	}

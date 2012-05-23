@@ -16,6 +16,10 @@ handlers:
   servlet: com.tol1.irssinotifier.server.login.LoginSuccess
   secure: always
   
+- url: /client/logout/logoutsuccess
+  servlet: com.tol1.irssinotifier.server.login.LogoutSuccess
+  secure: always
+  
 - url: /client/register
   servlet: com.tol1.irssinotifier.server.api.RegisterPhoneClient
   secure: always

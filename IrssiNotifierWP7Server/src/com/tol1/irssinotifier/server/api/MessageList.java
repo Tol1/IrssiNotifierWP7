@@ -42,7 +42,7 @@ public class MessageList extends HttpServlet {
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
 		
-		if(id == null || guid == null){
+		if(id == null || guid == null || id.equals("") || guid.equals("")){
 			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");
 			return;
 		}

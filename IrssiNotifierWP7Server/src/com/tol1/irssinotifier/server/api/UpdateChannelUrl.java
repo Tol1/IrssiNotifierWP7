@@ -35,7 +35,7 @@ public class UpdateChannelUrl extends HttpServlet {
 			return;
 		}
 		
-		if(id == null || guid == null){
+		if(id == null || guid == null || id.equals("") || guid.equals("")){
 			IrssiNotifier.printError(resp.getWriter(), "Virheellinen pyyntö");
 			return;
 		}
