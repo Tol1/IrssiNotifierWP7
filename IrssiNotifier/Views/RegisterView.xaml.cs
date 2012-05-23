@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using IrssiNotifier.Pages;
+using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
 
@@ -61,6 +62,8 @@ namespace IrssiNotifier.Views
 
 		private void ButtonClick(object sender, EventArgs e)
 		{
+			MessageBox.Show("Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.");
+			PushContext.Current.IsPushEnabled = true;
 			PhoneApplicationService.Current.State["registered"] = true;
 			FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 		}
