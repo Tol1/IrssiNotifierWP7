@@ -109,6 +109,8 @@ namespace IrssiNotifier.Views
 			}
 		}
 
+		public int ToastInterval { get; set; }
+
 		public void NotifyPropertyChanged(string property){
 			if(PropertyChanged != null){
 				PropertyChanged(this,new PropertyChangedEventArgs(property));
@@ -216,7 +218,7 @@ namespace IrssiNotifier.Views
 				}
 		}
 
-		private static void UpdateSettings(string param, bool enabled, Dispatcher dispatcher, Action callback = null)
+		private static void UpdateSettings(string param, object value, Dispatcher dispatcher, Action callback = null)
 		{
 			PushContext.Current.IsBusy = true;
 			var webclient = new WebClient();
@@ -244,7 +246,7 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST",
 			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
-			                            App.AppGuid + "&" + param + "=" + enabled + "&version=" + App.Version);
+			                            App.AppGuid + "&" + param + "=" + value + "&version=" + App.Version);
 		}
 
 		private static void PinTile(bool value)

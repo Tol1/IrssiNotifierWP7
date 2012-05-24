@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-             xmlns:PushNotificationContext="clr-namespace:IrssiNotifier.PushNotificationContext" mc:Ignorable="d"
+    xmlns:PushNotificationContext="clr-namespace:IrssiNotifier.PushNotificationContext" mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -53,7 +53,7 @@
                                 IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
-
+                <Slider SmallChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="300" />
                 <!--toolkit:ToggleSwitch Header="Raw Notifications"
                                 IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
