@@ -51,6 +51,10 @@ public class UpdateSettings extends HttpServlet {
 					user.tileCount = 0;
 					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
 				}
+				if((param = req.getParameter("toastoffset")) != null){
+					user.toastNotificationOffset = Integer.parseInt(param);
+					IrssiNotifier.log.info("Käyttäjän "+id+" toast notificationien lähetykselle asetettu "+Boolean.parseBoolean(param)+" sekunnin offset");
+				}
 				dao.ofy().put(user);
 				resp.getWriter().println(new JSONSerializer().exclude("class").serialize(new StatusMessage()));
 				resp.getWriter().close();
