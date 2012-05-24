@@ -12,9 +12,11 @@
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="KäyttäjäID irssi-skriptiä varten:" Grid.Row="0" />
+        <TextBlock Text="Api Token irssi-skriptiä varten:" Grid.Row="0" Style="{StaticResource PhoneTextTitle3Style}" />
         <TextBlock Text="{Binding UserId, Mode=TwoWay}" Grid.Row="1" />
+        <TextBlock Grid.Row="2" Text="Tämä tieto on myöhemmin nähtävillä asetusnäkymässä" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}" />
     </Grid>
 </UserControl>
