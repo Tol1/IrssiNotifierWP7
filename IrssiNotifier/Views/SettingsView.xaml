@@ -15,6 +15,9 @@
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="Silver" />
             <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="16,0,16,24" />
+        </Style>
+        <Style x:Key="ToggleDescTextStyle" BasedOn="{StaticResource DescTextStyle}" TargetType="TextBlock">
             <Setter Property="Margin" Value="16,-38,16,24" />
         </Style>
         <Style x:Key="ReadOnlyTextBox" TargetType="TextBox">
@@ -39,32 +42,34 @@
                 <StackPanel>
                     <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
                                  IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                            Text="Avaa/Sulje notifikaatiokanava kokonaan" />
                 </StackPanel>
 
                 <StackPanel Margin="16,0,0,0">
                     <toolkit:ToggleSwitch Header="Livetiili"
                                 IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                         Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
 
                     <toolkit:ToggleSwitch Header="Ponnahdusviestit"
                                 IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                    <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                         Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
-                    <Slider SmallChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="300" />
+                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Ponnahdusviestien vähimmäisväli"/>
+                    <TextBlock Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}" Tap="IntervalTimeOnTap"/>
+                    <TextBlock Style="{StaticResource DescTextStyle}"
+                        Text="Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla." />
                     <!--toolkit:ToggleSwitch Header="Raw Notifications"
                                 IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
-                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
-                    <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
-                            Text="{Binding UserId, Mode=OneTime}" />
+                    
                 </StackPanel>
-                <StackPanel>
-                    <Button Click="LogoutClick">Kirjaudu ulos</Button>
-                </StackPanel>
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
+                <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" 
+                         Margin="16,0,16,24" Text="{Binding UserId, Mode=OneTime}" />
+                <Button Click="LogoutClick">Kirjaudu ulos</Button>
             </StackPanel>
         </ScrollViewer>
         <toolkit:PerformanceProgressBar VerticalAlignment="Top" IsIndeterminate="{Binding IsBusy}" />

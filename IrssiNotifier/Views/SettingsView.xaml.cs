@@ -10,6 +10,7 @@ using IrssiNotifier.PushNotificationContext;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace IrssiNotifier.Views
 {
@@ -124,7 +125,21 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		public int ToastInterval { get; set; }
+		private int _toastInterval;
+
+		public int ToastInterval
+		{
+			get { return _toastInterval; }
+			set
+			{
+				if (_toastInterval != value)
+				{
+					UpdateSettings("toastinterval", value, Dispatcher);
+					_toastInterval = value;
+					NotifyPropertyChanged("ToastInterval");
+				}
+			}
+		}
 
 		public void NotifyPropertyChanged(string property){
 			if(PropertyChanged != null){
@@ -152,18 +167,18 @@ namespace IrssiNotifier.Views
 					if(tileStatus && IsTileEnabled)
 					{
 						var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
-						if (hiliteTile == null && PushContext.Current.IsPushEnabled)
+						if (hiliteTile == null && IsPushEnabled)
 						{
 							dispatcher.BeginInvoke(() =>
 							                       	{
 							                       		MessageBox.Show("Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.");
-							                       		PushContext.Current.IsTileEnabled = false;
-							                       		UpdateSettings("tile", false, dispatcher);
+							                       		IsTileEnabled = false;
 							                       	});
 						}
 					}
 					IsTileEnabled = tileStatus;
 					IsToastEnabled = toastStatus;
+					ToastInterval = int.Parse(result["toastInterval"].ToString());
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
@@ -323,6 +338,18 @@ namespace IrssiNotifier.Views
 					                     		}
 					                     	};
 					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));
+				}
+			}
+		}
+
+		private void IntervalTimeOnTap(object sender, GestureEventArgs e)
+		{
+			if (IsToastEnabled)
+			{
+				var settingsPage = App.GetCurrentPage() as SettingsPage;
+				if (settingsPage != null)
+				{
+					settingsPage.contentBorder.Child = new ToastIntervalView();
 				}
 			}
 		}

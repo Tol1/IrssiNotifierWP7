@@ -11,7 +11,7 @@ public class IrssiNotifierUser {
 	public boolean sendTileNotifications;
 	public boolean errorOccurred;
 	public int tileCount;
-	public int toastNotificationOffset;
+	public int toastNotificationInterval;
 	public long lastToastNotificationSent;
 	
 	public IrssiNotifierUser(){}
@@ -20,6 +20,6 @@ public class IrssiNotifierUser {
 		this.UserID = id;
 		this.guid = guid;
 		this.UUID = uuid;
-		this.toastNotificationOffset = 15;
+		this.toastNotificationInterval = 15;
 	}
 }

@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="IrssiNotifier.Views.ToastIntervalView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    
+    <Grid x:Name="LayoutRoot">
+        <ScrollViewer>
+            <StackPanel>
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Ponnahdusviestien vähimmäisväli"/>
+                <TextBlock Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}"/>
+                <Slider SmallChange="5" LargeChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="150" />
+                <StackPanel Orientation="Horizontal" >
+                    <Button Click="OkButtonClick" Width="150">Ok</Button>
+                    <Button Click="CancelButtonClick" Width="150">Peruuta</Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

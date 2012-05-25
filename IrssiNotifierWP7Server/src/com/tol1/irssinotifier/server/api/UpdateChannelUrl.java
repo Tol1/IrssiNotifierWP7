@@ -52,7 +52,7 @@ public class UpdateChannelUrl extends HttpServlet {
 					user.ChannelURI = newUrl;
 					dao.ofy().put(user);
 				}
-				ChannelStatusMessage message = new ChannelStatusMessage(user.sendToastNotifications, user.sendTileNotifications, user.errorOccurred, user.toastNotificationOffset);
+				ChannelStatusMessage message = new ChannelStatusMessage(user.sendToastNotifications, user.sendTileNotifications, user.errorOccurred, user.toastNotificationInterval);
 				if(user.errorOccurred){
 					user.errorOccurred = false;
 					dao.ofy().put(user);

@@ -37,20 +37,20 @@ public class StatusMessages {
 	public static class ChannelStatusMessage extends StatusMessage{
 		public boolean toastStatus;
 		public boolean tileStatus;
-		public int toastOffset;
+		public int toastInterval;
 		public boolean errorStatus;
 		public ChannelStatusMessage(){
 			super();
 			this.toastStatus = false;
 			this.tileStatus = false;
 			this.errorStatus = false;
-			this.toastOffset = 15;
+			this.toastInterval = 15;
 		}
-		public ChannelStatusMessage(boolean toastEnabled, boolean tileEnabled, boolean errorStatus, int toastOffset){
+		public ChannelStatusMessage(boolean toastEnabled, boolean tileEnabled, boolean errorStatus, int toastInterval){
 			super();
 			this.toastStatus = toastEnabled;
 			this.tileStatus = tileEnabled;
-			this.toastOffset = toastOffset;
+			this.toastInterval = toastInterval;
 			this.errorStatus = errorStatus;
 		}
 	}
