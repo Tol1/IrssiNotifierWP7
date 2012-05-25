@@ -344,7 +344,7 @@ namespace IrssiNotifier.Views
 
 		private void IntervalTimeOnTap(object sender, GestureEventArgs e)
 		{
-			if (IsToastEnabled)
+			if (IsPushEnabled && IsToastEnabled)
 			{
 				var settingsPage = App.GetCurrentPage() as SettingsPage;
 				if (settingsPage != null)
