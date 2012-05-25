@@ -13,10 +13,9 @@ namespace IrssiNotifier.Views
 {
 	public partial class RegisterView : INotifyPropertyChanged
 	{
-		public RegisterView(LoginPage page)
+		public RegisterView()
 		{
 			InitializeComponent();
-			FromPage = page;
 
 			DataContext = this;
 			var webclient = new WebClient();
@@ -26,10 +25,14 @@ namespace IrssiNotifier.Views
 				var parsed = JObject.Parse(result);	
 				if (bool.Parse(parsed["success"].ToString()))
 				{
+					var loginPage = App.GetCurrentPage() as LoginPage;
 					UserId = (string)parsed["userid"];
-					FromPage.button.Content = "Jatka";
-					FromPage.button.Visibility = Visibility.Visible;
-					FromPage.button.Click += ButtonClick;
+					if (loginPage != null)
+					{
+						loginPage.button.Content = "Jatka";
+						loginPage.button.Visibility = Visibility.Visible;
+						loginPage.button.Click += ButtonClick;
+					}
 				}
 				else
 				{
@@ -43,7 +46,6 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid + "&version=" + App.Version);
 		}
-		public LoginPage FromPage { get; private set; }
 
 		private string _userId;
 		public string UserId
@@ -65,7 +67,7 @@ namespace IrssiNotifier.Views
 			MessageBox.Show("Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.");
 			PushContext.Current.IsPushEnabled = true;
 			PhoneApplicationService.Current.State["registered"] = true;
-			FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

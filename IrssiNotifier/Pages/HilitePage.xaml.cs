@@ -13,16 +13,16 @@ namespace IrssiNotifier.Pages
 			DataContext = this;
 			if (!IsolatedStorageSettings.ApplicationSettings.Contains("userID"))
 			{
-				contentBorder.Child = new InitialView(this);
+				contentBorder.Child = new InitialView();
 				ApplicationBar.IsVisible = false;
 			}
 			else
 			{
 				if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 				{
-					PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, this));
+					PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 				}
-				contentBorder.Child = new HiliteView(this);
+				contentBorder.Child = new HiliteView();
 			}
 		}
 

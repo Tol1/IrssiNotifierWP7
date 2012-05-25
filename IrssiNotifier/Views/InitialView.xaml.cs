@@ -1,19 +1,15 @@
 ﻿
 using System;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace IrssiNotifier.Views
 {
 	public partial class InitialView
 	{
-		public InitialView(Page fromPage)
+		public InitialView()
 		{
 			InitializeComponent();
-			FromPage = fromPage;
 		}
-
-		public Page FromPage { get; private set; }
 
 		private void RegisterButtonClick(object sender, RoutedEventArgs e)
 		{
@@ -22,7 +18,7 @@ namespace IrssiNotifier.Views
 				"Tietosuoja", MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.Yes)
 			{
-				FromPage.NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
+				App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
 			}
 		}
 	}

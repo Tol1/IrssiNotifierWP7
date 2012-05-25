@@ -4,7 +4,6 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
@@ -97,7 +96,7 @@ namespace IrssiNotifier.Views
 				{
 					if (value)
 					{
-						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher));
 					}
 					else
 					{
@@ -119,7 +118,7 @@ namespace IrssiNotifier.Views
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher, Page currentPage)
+		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
 		{
 			PushContext.Current.IsBusy = true;
 			var webclient = new WebClient();
@@ -180,6 +179,7 @@ namespace IrssiNotifier.Views
 									IsolatedStorageSettings.ApplicationSettings.Remove("userID");
 									App.AppGuid = Guid.NewGuid().ToString();
 									IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
+									var currentPage = App.GetCurrentPage();
 									while (currentPage.NavigationService.CanGoBack)
 									{
 										currentPage.NavigationService.RemoveBackEntry();

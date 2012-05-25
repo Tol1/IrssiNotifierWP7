@@ -26,6 +26,11 @@ namespace IrssiNotifier
 
 		private static PushContext _pushContext;
 
+		public static PhoneApplicationPage GetCurrentPage()
+		{
+			return ((App)Current).RootFrame.Content as PhoneApplicationPage;
+		}
+
 		/// <summary>
 		/// Provides easy access to the root frame of the Phone Application.
 		/// </summary>

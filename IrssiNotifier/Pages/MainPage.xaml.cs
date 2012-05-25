@@ -26,7 +26,7 @@ namespace IrssiNotifier.Pages
 
 		private void ShowInitialView()
 		{
-			contentBorder.Child = new InitialView(this);
+			contentBorder.Child = new InitialView();
 			ApplicationBar.IsVisible = false;
 		}
 
@@ -34,9 +34,9 @@ namespace IrssiNotifier.Pages
 		{
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, this));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
-			contentBorder.Child = new HiliteView(this);
+			contentBorder.Child = new HiliteView();
 			
 		}
 

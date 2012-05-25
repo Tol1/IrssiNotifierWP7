@@ -5,7 +5,6 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using IrssiNotifier.Model;
 using IrssiNotifier.PushNotificationContext;
 using Newtonsoft.Json.Linq;
@@ -18,30 +17,16 @@ namespace IrssiNotifier.Views
 		private bool _isBusy;
 		private long _lastFetch;
 
-		public HiliteView(Page fromPage)
-		{
-			InitializeComponent();
-			DataContext = this;
-			FromPage = fromPage;
-			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
-			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
-			}
-			Fetch(true);
-		}
-
 		public HiliteView()
 		{
 			InitializeComponent();
 			DataContext = this;
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher, FromPage));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
 			Fetch(true);
 		}
-
-		public Page FromPage { get; set; }
 
 		public bool IsBusy
 		{
@@ -233,7 +218,7 @@ namespace IrssiNotifier.Views
 
 		public void SettingsButtonClick(object sender, EventArgs e)
 		{
-			FromPage.NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
+			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
 		}
 
 		private void MoreClick(object sender, RoutedEventArgs e)

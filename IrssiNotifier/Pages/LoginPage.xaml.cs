@@ -7,7 +7,7 @@ namespace IrssiNotifier.Pages
 		public LoginPage()
 		{
 			InitializeComponent();
-			contentBorder.Child = new LoginView(this);
+			contentBorder.Child = new LoginView();
 		}
 	}
 }

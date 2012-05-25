@@ -7,14 +7,11 @@ namespace IrssiNotifier.Views
 {
 	public partial class LoginView
 	{
-		public LoginView(LoginPage page)
+		public LoginView()
 		{
 			InitializeComponent();
-			FromPage = page;
 			webBrowser.Navigate(new Uri(App.Baseaddress + "client/login?version="+App.Version));
 		}
-
-		public LoginPage FromPage { get; private set; }
 
 		private void BrowserNavigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
 		{
@@ -25,7 +22,11 @@ namespace IrssiNotifier.Views
 				var uri = browser.Source;
 				PhoneApplicationService.Current.State["cookies"] = cookies;
 				PhoneApplicationService.Current.State["cookiesUri"] = uri;
-				FromPage.contentBorder.Child = new RegisterView(FromPage);
+				var loginPage = App.GetCurrentPage() as LoginPage;
+				if (loginPage != null)
+				{
+					loginPage.contentBorder.Child = new RegisterView();
+				}
 			}
 			browser.IsEnabled = true;
 			progressBar.IsIndeterminate = false;
