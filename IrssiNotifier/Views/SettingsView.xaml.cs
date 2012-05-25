@@ -15,14 +15,11 @@ namespace IrssiNotifier.Views
 {
 	public partial class SettingsView : INotifyPropertyChanged
 	{
-		public SettingsView(SettingsPage fromPage)
+		public SettingsView()
 		{
 			DataContext = this;
 			InitializeComponent();
-			FromPage = fromPage;
 		}
-
-		public SettingsPage FromPage { get; private set; }
 
 		public string UserId
 		{
@@ -281,29 +278,33 @@ namespace IrssiNotifier.Views
 			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
+				var settingsPage = App.GetCurrentPage() as SettingsPage;
 				PushContext.Current.IsBusy = true;
-				FromPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
-				var browser = (WebBrowser) FromPage.contentBorder.Child;
-				browser.Navigated += (o, args) =>
-				                     	{
-											if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
-											{
-												IsPushEnabled = false;
-												IsTileEnabled = false;
-												IsToastEnabled = false;
-												IsolatedStorageSettings.ApplicationSettings.Remove("userID");
-												App.AppGuid = Guid.NewGuid().ToString();
-												IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
-												while (FromPage.NavigationService.CanGoBack)
-												{
-													FromPage.NavigationService.RemoveBackEntry();
-												}
-												PushContext.Current.IsBusy = false;
-												PhoneApplicationService.Current.State["logout"] = true;
-												FromPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
-											}
-				                     	};
-				browser.Navigate(new Uri(App.Baseaddress+"client/logout"));
+				if (settingsPage != null)
+				{
+					settingsPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
+					var browser = (WebBrowser) settingsPage.contentBorder.Child;
+					browser.Navigated += (o, args) =>
+					                     	{
+					                     		if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
+					                     		{
+					                     			IsPushEnabled = false;
+					                     			IsTileEnabled = false;
+					                     			IsToastEnabled = false;
+					                     			IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+					                     			App.AppGuid = Guid.NewGuid().ToString();
+					                     			IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
+					                     			while (settingsPage.NavigationService.CanGoBack)
+					                     			{
+					                     				settingsPage.NavigationService.RemoveBackEntry();
+					                     			}
+					                     			PushContext.Current.IsBusy = false;
+					                     			PhoneApplicationService.Current.State["logout"] = true;
+					                     			settingsPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+					                     		}
+					                     	};
+					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));
+				}
 			}
 		}
 	}

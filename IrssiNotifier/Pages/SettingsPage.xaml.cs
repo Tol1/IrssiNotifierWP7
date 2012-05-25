@@ -7,7 +7,7 @@ namespace IrssiNotifier.Pages
 		public SettingsPage()
 		{
 			InitializeComponent();
-			contentBorder.Child = new SettingsView(this);
+			contentBorder.Child = new SettingsView();
 		}
 	}
 }
