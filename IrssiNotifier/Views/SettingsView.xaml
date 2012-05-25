@@ -11,7 +11,6 @@
     d:DesignHeight="640" d:DesignWidth="480">
     
     <UserControl.Resources>
-        <PushNotificationContext:PushContextWrapper x:Key="pushContext" />
         <Style x:Key="DescTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="Silver" />
@@ -35,37 +34,39 @@
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
-        <StackPanel>
+        <ScrollViewer>
             <StackPanel>
-                <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
+                <StackPanel>
+                    <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
                                  IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource DescTextStyle}"
                            Text="Avaa/Sulje notifikaatiokanava kokonaan" />
-            </StackPanel>
+                </StackPanel>
 
-            <StackPanel Margin="16,0,0,0">
-                <toolkit:ToggleSwitch Header="Livetiili"
+                <StackPanel Margin="16,0,0,0">
+                    <toolkit:ToggleSwitch Header="Livetiili"
                                 IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
 
-                <toolkit:ToggleSwitch Header="Ponnahdusviestit"
+                    <toolkit:ToggleSwitch Header="Ponnahdusviestit"
                                 IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
-                <TextBlock Style="{StaticResource DescTextStyle}"
+                    <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
-                <Slider SmallChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="300" />
-                <!--toolkit:ToggleSwitch Header="Raw Notifications"
+                    <Slider SmallChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="300" />
+                    <!--toolkit:ToggleSwitch Header="Raw Notifications"
                                 IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
-                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
-                <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
+                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
+                    <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" Margin="16,0,16,24"
                             Text="{Binding UserId, Mode=OneTime}" />
+                </StackPanel>
+                <StackPanel>
+                    <Button Click="LogoutClick">Kirjaudu ulos</Button>
+                </StackPanel>
             </StackPanel>
-            <StackPanel>
-                <Button Click="LogoutClick">Kirjaudu ulos</Button>
-            </StackPanel>
-        </StackPanel>
-        <toolkit:PerformanceProgressBar VerticalAlignment="Top" IsIndeterminate="{Binding Path=IsBusy, Source={StaticResource pushContext}}" />
+        </ScrollViewer>
+        <toolkit:PerformanceProgressBar VerticalAlignment="Top" IsIndeterminate="{Binding IsBusy}" />
     </Grid>
 </UserControl>

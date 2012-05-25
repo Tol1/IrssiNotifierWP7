@@ -20,7 +20,7 @@ namespace IrssiNotifier.Pages
 			{
 				if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 				{
-					PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+					PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
 				}
 				contentBorder.Child = new HiliteView();
 			}

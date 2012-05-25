@@ -23,7 +23,7 @@ namespace IrssiNotifier.Views
 			DataContext = this;
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.RegisterChannelUri(c.ChannelUri, Dispatcher));
+				PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
 			Fetch(true);
 		}
@@ -213,7 +213,7 @@ namespace IrssiNotifier.Views
 		public void RefreshButtonClick(object sender, EventArgs e)
 		{
 			Fetch(true);
-			SettingsView.ClearTileCount(Dispatcher);
+			SettingsView.GetInstance().ClearTileCount(Dispatcher);
 		}
 
 		public void SettingsButtonClick(object sender, EventArgs e)

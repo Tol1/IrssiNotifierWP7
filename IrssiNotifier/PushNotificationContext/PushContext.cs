@@ -21,7 +21,6 @@ namespace IrssiNotifier.PushNotificationContext
         #endregion
 
         #region Properties
-		private bool _isBusy;
         private Dispatcher Dispatcher { get; set; }
 
         public string ChannelName { get; private set; }
@@ -89,16 +88,6 @@ namespace IrssiNotifier.PushNotificationContext
                 NotifyPropertyChanged("IsRawEnabled");
             }
         }
-
-    	public bool IsBusy
-    	{
-    		get { return _isBusy; }
-			set
-			{
-				_isBusy = value;
-				NotifyPropertyChanged("IsBusy");
-			}
-    	}
         #endregion
 
         #region Events

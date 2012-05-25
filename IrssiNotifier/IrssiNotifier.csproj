@@ -82,7 +82,6 @@
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PushNotificationContext\PushContextWrapper.cs" />
     <Compile Include="PushNotificationContext\PushContext.cs" />
     <Compile Include="PushNotificationContext\PushContextErrorEventArgs.cs" />
     <Compile Include="PushNotificationContext\PushContextEventArgs.cs" />

@@ -15,6 +15,13 @@ namespace IrssiNotifier.Views
 {
 	public partial class SettingsView : INotifyPropertyChanged
 	{
+		private static SettingsView _instance;
+
+		public static SettingsView GetInstance()
+		{
+			return _instance ?? (_instance = new SettingsView());
+		}
+
 		public SettingsView()
 		{
 			DataContext = this;
@@ -105,6 +112,18 @@ namespace IrssiNotifier.Views
 			}
 		}
 
+		private bool _isBusy;
+
+		public bool IsBusy
+		{
+			get { return _isBusy; }
+			set
+			{
+				_isBusy = value;
+				NotifyPropertyChanged("IsBusy");
+			}
+		}
+
 		public int ToastInterval { get; set; }
 
 		public void NotifyPropertyChanged(string property){
@@ -115,9 +134,9 @@ namespace IrssiNotifier.Views
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public static void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
+		public void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
 		{
-			PushContext.Current.IsBusy = true;
+			IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
@@ -130,7 +149,7 @@ namespace IrssiNotifier.Views
 				{
 					var toastStatus = bool.Parse(result["toastStatus"].ToString());
 					var tileStatus = bool.Parse(result["tileStatus"].ToString());
-					if(tileStatus && PushContext.Current.IsTileEnabled)
+					if(tileStatus && IsTileEnabled)
 					{
 						var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 						if (hiliteTile == null && PushContext.Current.IsPushEnabled)
@@ -143,8 +162,8 @@ namespace IrssiNotifier.Views
 							                       	});
 						}
 					}
-					PushContext.Current.IsTileEnabled = tileStatus;
-					PushContext.Current.IsToastEnabled = toastStatus;
+					IsTileEnabled = tileStatus;
+					IsToastEnabled = toastStatus;
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
@@ -192,7 +211,7 @@ namespace IrssiNotifier.Views
 					}
 				}
 				ClearTileCount(dispatcher);
-				PushContext.Current.IsBusy = false;
+				IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
@@ -200,9 +219,9 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
 		}
 
-		public static void ClearTileCount(Dispatcher dispatcher)
+		public void ClearTileCount(Dispatcher dispatcher)
 		{
-			if (PushContext.Current.IsConnected && PushContext.Current.IsPushEnabled && PushContext.Current.IsTileEnabled)
+			if (PushContext.Current.IsConnected && IsPushEnabled && IsTileEnabled)
 				{
 					UpdateSettings("clearcount", true, dispatcher, () =>
 					                                               	{
@@ -215,9 +234,9 @@ namespace IrssiNotifier.Views
 				}
 		}
 
-		private static void UpdateSettings(string param, object value, Dispatcher dispatcher, Action callback = null)
+		private void UpdateSettings(string param, object value, Dispatcher dispatcher, Action callback = null)
 		{
-			PushContext.Current.IsBusy = true;
+			IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
@@ -238,7 +257,7 @@ namespace IrssiNotifier.Views
 						callback();
 					}
 				}
-				PushContext.Current.IsBusy = false;
+				IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST",
@@ -279,7 +298,7 @@ namespace IrssiNotifier.Views
 			if(answer == MessageBoxResult.OK)
 			{
 				var settingsPage = App.GetCurrentPage() as SettingsPage;
-				PushContext.Current.IsBusy = true;
+				IsBusy = true;
 				if (settingsPage != null)
 				{
 					settingsPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
@@ -298,7 +317,7 @@ namespace IrssiNotifier.Views
 					                     			{
 					                     				settingsPage.NavigationService.RemoveBackEntry();
 					                     			}
-					                     			PushContext.Current.IsBusy = false;
+					                     			IsBusy = false;
 					                     			PhoneApplicationService.Current.State["logout"] = true;
 					                     			settingsPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 					                     		}
