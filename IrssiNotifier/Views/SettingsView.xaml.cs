@@ -4,6 +4,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
@@ -59,6 +60,7 @@ namespace IrssiNotifier.Views
 					PushContext.Current.IsToastEnabled = value;
 					UpdateSettings("toast", value, Dispatcher);
 					NotifyPropertyChanged("IsToastEnabled");
+					NotifyPropertyChanged("IntervalBrush");
 				}
 			}
 		}
@@ -109,6 +111,8 @@ namespace IrssiNotifier.Views
 					}
 					PushContext.Current.IsPushEnabled = value;
 					NotifyPropertyChanged("IsPushEnabled");
+					NotifyPropertyChanged("IsSettingsEnabled");
+					NotifyPropertyChanged("IntervalBrush");
 				}
 			}
 		}
@@ -122,7 +126,19 @@ namespace IrssiNotifier.Views
 			{
 				_isBusy = value;
 				NotifyPropertyChanged("IsBusy");
+				NotifyPropertyChanged("IsSettingsEnabled");
+				NotifyPropertyChanged("IntervalBrush");
 			}
+		}
+
+		public bool IsSettingsEnabled
+		{
+			get { return !IsBusy && IsPushEnabled; }
+		}
+
+		public Brush IntervalBrush
+		{
+			get { return (IsSettingsEnabled && IsToastEnabled) ? (Brush)Application.Current.Resources["PhoneForegroundBrush"] : (Brush)Application.Current.Resources["PhoneDisabledBrush"]; }
 		}
 
 		private int _toastInterval;
@@ -344,7 +360,7 @@ namespace IrssiNotifier.Views
 
 		private void IntervalTimeOnTap(object sender, GestureEventArgs e)
 		{
-			if (IsPushEnabled && IsToastEnabled)
+			if (!IsBusy && IsPushEnabled && IsToastEnabled)
 			{
 				var settingsPage = App.GetCurrentPage() as SettingsPage;
 				if (settingsPage != null)

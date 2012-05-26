@@ -3,8 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:PushNotificationContext="clr-namespace:IrssiNotifier.PushNotificationContext" mc:Ignorable="d"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -41,23 +40,23 @@
             <StackPanel>
                 <StackPanel>
                     <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
-                                 IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" />
+                                 IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverter}}"/>
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                            Text="Avaa/Sulje notifikaatiokanava kokonaan" />
                 </StackPanel>
 
                 <StackPanel Margin="16,0,0,0">
                     <toolkit:ToggleSwitch Header="Livetiili"
-                                IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
+                                IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsSettingsEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                         Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
 
                     <toolkit:ToggleSwitch Header="Ponnahdusviestit"
-                                IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
+                                IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsSettingsEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
                         Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
                     <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Ponnahdusviestien vähimmäisväli"/>
-                    <TextBlock Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}" Tap="IntervalTimeOnTap"/>
+                    <TextBlock Foreground="{Binding IntervalBrush, Mode=TwoWay}" Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}" Tap="IntervalTimeOnTap"/>
                     <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla." />
                     <!--toolkit:ToggleSwitch Header="Raw Notifications"

@@ -86,6 +86,7 @@
     <Compile Include="PushNotificationContext\PushContext.cs" />
     <Compile Include="PushNotificationContext\PushContextErrorEventArgs.cs" />
     <Compile Include="PushNotificationContext\PushContextEventArgs.cs" />
+    <Compile Include="Utils\BooleanInverter.cs" />
     <Compile Include="Views\HiliteView.xaml.cs">
       <DependentUpon>HiliteView.xaml</DependentUpon>
     </Compile>
