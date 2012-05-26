@@ -41,6 +41,7 @@ namespace IrssiNotifier.Views
 				}
 			};
 			var cookies = PhoneApplicationService.Current.State["cookies"] as CookieCollection;
+			PhoneApplicationService.Current.State.Remove("cookies");
 			var cookieHeader = cookies.Cast<Cookie>().Aggregate("", (current, cookie) => current + (cookie.Name + "=" + cookie.Value + "; "));
 			webclient.Headers["Cookie"] = cookieHeader;
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";

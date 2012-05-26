@@ -16,7 +16,7 @@ namespace IrssiNotifier.Views
 			var answer = MessageBox.Show(
 				"Sinut ohjataan Googlen kirjautumissivulle. Tälle sovellukselle ei välity tilitietosi eikä salasanasi. Google välittää tälle sovellukselle ainoastaan tiedon kirjautumisesta.",
 				"Tietosuoja", MessageBoxButton.OKCancel);
-			if(answer == MessageBoxResult.Yes)
+			if(answer == MessageBoxResult.OK)
 			{
 				App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
 			}
