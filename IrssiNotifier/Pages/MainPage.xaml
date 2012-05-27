@@ -16,10 +16,12 @@
     <Border x:Name="contentBorder" Background="Transparent"/>
     
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.rest.png" Text="Päivitä" Click="RefreshButtonClick"/>
             <shell:ApplicationBarIconButton IconUri="/Images/appbar.feature.settings.rest.png" Text="Asetukset" Click="SettingsButtonClick"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.questionmark.rest.png" Text="Tietoja" Click="AboutButtonClick" />
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="Tietoja" Click="AboutButtonClick" />
+            </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
