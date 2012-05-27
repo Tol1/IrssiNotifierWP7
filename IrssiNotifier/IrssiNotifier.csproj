@@ -16,7 +16,7 @@
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>true</SilverlightApplication>
-    <SupportedCultures>
+    <SupportedCultures>fi-FI
     </SupportedCultures>
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
@@ -167,7 +167,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\About\Data.xml" />
+    <Content Include="Content\About\Data.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Images\appbar.questionmark.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
