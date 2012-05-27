@@ -35,5 +35,10 @@ namespace IrssiNotifier.Pages
 		{
 			((HiliteView)contentBorder.Child).RefreshButtonClick(sender, e);
 		}
+
+		private void AboutButtonClick(object sender, EventArgs e)
+		{
+			((HiliteView) contentBorder.Child).AboutButtonClick(sender, e);
+		}
 	}
 }

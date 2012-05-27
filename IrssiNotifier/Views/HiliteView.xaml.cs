@@ -221,6 +221,11 @@ namespace IrssiNotifier.Views
 			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/SettingsPage.xaml", UriKind.Relative));
 		}
 
+		public void AboutButtonClick(object sender, EventArgs e)
+		{
+			App.GetCurrentPage().NavigationService.Navigate(new Uri("/YourLastAboutDialog;component/AboutPage.xaml", UriKind.Relative));
+		}
+
 		private void MoreClick(object sender, RoutedEventArgs e)
 		{
 			FetchHilites(_nextHilite.Id);
