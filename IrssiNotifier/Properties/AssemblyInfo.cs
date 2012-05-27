@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("IrssiNotifier")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sovellus irssin hilight-notifikaatioiden lähettämiseksi puhelimeen")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("IrssiNotifier")]

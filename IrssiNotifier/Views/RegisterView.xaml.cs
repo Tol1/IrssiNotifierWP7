@@ -18,11 +18,13 @@ namespace IrssiNotifier.Views
 			InitializeComponent();
 
 			DataContext = this;
+			IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender, args) =>
 			{
 				var result = args.Result;
-				var parsed = JObject.Parse(result);	
+				var parsed = JObject.Parse(result);
+				IsBusy = false;
 				if (bool.Parse(parsed["success"].ToString()))
 				{
 					var loginPage = App.GetCurrentPage() as LoginPage;
@@ -56,10 +58,19 @@ namespace IrssiNotifier.Views
 			{
 				_userId = value;
 				IsolatedStorageSettings.ApplicationSettings["userID"] = value;
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("UserId"));
-				}
+				NotifyPropertyChanged("UserId");
+			}
+		}
+
+		private bool _isBusy;
+
+		public bool IsBusy
+		{
+			get { return _isBusy; }
+			set
+			{
+				_isBusy = value;
+				NotifyPropertyChanged("IsBusy");
 			}
 		}
 
@@ -69,6 +80,14 @@ namespace IrssiNotifier.Views
 			PushContext.Current.IsPushEnabled = true;
 			PhoneApplicationService.Current.State["registered"] = true;
 			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+		}
+
+		public void NotifyPropertyChanged(string property)
+		{
+			if(PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(property));
+			}
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

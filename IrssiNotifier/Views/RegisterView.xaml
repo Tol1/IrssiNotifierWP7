@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+             xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+             mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -16,7 +17,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Text="Api Token irssi-skriptiä varten:" Grid.Row="0" Style="{StaticResource PhoneTextTitle3Style}" />
-        <TextBlock Text="{Binding UserId, Mode=TwoWay}" Grid.Row="1" />
-        <TextBlock Grid.Row="2" Text="Tämä tieto on myöhemmin nähtävillä asetusnäkymässä" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}" />
+        <TextBlock Text="{Binding UserId, Mode=TwoWay}" Style="{StaticResource PhoneTextLargeStyle}" Grid.Row="1" />
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Tämä tieto on myöhemmin nähtävillä asetusnäkymässä." TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}" />
+            <TextBlock Margin="12,12,12,0" Text="Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+            <HyperlinkButton NavigateUri="http://irssinotifierwp.appspot.com" TargetName="_blank">http://irssinotifierwp.appspot.com</HyperlinkButton>
+        </StackPanel>
+        <toolkit:PerformanceProgressBar IsIndeterminate="{Binding IsBusy}" VerticalAlignment="Top" />
     </Grid>
 </UserControl>

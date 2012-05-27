@@ -14,7 +14,7 @@ namespace IrssiNotifier.Views
 		private void RegisterButtonClick(object sender, RoutedEventArgs e)
 		{
 			var answer = MessageBox.Show(
-				"Sinut ohjataan Googlen kirjautumissivulle. Tälle sovellukselle ei välity tilitietosi eikä salasanasi. Google välittää tälle sovellukselle ainoastaan tiedon kirjautumisesta.",
+				"Sinut ohjataan Googlen kirjautumissivulle. Google ei välitä tälle sovellukselle salasanaasi eikä muitakaan tilitietojasi. Kirjautumista käytetään ainoastaan käyttäjien yksilöintiin. Google välittää tälle sovellukselle ainoastaan anonyymejä yksilöintitietoja.",
 				"Tietosuoja", MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
