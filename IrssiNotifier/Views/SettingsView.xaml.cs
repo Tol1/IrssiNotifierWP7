@@ -74,7 +74,7 @@ namespace IrssiNotifier.Views
 				{
 					PushContext.Current.IsTileEnabled = value;
 					NotifyPropertyChanged("IsTileEnabled");
-					UpdateSettings("tile", value, Dispatcher, () => PinTile(value));
+					PinTile(value);
 				}
 				
 			}
@@ -296,7 +296,7 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param + "=" + value + "&version=" + App.Version);
 		}
 
-		private static void PinTile(bool value)
+		private void PinTile(bool value)
 		{
 			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 			if (value && hiliteTile == null)
@@ -304,16 +304,27 @@ namespace IrssiNotifier.Views
 				var answer = MessageBox.Show("Käyttääksesi livetiilitoimintoa sinun on kiinnitettävä tiili aloitusnäyttöön. Valitsemalla OK sovellus luo livetiilen automaattisesti.", "Vahvista tiilen lisäys", MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					var newTileData = new StandardTileData
-					{
-						BackgroundImage = new Uri("/Images/Tile.png", UriKind.Relative),
-						Count = 0
-					};
-					ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative), newTileData);
+					UpdateSettings("tile", true, Dispatcher, () =>
+					                                         	{
+					                                         		var newTileData = new StandardTileData
+					                                         		                  	{
+					                                         		                  		BackgroundImage =
+					                                         		                  			new Uri("/Images/Tile.png", UriKind.Relative),
+					                                         		                  		Count = 0
+					                                         		                  	};
+					                                         		ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
+					                                         		                 newTileData);
+					                                         	});
+				}
+				else
+				{
+					PushContext.Current.IsTileEnabled = false;
+					NotifyPropertyChanged("IsTileEnabled");
 				}
 			}
 			else if (!value && hiliteTile != null)
 			{
+				UpdateSettings("tile", false, Dispatcher);
 				/*var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
