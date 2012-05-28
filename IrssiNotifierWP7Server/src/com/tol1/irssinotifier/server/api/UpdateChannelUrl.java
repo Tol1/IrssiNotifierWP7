@@ -45,16 +45,25 @@ public class UpdateChannelUrl extends HttpServlet {
 			IrssiNotifierUser user = IrssiNotifier.getUser(dao, id);
 			
 			if(user.guid.equals(guid)){
+				boolean userSettingsChanged = false;
 				if(user.ChannelURI != null && user.ChannelURI.equalsIgnoreCase(newUrl)) {
 					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri pysyy muuttumattomana");
 				} else {
 					IrssiNotifier.log.info("Käyttäjän "+id+" client rekisteröitiin, notification channel uri vaihtuu arvosta "+user.ChannelURI+" arvoon "+newUrl);
 					user.ChannelURI = newUrl;
-					dao.ofy().put(user);
+					userSettingsChanged = true;
 				}
 				ChannelStatusMessage message = new ChannelStatusMessage(user.sendToastNotifications, user.sendTileNotifications, user.errorOccurred, user.toastNotificationInterval);
 				if(user.errorOccurred){
 					user.errorOccurred = false;
+					userSettingsChanged = true;
+				}
+				if(user.tileCount != 0){
+					user.tileCount = 0;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
+				}
+				if(userSettingsChanged){
 					dao.ofy().put(user);
 				}
 				resp.getWriter().println(new JSONSerializer().exclude("class").serialize(message));

@@ -141,17 +141,15 @@ namespace IrssiNotifier.Views
 			get { return (IsSettingsEnabled && IsToastEnabled) ? (Brush)Application.Current.Resources["PhoneForegroundBrush"] : (Brush)Application.Current.Resources["PhoneDisabledBrush"]; }
 		}
 
-		private int _toastInterval;
-
 		public int ToastInterval
 		{
-			get { return _toastInterval; }
+			get { return GetOrCreate("Settings.ToastInterval", 15); }
 			set
 			{
-				if (_toastInterval != value)
+				if (GetOrCreate("Settings.ToastInterval", 15) != value)
 				{
+					SetOrCreate("Settings.ToastInterval", value);
 					UpdateSettings("toastinterval", value, Dispatcher);
-					_toastInterval = value;
 					NotifyPropertyChanged("ToastInterval");
 				}
 			}
@@ -194,7 +192,8 @@ namespace IrssiNotifier.Views
 					}
 					IsTileEnabled = tileStatus;
 					IsToastEnabled = toastStatus;
-					ToastInterval = int.Parse(result["toastInterval"].ToString());
+					SetOrCreate("Settings.ToastInterval", int.Parse(result["toastInterval"].ToString()));
+					NotifyPropertyChanged("ToastInterval");
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
@@ -241,7 +240,7 @@ namespace IrssiNotifier.Views
 						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
 					}
 				}
-				ClearTileCount(dispatcher);
+				ClearTileCount();
 				IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
@@ -250,17 +249,19 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
 		}
 
+		private static void ClearTileCount()
+		{
+			foreach (var tile in ShellTile.ActiveTiles)
+			{
+				tile.Update(new StandardTileData {Count = 0});
+			}
+		}
+
 		public void ClearTileCount(Dispatcher dispatcher)
 		{
 			if (PushContext.Current.IsConnected && IsPushEnabled && IsTileEnabled)
 				{
-					UpdateSettings("clearcount", true, dispatcher, () =>
-					                                               	{
-					                                               		foreach (var tile in ShellTile.ActiveTiles)
-					                                               		{
-					                                               			tile.Update(new StandardTileData { Count = 0 });
-					                                               		}
-					                                               	});
+					UpdateSettings("clearcount", true, dispatcher, ClearTileCount);
 
 				}
 		}
@@ -379,6 +380,22 @@ namespace IrssiNotifier.Views
 					settingsPage.contentBorder.Child = new ToastIntervalView();
 				}
 			}
+		}
+
+		private void SetOrCreate<T>(string key, T value)
+		{
+			IsolatedStorageSettings.ApplicationSettings[key] = value;
+		}
+
+		private T GetOrCreate<T>(string key, T defaultValue = default(T))
+		{
+			T value;
+			if (IsolatedStorageSettings.ApplicationSettings.TryGetValue(key, out value))
+			{
+				return value;
+			}
+			IsolatedStorageSettings.ApplicationSettings[key] = defaultValue;
+			return defaultValue;
 		}
 	}
 }
