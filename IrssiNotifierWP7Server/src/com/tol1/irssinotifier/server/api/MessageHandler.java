@@ -3,6 +3,7 @@ package com.tol1.irssinotifier.server.api;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -32,7 +33,7 @@ public class MessageHandler extends HttpServlet {
 			throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
 		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
-			IrssiNotifier.printErrorForIrssi(resp.getWriter(), new OldVersionException("Käytössäsi on vanhentunuy skriptiversio. Päivitä skripti osoitteessa https://"+ApiProxy.getCurrentEnvironment().getAttributes().get("com.google.appengine.runtime.default_version_hostname")));
+			IrssiNotifier.printErrorForIrssi(resp.getWriter(), new OldVersionException("Käytössäsi on vanhentunut skriptiversio. Päivitä skripti osoitteessa https://"+ApiProxy.getCurrentEnvironment().getAttributes().get("com.google.appengine.runtime.default_version_hostname")));
 			return;
 		}
 		String id = req.getParameter("apiToken").trim();
@@ -61,68 +62,70 @@ public class MessageHandler extends HttpServlet {
 			
 			if(user.sendToastNotifications && (retries == 0 || toastRetry != null) && ((System.currentTimeMillis() - user.lastToastNotificationSent) > (user.toastNotificationInterval*1000))){
 				String toastMessage = mess.GenerateToastNotification();
-				HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
-				Status responseStatus = HandleResponse(conn, resp, user, dao);
-				if(responseStatus == Status.STATUS_OK) {
-					IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
-					user.lastToastNotificationSent = System.currentTimeMillis();
-					dao.ofy().put(user);
-				} else {
-					IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-					if(responseStatus == Status.STATUS_ERROR){
-						user.errorOccurred = true;
-						user.sendToastNotifications = false;
+				try {
+					HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
+					Status responseStatus = HandleResponse(conn, resp, user, dao);
+					if(responseStatus == Status.STATUS_OK) {
+						IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
+						user.lastToastNotificationSent = System.currentTimeMillis();
 						dao.ofy().put(user);
-						IrssiNotifier.log.severe("Toast notificationit poistettu käytöstä virheestä johtuen");
-					}
-					else{
-						try {
-							if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
-								Queue queue = QueueFactory.getQueue("minutequeue");
-								queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
-										.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
-										.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-										.param("toastRetry", "true"));
-								
-							}
-						} catch (Exception e) {
-							IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+					} else {
+						IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
+						if(responseStatus == Status.STATUS_ERROR){
+							user.errorOccurred = true;
+							user.sendToastNotifications = false;
+							dao.ofy().put(user);
+							IrssiNotifier.log.severe("Toast notificationit poistettu käytöstä virheestä johtuen");
 						}
+						else{
+							try {
+								if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+									AddToQueue(req, retries, id, "toastRetry");
+								}
+							} catch (Exception e) {
+								IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+							}
+						}
+					}
+				} catch (SocketTimeoutException ste) {
+					if(retries < 4){
+						AddToQueue(req, retries, id, "toastRetry");
 					}
 				}
 			}
 			
 			if(user.sendTileNotifications && (retries == 0 || tileRetry != null)){
 				String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
-				HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
-				Status responseStatus = HandleResponse(conn, resp, user, dao);
-				IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
-				if(responseStatus == Status.STATUS_OK){
-					IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
-					user.tileCount++;
-					dao.ofy().put(user);
-				}
-				else{
-					IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
-					if(responseStatus == Status.STATUS_ERROR){
-						user.errorOccurred = true;
-						user.sendTileNotifications = false;
+				try {
+					HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
+					Status responseStatus = HandleResponse(conn, resp, user, dao);
+					IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
+					if(responseStatus == Status.STATUS_OK){
+						IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
+						user.tileCount++;
 						dao.ofy().put(user);
-						IrssiNotifier.log.severe("Tile notificationit poistettu käytöstä virheestä johtuen");
 					}
 					else{
-						try {
-							if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
-								Queue queue = QueueFactory.getQueue("minutequeue");
-								queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
-										.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
-										.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-										.param("tileRetry", "true"));
-								
-							}
-						} catch (Exception e) {
-							IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+						IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
+						if(responseStatus == Status.STATUS_ERROR){
+							user.errorOccurred = true;
+							user.sendTileNotifications = false;
+							dao.ofy().put(user);
+							IrssiNotifier.log.severe("Tile notificationit poistettu käytöstä virheestä johtuen");
 						}
+						else{
+							try {
+								if(responseStatus == Status.STATUS_QUEUEABLE && retries < 4){
+									AddToQueue(req, retries, id, "tileRetry");
+								}
+							} catch (Exception e) {
+								IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+							}
+						}
+					}
+				} catch (SocketTimeoutException ste) {
+					if(retries < 4){
+						AddToQueue(req, retries, id, "tileRetry");
 					}
 				}
 			}
@@ -133,6 +136,14 @@ public class MessageHandler extends HttpServlet {
 		} catch (UserNotFoundException e) {
 			IrssiNotifier.printErrorForIrssi(resp.getWriter(), e);
 		}
+	}
+	
+	private void AddToQueue(HttpServletRequest req, int retries, String id, String typeIdentifier){
+		Queue queue = QueueFactory.getQueue("minutequeue");
+		queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
+				.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
+				.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
+				.param(typeIdentifier, "true"));
 	}
 	
 	public static HttpURLConnection DoSend(String payload, String type, String notificationClass, URL url) throws IOException{
