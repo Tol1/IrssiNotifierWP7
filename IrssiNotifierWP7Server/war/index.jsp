@@ -87,15 +87,15 @@
 			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Suoritettuasi rekisteröinnin päivitä tämä sivu nähdäksesi skriptin asennus- ja määrittelyohjeet</li>
 		 
 		<%	if(inUser != null) {%>
-			<li>Asenna irssiskripti kirjoittamalla seuraavat komennot shelliin (ei siis irssiin)
+			<li>Asenna irssiskripti kirjoittamalla seuraavat komennot shelliin (ei siis irssiin vaan päätteelle, josta irssi käynnistetään)
 				<code class="emphasis">
 					mkdir -p ~/.irssi/scripts/autorun;
 					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts/irssinotifierwp7.pl;
 					ln -s ~/.irssi/scripts/irssinotifier.pl ~/.irssi/scripts/autorun/irssinotifier.pl;
 				</code>
 			 </li>
-			 <li>Lataa skripti irssiin komennolla <span class="emphasis">/script load irssinotifierwp7.pl</span></li>
-			 <li>Määritä API key komennolla <span class="emphasis">/set irssinotifierwp_api_token <%=inUser.UUID %></span></li>
+			 <li>Lataa skripti irssiin komennolla <span class="emphasis">/script load irssinotifierwp7.pl</span> (Tämä siis irssiin!)</li>
+			 <li>Määritä API key komennolla <span class="emphasis">/set irssinotifierwp_api_token <%=inUser.UUID %></span> (Tämä myös irssiin)</li>
 		<% } %>
 		</ol>
 		
