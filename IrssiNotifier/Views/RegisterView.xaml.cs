@@ -77,7 +77,7 @@ namespace IrssiNotifier.Views
 		private void ButtonClick(object sender, EventArgs e)
 		{
 			MessageBox.Show("Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.");
-			PushContext.Current.IsPushEnabled = true;
+			SettingsView.GetInstance().IsPushEnabled = true;
 			PhoneApplicationService.Current.State["registered"] = true;
 			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 		}
