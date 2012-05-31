@@ -65,6 +65,7 @@ public class MessageHandler extends HttpServlet {
 				try {
 					HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
+					IrssiNotifier.log.info("Toast notification lähetetty, tulos: "+responseStatus);
 					if(responseStatus == Status.STATUS_OK) {
 						IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
 						user.lastToastNotificationSent = System.currentTimeMillis();
