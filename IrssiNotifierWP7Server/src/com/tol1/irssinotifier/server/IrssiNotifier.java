@@ -8,6 +8,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.ApiProxy;
+import com.googlecode.objectify.NotFoundException;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
@@ -59,11 +60,16 @@ public class IrssiNotifier {
 	}
 	
 	public static IrssiNotifierUser getUser(ObjectifyDAO dao, User googleUser) throws UserNotFoundException{
-		IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, googleUser.getUserId());
-		if(user == null){
+		try{
+			IrssiNotifierUser user = dao.ofy().get(IrssiNotifierUser.class, googleUser.getUserId());
+			if(user == null){
+				throw new UserNotFoundException();
+			}
+			return user;
+		}
+		catch(NotFoundException nfe){
 			throw new UserNotFoundException();
 		}
-		return user;
 	}
 	
 	public static int getCurrentVersion(){
