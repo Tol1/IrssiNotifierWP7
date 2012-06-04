@@ -1,0 +1,6 @@
+<MarketplaceDetails>
+  <SmallAppTile>Smalltile.png</SmallAppTile>
+  <LargeAppTile>Tile.png</LargeAppTile>
+  <PCAppTile>MarketplaceIcon.png</PCAppTile>
+  <ScreenShots>Hilite.png;Hilite2.png;Asetukset.png;Livetiililisäys.png;Livetiili.png;;;;</ScreenShots>
+</MarketplaceDetails>
