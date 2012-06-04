@@ -15,7 +15,7 @@ namespace IrssiNotifier.Views
 
 		private void BrowserNavigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
 		{
-			var browser = sender as WebBrowser;
+			var browser = (WebBrowser)sender;
 			if (e.Uri.AbsoluteUri.EndsWith("client/login/loginsuccess"))
 			{
 				var cookies = browser.GetCookies();
@@ -35,7 +35,7 @@ namespace IrssiNotifier.Views
 		private void WebBrowserNavigating(object sender, NavigatingEventArgs e)
 		{
 			progressBar.IsIndeterminate = true;
-			(sender as WebBrowser).IsEnabled = false;
+			((WebBrowser)sender).IsEnabled = false;
 		}
 	}
 }
