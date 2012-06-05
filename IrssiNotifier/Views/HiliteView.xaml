@@ -27,8 +27,8 @@
     </UserControl.Resources>
     
     <Grid x:Name="LayoutRoot">
-        <controls:Pivot Title="IRSSI NOTIFIER - hailaitteja &lt;3">
-            <controls:PivotItem Header="Uudet">
+        <controls:Pivot Title="{Binding Path=Strings.HilitePivotTitle, Source={StaticResource Strings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}">
+            <controls:PivotItem Header="{Binding Path=Strings.HilitePivotNewTitle, Source={StaticResource Strings}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -39,7 +39,7 @@
                 </Grid>
             </controls:PivotItem>
 
-            <controls:PivotItem Header="Kaikki">
+            <controls:PivotItem Header="{Binding Path=Strings.HilitePivotAllTitle, Source={StaticResource Strings}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>

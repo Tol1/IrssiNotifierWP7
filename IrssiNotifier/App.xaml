@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:Utils="clr-namespace:IrssiNotifier.Utils">
+    xmlns:Utils="clr-namespace:IrssiNotifier.Utils" >
 
     <!--Application Resources-->
     <Application.Resources>
         <Utils:BooleanInverter x:Name="BooleanInverter" />
+        <Resources:LocalizedStrings xmlns:Resources="clr-namespace:IrssiNotifier.Resources" x:Name="Strings"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

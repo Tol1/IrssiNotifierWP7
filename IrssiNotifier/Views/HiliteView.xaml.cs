@@ -7,6 +7,7 @@ using System.Net;
 using System.Windows;
 using IrssiNotifier.Model;
 using IrssiNotifier.PushNotificationContext;
+using IrssiNotifier.Resources;
 using Newtonsoft.Json.Linq;
 
 namespace IrssiNotifier.Views
@@ -180,7 +181,7 @@ namespace IrssiNotifier.Views
 			}
 			catch (Exception e)
 			{
-				Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa: " + e));
+				Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorFetchingMessagesEx, e)));
 			}
 			IsBusy = false;
 		}
@@ -194,7 +195,7 @@ namespace IrssiNotifier.Views
 				if (args.Error != null)
 				{
 					IsBusy = false;
-					Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe viestien noutamisessa"));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ErrorFetchingMessages));
 					return;
 				}
 				ParseResult(args.Result);
