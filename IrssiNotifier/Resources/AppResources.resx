@@ -123,8 +123,17 @@
   <data name="ApiTokenText" xml:space="preserve">
     <value>Api Token irssi-skriptiä varten:</value>
   </data>
+  <data name="BackendErrorOccurredText" xml:space="preserve">
+    <value>Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. Tarkista asetukset asetusnäkymässä.</value>
+  </data>
   <data name="CancelButtonText" xml:space="preserve">
     <value>Peruuta</value>
+  </data>
+  <data name="ConfirmLogoutText" xml:space="preserve">
+    <value>Oletko varma että haluat kirjautua ulos?</value>
+  </data>
+  <data name="ConfirmLogoutTitle" xml:space="preserve">
+    <value>Vahvista uloskirjautuminen</value>
   </data>
   <data name="ErrorFetchingMessages" xml:space="preserve">
     <value>Virhe viestien noutamisessa</value>
@@ -132,8 +141,14 @@
   <data name="ErrorFetchingMessagesEx" xml:space="preserve">
     <value>Virhe viestien noutamisessa: {0}</value>
   </data>
+  <data name="ErrorGuidNotFound" xml:space="preserve">
+    <value>Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.</value>
+  </data>
   <data name="ErrorRegistration" xml:space="preserve">
     <value>Virhe rekisteröinnissä: {0}</value>
+  </data>
+  <data name="ErrorUserNotFound" xml:space="preserve">
+    <value>Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen.</value>
   </data>
   <data name="FrontPageTitle" xml:space="preserve">
     <value>Etusivu</value>
@@ -150,6 +165,9 @@
   <data name="InfoNotificationChannelAutoOpened" xml:space="preserve">
     <value>Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.</value>
   </data>
+  <data name="LiveTileRemovedText" xml:space="preserve">
+    <value>Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.</value>
+  </data>
   <data name="LoginTitle" xml:space="preserve">
     <value>Kirjautuminen</value>
   </data>
@@ -158,6 +176,12 @@
   </data>
   <data name="OkButtonText" xml:space="preserve">
     <value>Ok</value>
+  </data>
+  <data name="PinLiveTileText" xml:space="preserve">
+    <value>Käyttääksesi livetiilitoimintoa sinun on kiinnitettävä tiili aloitusnäyttöön. Valitsemalla OK sovellus luo livetiilen automaattisesti.</value>
+  </data>
+  <data name="PinLiveTileTitle" xml:space="preserve">
+    <value>Vahvista tiilen lisäys</value>
   </data>
   <data name="PrivacyStatementText" xml:space="preserve">
     <value>Sinut ohjataan Googlen kirjautumissivulle. Google ei välitä tälle sovellukselle salasanaasi eikä muitakaan tilitietojasi. Kirjautumista käytetään ainoastaan käyttäjien yksilöintiin. Google välittää tälle sovellukselle ainoastaan anonyymejä yksilöintitietoja.</value>
@@ -194,6 +218,12 @@
   </data>
   <data name="SettingsToastNotificationText" xml:space="preserve">
     <value>Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan.</value>
+  </data>
+  <data name="ToastNotificationPermissionText" xml:space="preserve">
+    <value>Haluatko antaa sovelluksen käyttää ponnahdusviestipalvelua?</value>
+  </data>
+  <data name="ToastNotificationPermissionTitle" xml:space="preserve">
+    <value>Salli ponnahdusviestit</value>
   </data>
   <data name="WebsiteHelpInfoText" xml:space="preserve">
     <value>Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:</value>

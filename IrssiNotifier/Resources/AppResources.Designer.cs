@@ -79,11 +79,38 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. Tarkista asetukset asetusnäkymässä..
+        /// </summary>
+        public static string BackendErrorOccurredText {
+            get {
+                return ResourceManager.GetString("BackendErrorOccurredText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peruuta.
         /// </summary>
         public static string CancelButtonText {
             get {
                 return ResourceManager.GetString("CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oletko varma että haluat kirjautua ulos?.
+        /// </summary>
+        public static string ConfirmLogoutText {
+            get {
+                return ResourceManager.GetString("ConfirmLogoutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vahvista uloskirjautuminen.
+        /// </summary>
+        public static string ConfirmLogoutTitle {
+            get {
+                return ResourceManager.GetString("ConfirmLogoutTitle", resourceCulture);
             }
         }
         
@@ -106,11 +133,29 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen..
+        /// </summary>
+        public static string ErrorGuidNotFound {
+            get {
+                return ResourceManager.GetString("ErrorGuidNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Virhe rekisteröinnissä: {0}.
         /// </summary>
         public static string ErrorRegistration {
             get {
                 return ResourceManager.GetString("ErrorRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen..
+        /// </summary>
+        public static string ErrorUserNotFound {
+            get {
+                return ResourceManager.GetString("ErrorUserNotFound", resourceCulture);
             }
         }
         
@@ -160,6 +205,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä..
+        /// </summary>
+        public static string LiveTileRemovedText {
+            get {
+                return ResourceManager.GetString("LiveTileRemovedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kirjautuminen.
         /// </summary>
         public static string LoginTitle {
@@ -183,6 +237,24 @@ namespace IrssiNotifier.Resources {
         public static string OkButtonText {
             get {
                 return ResourceManager.GetString("OkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Käyttääksesi livetiilitoimintoa sinun on kiinnitettävä tiili aloitusnäyttöön. Valitsemalla OK sovellus luo livetiilen automaattisesti..
+        /// </summary>
+        public static string PinLiveTileText {
+            get {
+                return ResourceManager.GetString("PinLiveTileText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vahvista tiilen lisäys.
+        /// </summary>
+        public static string PinLiveTileTitle {
+            get {
+                return ResourceManager.GetString("PinLiveTileTitle", resourceCulture);
             }
         }
         
@@ -291,6 +363,24 @@ namespace IrssiNotifier.Resources {
         public static string SettingsToastNotificationText {
             get {
                 return ResourceManager.GetString("SettingsToastNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Haluatko antaa sovelluksen käyttää ponnahdusviestipalvelua?.
+        /// </summary>
+        public static string ToastNotificationPermissionText {
+            get {
+                return ResourceManager.GetString("ToastNotificationPermissionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salli ponnahdusviestit.
+        /// </summary>
+        public static string ToastNotificationPermissionTitle {
+            get {
+                return ResourceManager.GetString("ToastNotificationPermissionTitle", resourceCulture);
             }
         }
         

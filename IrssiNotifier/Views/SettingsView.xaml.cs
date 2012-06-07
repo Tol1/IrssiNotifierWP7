@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
+using IrssiNotifier.Resources;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
@@ -44,8 +45,8 @@ namespace IrssiNotifier.Views
 				{
 					if (value && !IsolatedStorageSettings.ApplicationSettings.Contains("UserAllowedToast"))
 					{
-						var answer = MessageBox.Show("Haluatko antaa sovelluksen käyttää ponnahdusviestipalvelua?",
-						                             "Salli ponnahdusviestit",
+						var answer = MessageBox.Show(AppResources.ToastNotificationPermissionText,
+						                             AppResources.ToastNotificationPermissionTitle,
 						                             MessageBoxButton.OKCancel);
 						if (answer == MessageBoxResult.OK)
 						{
@@ -185,7 +186,7 @@ namespace IrssiNotifier.Views
 						{
 							dispatcher.BeginInvoke(() =>
 							                       	{
-							                       		MessageBox.Show("Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.");
+							                       		MessageBox.Show(AppResources.LiveTileRemovedText);
 							                       		IsTileEnabled = false;
 							                       	});
 						}
@@ -197,8 +198,7 @@ namespace IrssiNotifier.Views
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
-							MessageBox.Show("Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. " +
-							                "Tarkista asetukset asetusnäkymässä."));
+							MessageBox.Show(AppResources.BackendErrorOccurredText));
 					}
 				}
 				else
@@ -211,11 +211,11 @@ namespace IrssiNotifier.Views
 									switch (result["exceptionType"].ToString())
 									{
 										case "UserNotFoundException":
-											MessageBox.Show("Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen.");
+											MessageBox.Show(AppResources.ErrorUserNotFound);
 											break;
 										case "InvalidGUIDException":
 											MessageBox.Show(
-												"Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.");
+												AppResources.ErrorGuidNotFound);
 											break;
 									}
 									PushContext.Current.Disconnect();
@@ -302,7 +302,7 @@ namespace IrssiNotifier.Views
 			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 			if (value && hiliteTile == null)
 			{
-				var answer = MessageBox.Show("Käyttääksesi livetiilitoimintoa sinun on kiinnitettävä tiili aloitusnäyttöön. Valitsemalla OK sovellus luo livetiilen automaattisesti.", "Vahvista tiilen lisäys", MessageBoxButton.OKCancel);
+				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
 					UpdateSettings("tile", true, Dispatcher, () =>
@@ -336,7 +336,7 @@ namespace IrssiNotifier.Views
 
 		private void LogoutClick(object sender, RoutedEventArgs e)
 		{
-			var answer = MessageBox.Show("Oletko varma että haluat kirjautua ulos?", "Vahvista uloskirjautuminen",
+			var answer = MessageBox.Show(AppResources.ConfirmLogoutText, AppResources.ConfirmLogoutTitle,
 			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
