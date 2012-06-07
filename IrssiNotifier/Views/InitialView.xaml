@@ -18,7 +18,7 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="IRSSI NOTIFIER" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Etusivu" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="{Binding Path=Strings.FrontPageTitle, Source={StaticResource Strings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -28,15 +28,17 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Tervetuloa" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
+                <TextBlock Text="{Binding Path=Strings.WelcomeTextTitle, Source={StaticResource Strings}}" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
                 <StackPanel Grid.Row="1">
-                    <TextBlock Text="Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi." TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
-                    <TextBlock Text="Rekisteröimiseen ja sovelluksen käyttämiseen tarvitset Google-tunnukset." TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
-                    <TextBlock Text="Klikkaa &quot;Rekisteröidy&quot; jatkaaksesi." TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Text="{Binding Path=Strings.WelcomeText1, Source={StaticResource Strings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Text="{Binding Path=Strings.WelcomeText2, Source={StaticResource Strings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Text="{Binding Path=Strings.WelcomeText3, Source={StaticResource Strings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
                 </StackPanel>
             </Grid>
             <StackPanel VerticalAlignment="Bottom">
-                <Button x:Name="RegisterButton" Click="RegisterButtonClick" >Rekisteröidy</Button>
+                <Button x:Name="RegisterButton" Click="RegisterButtonClick">
+                    Rekisteröidy
+                </Button>
             </StackPanel>
 
         </Grid>

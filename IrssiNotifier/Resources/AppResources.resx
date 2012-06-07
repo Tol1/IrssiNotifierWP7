@@ -123,6 +123,9 @@
   <data name="ErrorFetchingMessagesEx" xml:space="preserve">
     <value>Virhe viestien noutamisessa: {0}</value>
   </data>
+  <data name="FrontPageTitle" xml:space="preserve">
+    <value>Etusivu</value>
+  </data>
   <data name="HilitePivotAllTitle" xml:space="preserve">
     <value>Kaikki</value>
   </data>
@@ -135,7 +138,22 @@
   <data name="LoginTitle" xml:space="preserve">
     <value>Kirjautuminen</value>
   </data>
+  <data name="RegisterButtonText" xml:space="preserve">
+    <value>Rekisteröidy</value>
+  </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Asetukset</value>
+  </data>
+  <data name="WelcomeText1" xml:space="preserve">
+    <value>Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi.</value>
+  </data>
+  <data name="WelcomeText2" xml:space="preserve">
+    <value>Rekisteröimiseen ja sovelluksen käyttämiseen tarvitset Google-tunnukset.</value>
+  </data>
+  <data name="WelcomeText3" xml:space="preserve">
+    <value>Klikkaa "Rekisteröidy" jatkaaksesi.</value>
+  </data>
+  <data name="WelcomeTextTitle" xml:space="preserve">
+    <value>Tervetuloa</value>
   </data>
 </root>

@@ -79,6 +79,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Etusivu.
+        /// </summary>
+        public static string FrontPageTitle {
+            get {
+                return ResourceManager.GetString("FrontPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kaikki.
         /// </summary>
         public static string HilitePivotAllTitle {
@@ -115,11 +124,56 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rekisteröidy.
+        /// </summary>
+        public static string RegisterButtonText {
+            get {
+                return ResourceManager.GetString("RegisterButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asetukset.
         /// </summary>
         public static string SettingsTitle {
             get {
                 return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi..
+        /// </summary>
+        public static string WelcomeText1 {
+            get {
+                return ResourceManager.GetString("WelcomeText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rekisteröimiseen ja sovelluksen käyttämiseen tarvitset Google-tunnukset..
+        /// </summary>
+        public static string WelcomeText2 {
+            get {
+                return ResourceManager.GetString("WelcomeText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Klikkaa &quot;Rekisteröidy&quot; jatkaaksesi..
+        /// </summary>
+        public static string WelcomeText3 {
+            get {
+                return ResourceManager.GetString("WelcomeText3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tervetuloa.
+        /// </summary>
+        public static string WelcomeTextTitle {
+            get {
+                return ResourceManager.GetString("WelcomeTextTitle", resourceCulture);
             }
         }
     }
