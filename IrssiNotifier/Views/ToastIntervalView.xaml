@@ -12,12 +12,12 @@
     <Grid x:Name="LayoutRoot">
         <ScrollViewer>
             <StackPanel>
-                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Ponnahdusviestien vähimmäisväli"/>
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.SettingsMinimumToastIntervalHeader, Source={StaticResource Strings}}"/>
                 <TextBlock Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}"/>
                 <Components:DiscreteSlider SmallChange="5" Value="{Binding ToastInterval, Mode=TwoWay}" Maximum="150" />
                 <StackPanel Orientation="Horizontal" >
-                    <Button Click="OkButtonClick" Width="150">Ok</Button>
-                    <Button Click="CancelButtonClick" Width="150">Peruuta</Button>
+                    <Button Click="OkButtonClick" Width="150" Content="{Binding Path=Strings.OkButtonText, Source={StaticResource Strings}}"/>
+                    <Button Click="CancelButtonClick" Width="150" Content="{Binding Path=Strings.CancelButtonText, Source={StaticResource Strings}}"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

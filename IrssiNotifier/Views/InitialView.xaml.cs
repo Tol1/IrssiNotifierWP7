@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Windows;
+using IrssiNotifier.Resources;
 
 namespace IrssiNotifier.Views
 {
@@ -13,9 +14,8 @@ namespace IrssiNotifier.Views
 
 		private void RegisterButtonClick(object sender, RoutedEventArgs e)
 		{
-			var answer = MessageBox.Show(
-				"Sinut ohjataan Googlen kirjautumissivulle. Google ei välitä tälle sovellukselle salasanaasi eikä muitakaan tilitietojasi. Kirjautumista käytetään ainoastaan käyttäjien yksilöintiin. Google välittää tälle sovellukselle ainoastaan anonyymejä yksilöintitietoja.",
-				"Tietosuoja", MessageBoxButton.OKCancel);
+			var answer = MessageBox.Show(AppResources.PrivacyStatementText, AppResources.PrivacyStatementTitle,
+			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
 				App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));

@@ -39,36 +39,36 @@
         <ScrollViewer>
             <StackPanel>
                 <StackPanel>
-                    <toolkit:ToggleSwitch Header="Notifikaatiopalvelu"
+                    <toolkit:ToggleSwitch Header="{Binding Path=Strings.SettingsPushNotificationHeader, Source={StaticResource Strings}}"
                                  IsChecked="{Binding IsPushEnabled, Mode=TwoWay}" IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInverter}}"/>
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
-                           Text="Avaa/Sulje notifikaatiokanava kokonaan" />
+                           Text="{Binding Path=Strings.SettingsPushNotificationText, Source={StaticResource Strings}}" />
                 </StackPanel>
 
                 <StackPanel Margin="16,0,0,0">
-                    <toolkit:ToggleSwitch Header="Livetiili"
+                    <toolkit:ToggleSwitch Header="{Binding Path=Strings.SettingsTileNotificationHeader, Source={StaticResource Strings}}"
                                 IsChecked="{Binding IsTileEnabled, Mode=TwoWay}" IsEnabled="{Binding IsSettingsEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
-                        Text="Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon." />
+                        Text="{Binding Path=Strings.SettingsTileNotificationText, Source={StaticResource Strings}}" />
 
-                    <toolkit:ToggleSwitch Header="Ponnahdusviestit"
+                    <toolkit:ToggleSwitch Header="{Binding Path=Strings.SettingsToastNotificationHeader, Source={StaticResource Strings}}"
                                 IsChecked="{Binding IsToastEnabled, Mode=TwoWay}" IsEnabled="{Binding IsSettingsEnabled, Mode=TwoWay}" />
                     <TextBlock Style="{StaticResource ToggleDescTextStyle}"
-                        Text="Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan." />
-                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Ponnahdusviestien vähimmäisväli"/>
+                        Text="{Binding Path=Strings.SettingsToastNotificationText, Source={StaticResource Strings}}" />
+                    <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.SettingsMinimumToastIntervalHeader, Source={StaticResource Strings}}"/>
                     <TextBlock Foreground="{Binding IntervalBrush, Mode=TwoWay}" Text="{Binding ToastInterval, StringFormat='\{0\} s'}" Style="{StaticResource PhoneTextTitle2Style}" Tap="IntervalTimeOnTap"/>
                     <TextBlock Style="{StaticResource DescTextStyle}"
-                        Text="Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla." />
+                        Text="{Binding Path=Strings.SettingsMinimumToastIntervalText, Source={StaticResource Strings}}" />
                     <!--toolkit:ToggleSwitch Header="Raw Notifications"
                                 IsChecked="{Binding IsRawEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPushEnabled, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescTextStyle}"
                         Text="Raw push notifications are used to send application specific information. The application must be running first." /-->
                     
                 </StackPanel>
-                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="Käyttäjä-ID irssiskriptiä varten: "/>
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.ApiTokenText, Source={StaticResource Strings}}"/>
                 <TextBox Style="{StaticResource ReadOnlyTextBox}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="Silver" 
                          Margin="16,0,16,24" Text="{Binding UserId, Mode=OneTime}" />
-                <Button Click="LogoutClick">Kirjaudu ulos</Button>
+                <Button Click="LogoutClick" Content="{Binding Path=Strings.LogoutButtonText, Source={StaticResource Strings}}"/>
             </StackPanel>
         </ScrollViewer>
         <toolkit:PerformanceProgressBar VerticalAlignment="Top" IsIndeterminate="{Binding IsBusy}" />

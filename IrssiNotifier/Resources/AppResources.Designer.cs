@@ -61,6 +61,33 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tämä tieto on myöhemmin nähtävillä asetusnäkymässä..
+        /// </summary>
+        public static string ApiTokenInfoText {
+            get {
+                return ResourceManager.GetString("ApiTokenInfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Api Token irssi-skriptiä varten:.
+        /// </summary>
+        public static string ApiTokenText {
+            get {
+                return ResourceManager.GetString("ApiTokenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peruuta.
+        /// </summary>
+        public static string CancelButtonText {
+            get {
+                return ResourceManager.GetString("CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Virhe viestien noutamisessa.
         /// </summary>
         public static string ErrorFetchingMessages {
@@ -75,6 +102,15 @@ namespace IrssiNotifier.Resources {
         public static string ErrorFetchingMessagesEx {
             get {
                 return ResourceManager.GetString("ErrorFetchingMessagesEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virhe rekisteröinnissä: {0}.
+        /// </summary>
+        public static string ErrorRegistration {
+            get {
+                return ResourceManager.GetString("ErrorRegistration", resourceCulture);
             }
         }
         
@@ -115,11 +151,56 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset..
+        /// </summary>
+        public static string InfoNotificationChannelAutoOpened {
+            get {
+                return ResourceManager.GetString("InfoNotificationChannelAutoOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kirjautuminen.
         /// </summary>
         public static string LoginTitle {
             get {
                 return ResourceManager.GetString("LoginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kirjaudu ulos.
+        /// </summary>
+        public static string LogoutButtonText {
+            get {
+                return ResourceManager.GetString("LogoutButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string OkButtonText {
+            get {
+                return ResourceManager.GetString("OkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sinut ohjataan Googlen kirjautumissivulle. Google ei välitä tälle sovellukselle salasanaasi eikä muitakaan tilitietojasi. Kirjautumista käytetään ainoastaan käyttäjien yksilöintiin. Google välittää tälle sovellukselle ainoastaan anonyymejä yksilöintitietoja..
+        /// </summary>
+        public static string PrivacyStatementText {
+            get {
+                return ResourceManager.GetString("PrivacyStatementText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tietosuoja.
+        /// </summary>
+        public static string PrivacyStatementTitle {
+            get {
+                return ResourceManager.GetString("PrivacyStatementTitle", resourceCulture);
             }
         }
         
@@ -133,11 +214,92 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ponnahdusviestien vähimmäisväli.
+        /// </summary>
+        public static string SettingsMinimumToastIntervalHeader {
+            get {
+                return ResourceManager.GetString("SettingsMinimumToastIntervalHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla..
+        /// </summary>
+        public static string SettingsMinimumToastIntervalText {
+            get {
+                return ResourceManager.GetString("SettingsMinimumToastIntervalText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notifikaatiopalvelu.
+        /// </summary>
+        public static string SettingsPushNotificationHeader {
+            get {
+                return ResourceManager.GetString("SettingsPushNotificationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avaa/Sulje notifikaatiokanava kokonaan.
+        /// </summary>
+        public static string SettingsPushNotificationText {
+            get {
+                return ResourceManager.GetString("SettingsPushNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livetiili.
+        /// </summary>
+        public static string SettingsTileNotificationHeader {
+            get {
+                return ResourceManager.GetString("SettingsTileNotificationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon..
+        /// </summary>
+        public static string SettingsTileNotificationText {
+            get {
+                return ResourceManager.GetString("SettingsTileNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asetukset.
         /// </summary>
         public static string SettingsTitle {
             get {
                 return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ponnahdusviestit.
+        /// </summary>
+        public static string SettingsToastNotificationHeader {
+            get {
+                return ResourceManager.GetString("SettingsToastNotificationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan..
+        /// </summary>
+        public static string SettingsToastNotificationText {
+            get {
+                return ResourceManager.GetString("SettingsToastNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:.
+        /// </summary>
+        public static string WebsiteHelpInfoText {
+            get {
+                return ResourceManager.GetString("WebsiteHelpInfoText", resourceCulture);
             }
         }
         

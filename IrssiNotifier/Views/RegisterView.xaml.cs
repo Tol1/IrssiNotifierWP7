@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using IrssiNotifier.Pages;
+using IrssiNotifier.Resources;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
 
@@ -37,7 +38,7 @@ namespace IrssiNotifier.Views
 				}
 				else
 				{
-					Dispatcher.BeginInvoke(() => MessageBox.Show("Virhe rekisteröinnissä: " + parsed["errorMessage"]));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorRegistration, parsed["errorMessage"])));
 					//TODO unsuccessful
 				}
 			};
@@ -78,7 +79,7 @@ namespace IrssiNotifier.Views
 
 		private void ButtonClick(object sender, EventArgs e)
 		{
-			MessageBox.Show("Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.");
+			MessageBox.Show(AppResources.InfoNotificationChannelAutoOpened);
 			SettingsView.GetInstance().IsPushEnabled = true;
 			PhoneApplicationService.Current.State["registered"] = true;
 			App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));

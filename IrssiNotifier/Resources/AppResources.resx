@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApiTokenInfoText" xml:space="preserve">
+    <value>Tämä tieto on myöhemmin nähtävillä asetusnäkymässä.</value>
+  </data>
+  <data name="ApiTokenText" xml:space="preserve">
+    <value>Api Token irssi-skriptiä varten:</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Peruuta</value>
+  </data>
   <data name="ErrorFetchingMessages" xml:space="preserve">
     <value>Virhe viestien noutamisessa</value>
   </data>
   <data name="ErrorFetchingMessagesEx" xml:space="preserve">
     <value>Virhe viestien noutamisessa: {0}</value>
+  </data>
+  <data name="ErrorRegistration" xml:space="preserve">
+    <value>Virhe rekisteröinnissä: {0}</value>
   </data>
   <data name="FrontPageTitle" xml:space="preserve">
     <value>Etusivu</value>
@@ -135,14 +147,56 @@
   <data name="HilitePivotTitle" xml:space="preserve">
     <value>IRSSI NOTIFIER - hailaitteja &lt;3</value>
   </data>
+  <data name="InfoNotificationChannelAutoOpened" xml:space="preserve">
+    <value>Notifikaatiokanava avataan automaattisesti. Tarkista asetusnäkymästä muut asetukset.</value>
+  </data>
   <data name="LoginTitle" xml:space="preserve">
     <value>Kirjautuminen</value>
+  </data>
+  <data name="LogoutButtonText" xml:space="preserve">
+    <value>Kirjaudu ulos</value>
+  </data>
+  <data name="OkButtonText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="PrivacyStatementText" xml:space="preserve">
+    <value>Sinut ohjataan Googlen kirjautumissivulle. Google ei välitä tälle sovellukselle salasanaasi eikä muitakaan tilitietojasi. Kirjautumista käytetään ainoastaan käyttäjien yksilöintiin. Google välittää tälle sovellukselle ainoastaan anonyymejä yksilöintitietoja.</value>
+  </data>
+  <data name="PrivacyStatementTitle" xml:space="preserve">
+    <value>Tietosuoja</value>
   </data>
   <data name="RegisterButtonText" xml:space="preserve">
     <value>Rekisteröidy</value>
   </data>
+  <data name="SettingsMinimumToastIntervalHeader" xml:space="preserve">
+    <value>Ponnahdusviestien vähimmäisväli</value>
+  </data>
+  <data name="SettingsMinimumToastIntervalText" xml:space="preserve">
+    <value>Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla.</value>
+  </data>
+  <data name="SettingsPushNotificationHeader" xml:space="preserve">
+    <value>Notifikaatiopalvelu</value>
+  </data>
+  <data name="SettingsPushNotificationText" xml:space="preserve">
+    <value>Avaa/Sulje notifikaatiokanava kokonaan</value>
+  </data>
+  <data name="SettingsTileNotificationHeader" xml:space="preserve">
+    <value>Livetiili</value>
+  </data>
+  <data name="SettingsTileNotificationText" xml:space="preserve">
+    <value>Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon.</value>
+  </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Asetukset</value>
+  </data>
+  <data name="SettingsToastNotificationHeader" xml:space="preserve">
+    <value>Ponnahdusviestit</value>
+  </data>
+  <data name="SettingsToastNotificationText" xml:space="preserve">
+    <value>Näyttää ponnahdusviestin näytön yläreunassa 10 sekunnin ajan.</value>
+  </data>
+  <data name="WebsiteHelpInfoText" xml:space="preserve">
+    <value>Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:</value>
   </data>
   <data name="WelcomeText1" xml:space="preserve">
     <value>Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi.</value>
