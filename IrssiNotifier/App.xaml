@@ -8,8 +8,8 @@
 
     <!--Application Resources-->
     <Application.Resources>
-        <Utils:BooleanInverter x:Name="BooleanInverter" />
-        <Resources:LocalizedStrings xmlns:Resources="clr-namespace:IrssiNotifier.Resources" x:Name="Strings"/>
+        <Utils:BooleanInverter x:Key="BooleanInverter" />
+        <Resources:LocalizedStrings xmlns:Resources="clr-namespace:IrssiNotifier.Resources" x:Key="Strings"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

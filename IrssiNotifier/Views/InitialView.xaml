@@ -36,9 +36,7 @@
                 </StackPanel>
             </Grid>
             <StackPanel VerticalAlignment="Bottom">
-                <Button x:Name="RegisterButton" Click="RegisterButtonClick">
-                    Rekisteröidy
-                </Button>
+                <Button x:Name="RegisterButton" Click="RegisterButtonClick" Content="{Binding Path=Strings.RegisterButtonText, Source={StaticResource Strings}}"/>
             </StackPanel>
 
         </Grid>
