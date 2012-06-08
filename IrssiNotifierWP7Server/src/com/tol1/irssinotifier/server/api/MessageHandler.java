@@ -5,7 +5,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -45,9 +44,9 @@ public class MessageHandler extends HttpServlet {
 			
 			URL url = new URL(user.ChannelURI);
 			
-			String nick = URLDecoder.decode(req.getParameter("nick"),"UTF-8");
-			String channel = URLDecoder.decode(req.getParameter("channel"),"UTF-8");
-			String message = URLDecoder.decode(req.getParameter("message"),"UTF-8");
+			String nick = req.getParameter("nick");
+			String channel = req.getParameter("channel");
+			String message = req.getParameter("message");
 			
 			int retries = 0;
 			if(req.getParameter("retries") != null){
