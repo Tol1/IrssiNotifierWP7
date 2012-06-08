@@ -196,7 +196,7 @@
     <value>Ponnahdusviestien vähimmäisväli</value>
   </data>
   <data name="SettingsMinimumToastIntervalText" xml:space="preserve">
-    <value>Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla.</value>
+    <value>Määrittelee miten pitkä aika kahden ponnahdusviestin välillä tulee vähintään olla.</value>
   </data>
   <data name="SettingsPushNotificationHeader" xml:space="preserve">
     <value>Notifikaatiopalvelu</value>
@@ -208,7 +208,7 @@
     <value>Livetiili</value>
   </data>
   <data name="SettingsTileNotificationText" xml:space="preserve">
-    <value>Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon.</value>
+    <value>Päivittää aloitusvalikkoon kiinnitettyä livetiiltä kertoen lukemattomien viestien lukumäärän. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon.</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Asetukset</value>

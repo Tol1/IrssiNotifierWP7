@@ -295,7 +295,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Määrittelee miten pitkä väli kahden ponnahdusviestin välillä tulee vähintään olla..
+        ///   Looks up a localized string similar to Määrittelee miten pitkä aika kahden ponnahdusviestin välillä tulee vähintään olla..
         /// </summary>
         public static string SettingsMinimumToastIntervalText {
             get {
@@ -331,7 +331,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Päivitä aloitusvalikkoon kiinnitettyä livetiiltä. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon..
+        ///   Looks up a localized string similar to Päivittää aloitusvalikkoon kiinnitettyä livetiiltä kertoen lukemattomien viestien lukumäärän. Päälle kytkeminen vaatii livetiilen kiinnittämistä päävalikkoon..
         /// </summary>
         public static string SettingsTileNotificationText {
             get {

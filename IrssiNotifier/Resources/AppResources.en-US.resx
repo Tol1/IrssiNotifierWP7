@@ -208,7 +208,7 @@
     <value>Tile notifications</value>
   </data>
   <data name="SettingsTileNotificationText" xml:space="preserve">
-    <value>Tile push notifications update the application's tile displayed in the Start Screen. The application must be pinned by the user first.</value>
+    <value>Tile push notifications update the application's tile displayed in the Start Screen by telling count of unread messages. The tile must be pinned to start screen.</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
     <value>Settings</value>
@@ -229,7 +229,7 @@
     <value>Instructions for configuring Irssi and installing Irssi script can be found from website:</value>
   </data>
   <data name="WelcomeText1" xml:space="preserve">
-    <value>To use app you must register your phone for web backend.</value>
+    <value>To use the app you must register your phone for web backend.</value>
   </data>
   <data name="WelcomeText2" xml:space="preserve">
     <value>Google account is needed for registration and using of this app.</value>
