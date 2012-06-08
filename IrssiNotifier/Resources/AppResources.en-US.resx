@@ -117,4 +117,127 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApiTokenInfoText" xml:space="preserve">
+    <value>This information can be later seen on settings view</value>
+  </data>
+  <data name="ApiTokenText" xml:space="preserve">
+    <value>Api Token for Irssi script:</value>
+  </data>
+  <data name="BackendErrorOccurredText" xml:space="preserve">
+    <value>Web backend has changed notification settings because of error. Check the changed settings in settings view.</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ConfirmLogoutText" xml:space="preserve">
+    <value>Are you sure you want to log out?</value>
+  </data>
+  <data name="ConfirmLogoutTitle" xml:space="preserve">
+    <value>Confirm logout</value>
+  </data>
+  <data name="ErrorFetchingMessages" xml:space="preserve">
+    <value>Error fetching messages.</value>
+  </data>
+  <data name="ErrorFetchingMessagesEx" xml:space="preserve">
+    <value>Error fetching messages: {0}</value>
+  </data>
+  <data name="ErrorGuidNotFound" xml:space="preserve">
+    <value>Your phone is not registered or it's identification data has been changed. Please relogin.</value>
+  </data>
+  <data name="ErrorRegistration" xml:space="preserve">
+    <value>Error on registration: {0}</value>
+  </data>
+  <data name="ErrorUserNotFound" xml:space="preserve">
+    <value>User account not found. Please relogin.</value>
+  </data>
+  <data name="FrontPageTitle" xml:space="preserve">
+    <value>Front page</value>
+  </data>
+  <data name="HilitePivotAllTitle" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="HilitePivotNewTitle" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="HilitePivotTitle" xml:space="preserve">
+    <value>IRSSI NOTIFIER - hilites &lt;3</value>
+  </data>
+  <data name="InfoNotificationChannelAutoOpened" xml:space="preserve">
+    <value>Notification channel is opened automatically. Other settings can be altered in settings view.</value>
+  </data>
+  <data name="LiveTileRemovedText" xml:space="preserve">
+    <value>Live tile has been deleted. Live tile notifications are disabled.</value>
+  </data>
+  <data name="LoginTitle" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LogoutButtonText" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="OkButtonText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="PinLiveTileText" xml:space="preserve">
+    <value>To use Live tile notifications you must pin Live tile into main screen. By selecting Ok live tile is created automatically.</value>
+  </data>
+  <data name="PinLiveTileTitle" xml:space="preserve">
+    <value>Confirm pin of live tile</value>
+  </data>
+  <data name="PrivacyStatementText" xml:space="preserve">
+    <value>You are forwarded to Google login page. Google doesn't reveal your password or any other private information for this application. Login is only used for identifying users. Google provides only anonyme identification information for this application.</value>
+  </data>
+  <data name="PrivacyStatementTitle" xml:space="preserve">
+    <value>Privacy statement.</value>
+  </data>
+  <data name="RegisterButtonText" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="SettingsMinimumToastIntervalHeader" xml:space="preserve">
+    <value>Minimum time between toast notifications</value>
+  </data>
+  <data name="SettingsMinimumToastIntervalText" xml:space="preserve">
+    <value>Defines minimum time how often toast notifications are displayed.</value>
+  </data>
+  <data name="SettingsPushNotificationHeader" xml:space="preserve">
+    <value>Push notifications</value>
+  </data>
+  <data name="SettingsPushNotificationText" xml:space="preserve">
+    <value>Turn on/off push notifications.</value>
+  </data>
+  <data name="SettingsTileNotificationHeader" xml:space="preserve">
+    <value>Tile notifications</value>
+  </data>
+  <data name="SettingsTileNotificationText" xml:space="preserve">
+    <value>Tile push notifications update the application's tile displayed in the Start Screen. The application must be pinned by the user first.</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsToastNotificationHeader" xml:space="preserve">
+    <value>Toast notifications</value>
+  </data>
+  <data name="SettingsToastNotificationText" xml:space="preserve">
+    <value>Toast push notifications show notification message in the top of the screen for ten seconds.</value>
+  </data>
+  <data name="ToastNotificationPermissionText" xml:space="preserve">
+    <value>Do you want to allow app to use toast notifications?</value>
+  </data>
+  <data name="ToastNotificationPermissionTitle" xml:space="preserve">
+    <value>Allow toast notifications</value>
+  </data>
+  <data name="WebsiteHelpInfoText" xml:space="preserve">
+    <value>Instructions for configuring Irssi and installing Irssi script can be found from website:</value>
+  </data>
+  <data name="WelcomeText1" xml:space="preserve">
+    <value>To use app you must register your phone for web backend.</value>
+  </data>
+  <data name="WelcomeText2" xml:space="preserve">
+    <value>Google account is needed for registration and using of this app.</value>
+  </data>
+  <data name="WelcomeText3" xml:space="preserve">
+    <value>Click "Register" to continue.</value>
+  </data>
+  <data name="WelcomeTextTitle" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
 </root>
