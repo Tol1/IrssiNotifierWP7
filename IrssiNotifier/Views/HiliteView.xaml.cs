@@ -8,6 +8,7 @@ using System.Windows;
 using IrssiNotifier.Model;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
+using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
 
 namespace IrssiNotifier.Views
@@ -27,6 +28,7 @@ namespace IrssiNotifier.Views
 				PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
 			}
 			Fetch(true);
+			GenerateLocalizedAppBar();
 		}
 
 		public bool IsBusy
@@ -230,6 +232,25 @@ namespace IrssiNotifier.Views
 		private void MoreClick(object sender, RoutedEventArgs e)
 		{
 			FetchHilites(_nextHilite.Id);
+		}
+
+		public ApplicationBar ApplicationBar { get; private set; }
+
+		private void GenerateLocalizedAppBar()
+		{
+			var appBar = new ApplicationBar {IsMenuEnabled = true, IsVisible = true};
+			var refreshButton = new ApplicationBarIconButton(new Uri("/Images/appbar.refresh.rest.png", UriKind.Relative))
+			                    	{Text = AppResources.RefreshButtonText};
+			refreshButton.Click += RefreshButtonClick;
+			appBar.Buttons.Add(refreshButton);
+			var settingsButton = new ApplicationBarIconButton(new Uri("/Images/appbar.feature.settings.rest.png", UriKind.Relative))
+									{Text = AppResources.SettingsButtonText};
+			settingsButton.Click += SettingsButtonClick;
+			appBar.Buttons.Add(settingsButton);
+			var aboutButton = new ApplicationBarMenuItem(AppResources.AboutButtonText);
+			aboutButton.Click += AboutButtonClick;
+			appBar.MenuItems.Add(aboutButton);
+			ApplicationBar = appBar;
 		}
 	}
 }

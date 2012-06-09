@@ -61,6 +61,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tietoja....
+        /// </summary>
+        public static string AboutButtonText {
+            get {
+                return ResourceManager.GetString("AboutButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tämä tieto on myöhemmin nähtävillä asetusnäkymässä..
         /// </summary>
         public static string ApiTokenInfoText {
@@ -286,11 +295,29 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Päivitä.
+        /// </summary>
+        public static string RefreshButtonText {
+            get {
+                return ResourceManager.GetString("RefreshButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rekisteröidy.
         /// </summary>
         public static string RegisterButtonText {
             get {
                 return ResourceManager.GetString("RegisterButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asetukset.
+        /// </summary>
+        public static string SettingsButtonText {
+            get {
+                return ResourceManager.GetString("SettingsButtonText", resourceCulture);
             }
         }
         

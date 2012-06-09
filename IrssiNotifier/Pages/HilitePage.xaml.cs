@@ -22,23 +22,10 @@ namespace IrssiNotifier.Pages
 				{
 					PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
 				}
-				contentBorder.Child = new HiliteView();
+				var view = new HiliteView();
+				ApplicationBar = view.ApplicationBar;
+				contentBorder.Child = view;
 			}
-		}
-
-		private void SettingsButtonClick(object sender, EventArgs e)
-		{
-			((HiliteView)contentBorder.Child).SettingsButtonClick(sender, e);
-		}
-
-		private void RefreshButtonClick(object sender, EventArgs e)
-		{
-			((HiliteView)contentBorder.Child).RefreshButtonClick(sender, e);
-		}
-
-		private void AboutButtonClick(object sender, EventArgs e)
-		{
-			((HiliteView) contentBorder.Child).AboutButtonClick(sender, e);
 		}
 	}
 }
