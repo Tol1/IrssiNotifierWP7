@@ -174,6 +174,9 @@
   <data name="LogoutButtonText" xml:space="preserve">
     <value>Logout</value>
   </data>
+  <data name="MoreButtonText" xml:space="preserve">
+    <value>More...</value>
+  </data>
   <data name="OkButtonText" xml:space="preserve">
     <value>Ok</value>
   </data>

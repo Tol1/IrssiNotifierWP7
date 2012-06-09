@@ -232,6 +232,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lisää....
+        /// </summary>
+        public static string MoreButtonText {
+            get {
+                return ResourceManager.GetString("MoreButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string OkButtonText {
