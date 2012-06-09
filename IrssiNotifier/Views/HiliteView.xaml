@@ -27,7 +27,7 @@
     </UserControl.Resources>
     
     <Grid x:Name="LayoutRoot">
-        <controls:Pivot Title="{Binding Path=Strings.HilitePivotTitle, Source={StaticResource Strings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}">
+        <controls:Pivot Title="{Binding Path=Strings.HilitePivotTitle, Source={StaticResource Strings}}">
             <controls:PivotItem Header="{Binding Path=Strings.HilitePivotNewTitle, Source={StaticResource Strings}}">
                 <Grid>
                     <Grid.RowDefinitions>
