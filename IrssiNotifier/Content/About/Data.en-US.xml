@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<About>
+  <App Author="Tomi 'Tol1' Nokkala"
+       Publisher=""
+       Description="Application to deliver Irssi's highlight notifications into your phone."
+       AdditionalNotes="To work this application needs a script found from app's web page to be installed to Irssi. More details can be found by opening the link above.&#x0a;&#x0a;Thanks to Lauri 'Murgo' Härsilä from idea and the base of Irssi script." />
+  <Items>
+    <MainItem Title="About"
+              AppAuthorLabel="by"
+              AppDescriptionLabel="Description:"
+              AppPublisherLabel="Publisher:"
+              AppVersionLabel="Version:"
+              AppAdditionalNotesLabel="Note!"
+              AppReviewButtonContent="Rate app"
+              AppBuyButtonContent="">
+      <Links>
+        <Link NavigateUri="https://irssinotifierwp.appspot.com"
+              Content="https://irssinotifierwp.appspot.com"
+              Label="Web:" />
+      </Links>
+    </MainItem>
+    <Item Title="History"
+          Type="text">
+      1.0.0.0
+      First version
+    </Item>
+  </Items>
+</About>

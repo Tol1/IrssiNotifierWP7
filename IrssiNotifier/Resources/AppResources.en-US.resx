@@ -127,7 +127,7 @@
     <value>Api Token for Irssi script:</value>
   </data>
   <data name="BackendErrorOccurredText" xml:space="preserve">
-    <value>Web backend has changed notification settings because of error. Check the changed settings in settings view.</value>
+    <value>Web backend has changed notification settings because of an error. Check the changed settings in settings view.</value>
   </data>
   <data name="CancelButtonText" xml:space="preserve">
     <value>Cancel</value>

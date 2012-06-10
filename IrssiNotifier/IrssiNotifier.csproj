@@ -178,6 +178,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\About\Data.en-US.xml" />
     <Content Include="Content\About\Data.xml">
       <SubType>Designer</SubType>
     </Content>

@@ -21,7 +21,7 @@
   <App Author="Tomi 'Tol1' Nokkala"
        Publisher=""
        Description="Sovellus Irssin highlight-notifikaatioiden välittämiseksi puhelimeen."
-       AdditionalNotes="Tämä sovellus vaatii toimiakseen verkkosivulta ladattavan irssiskriptin. Tarkemmat ohjeet löydät yllä olevan linkin kautta.&#x0a;&#x0a;Kiitokset Lauri 'Murgo' Härsilälle ideasta sekä irssiskriptistä." />
+       AdditionalNotes="Tämä sovellus vaatii toimiakseen verkkosivulta ladattavan Irssi-skriptin. Tarkemmat ohjeet löydät yllä olevan linkin kautta.&#x0a;&#x0a;Kiitokset Lauri 'Murgo' Härsilälle ideasta sekä irssiskriptistä." />
   <Items>
     <!-- Create a MainItem entry to configure the front page -->
     <!-- The Titel attribute defines the title of the pivot item -->

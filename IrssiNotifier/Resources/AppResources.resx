@@ -124,7 +124,7 @@
     <value>Tämä tieto on myöhemmin nähtävillä asetusnäkymässä.</value>
   </data>
   <data name="ApiTokenText" xml:space="preserve">
-    <value>Api Token irssi-skriptiä varten:</value>
+    <value>Api Token Irssi-skriptiä varten:</value>
   </data>
   <data name="BackendErrorOccurredText" xml:space="preserve">
     <value>Web-sovellus on muuttanut notifikaatioasetuksia aiemmin sattuneen virheen vuoksi. Tarkista asetukset asetusnäkymässä.</value>
@@ -241,7 +241,7 @@
     <value>Salli ponnahdusviestit</value>
   </data>
   <data name="WebsiteHelpInfoText" xml:space="preserve">
-    <value>Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:</value>
+    <value>Ohjeet Irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:</value>
   </data>
   <data name="WelcomeText1" xml:space="preserve">
     <value>Käyttääksesi sovellusta tulee sinun rekisteröidä puhelimesi palvelun käyttäjäksi.</value>

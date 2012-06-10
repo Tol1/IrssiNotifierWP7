@@ -79,7 +79,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Api Token irssi-skriptiä varten:.
+        ///   Looks up a localized string similar to Api Token Irssi-skriptiä varten:.
         /// </summary>
         public static string ApiTokenText {
             get {
@@ -430,7 +430,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ohjeet irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:.
+        ///   Looks up a localized string similar to Ohjeet Irssin konfiguroinnista ja skriptin asentamisesta löytyvät sovelluksen verkkosivuilta:.
         /// </summary>
         public static string WebsiteHelpInfoText {
             get {
