@@ -31,7 +31,7 @@ namespace IrssiNotifier.Views
 					UserId = (string)parsed["userid"];
 					if (loginPage != null)
 					{
-						loginPage.button.Content = "Jatka";
+						loginPage.button.Content = AppResources.ContinueButtonText;
 						loginPage.button.Visibility = Visibility.Visible;
 						loginPage.button.Click += ButtonClick;
 					}

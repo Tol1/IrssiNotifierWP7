@@ -124,6 +124,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jatka.
+        /// </summary>
+        public static string ContinueButtonText {
+            get {
+                return ResourceManager.GetString("ContinueButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Virhe viestien noutamisessa.
         /// </summary>
         public static string ErrorFetchingMessages {

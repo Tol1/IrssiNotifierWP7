@@ -138,6 +138,9 @@
   <data name="ConfirmLogoutTitle" xml:space="preserve">
     <value>Confirm logout</value>
   </data>
+  <data name="ContinueButtonText" xml:space="preserve">
+    <value>Continue</value>
+  </data>
   <data name="ErrorFetchingMessages" xml:space="preserve">
     <value>Error fetching messages.</value>
   </data>

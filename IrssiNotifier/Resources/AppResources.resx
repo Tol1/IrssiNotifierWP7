@@ -138,6 +138,9 @@
   <data name="ConfirmLogoutTitle" xml:space="preserve">
     <value>Vahvista uloskirjautuminen</value>
   </data>
+  <data name="ContinueButtonText" xml:space="preserve">
+    <value>Jatka</value>
+  </data>
   <data name="ErrorFetchingMessages" xml:space="preserve">
     <value>Virhe viestien noutamisessa</value>
   </data>
