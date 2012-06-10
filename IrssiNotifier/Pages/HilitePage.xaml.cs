@@ -14,7 +14,6 @@ namespace IrssiNotifier.Pages
 			if (!IsolatedStorageSettings.ApplicationSettings.Contains("userID"))
 			{
 				contentBorder.Child = new InitialView();
-				ApplicationBar.IsVisible = false;
 			}
 			else
 			{

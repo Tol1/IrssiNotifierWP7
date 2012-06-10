@@ -27,7 +27,6 @@ namespace IrssiNotifier.Pages
 		private void ShowInitialView()
 		{
 			contentBorder.Child = new InitialView();
-			ApplicationBar.IsVisible = false;
 		}
 
 		private void ShowMainView()
