@@ -9,6 +9,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.NotFoundException;
+import com.tol1.irssinotifier.server.api.MessageHandler;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
@@ -80,17 +81,21 @@ public class IrssiNotifier {
 		}
 	}
 	
-	public static boolean versionCheck(String versionString){
+	public static boolean versionCheck(String versionString, boolean script){
 		if(versionString == null){
 			return false;
 		}
 		try{
-			int serviceVersion = getCurrentVersion();
+			int serviceVersion = script?MessageHandler.VERSION:getCurrentVersion();
 			int version = Integer.parseInt(versionString);
 			return serviceVersion <= version;
 		}
 		catch(NumberFormatException nfe){
 			return false;
 		}
+	}
+	
+	public static boolean versionCheck(String versionString){
+		return versionCheck(versionString, false);
 	}
 }

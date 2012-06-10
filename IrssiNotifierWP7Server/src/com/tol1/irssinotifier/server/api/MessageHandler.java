@@ -26,12 +26,13 @@ import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
 public class MessageHandler extends HttpServlet {
-
+	public static final int VERSION = 1;
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		if(!IrssiNotifier.versionCheck(req.getParameter("version"))){
+		if(!IrssiNotifier.versionCheck(req.getParameter("version"), true)){
 			IrssiNotifier.printErrorForIrssi(resp.getWriter(), new OldVersionException("Käytössäsi on vanhentunut skriptiversio. Päivitä skripti osoitteessa https://"+ApiProxy.getCurrentEnvironment().getAttributes().get("com.google.appengine.runtime.default_version_hostname")));
 			return;
 		}
