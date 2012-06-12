@@ -75,11 +75,12 @@ public class MessageHandler extends HttpServlet {
 						dao.ofy().put(user);
 					} else {
 						IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-						if(responseStatus == Status.STATUS_ERROR){
+						if(responseStatus == Status.STATUS_CHANNEL_CLOSED){
 							user.errorOccurred = true;
 							user.sendToastNotifications = false;
 							dao.ofy().put(user);
 							IrssiNotifier.log.severe("Toast notificationit poistettu käytöstä virheestä johtuen");
+							
 						}
 						else{
 							try {
@@ -114,7 +115,7 @@ public class MessageHandler extends HttpServlet {
 					}
 					else{
 						IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
-						if(responseStatus == Status.STATUS_ERROR){
+						if(responseStatus == Status.STATUS_CHANNEL_CLOSED){
 							user.errorOccurred = true;
 							user.sendTileNotifications = false;
 							dao.ofy().put(user);
@@ -213,7 +214,7 @@ public class MessageHandler extends HttpServlet {
 		case 404:
 			user.sendToastNotifications = false;
 			dao.ofy().put(user);
-			resp.getWriter().print("Push channel error: The subscription is invalid and is not present on the Push Notification Service.");
+			resp.getWriter().print("Push channel error: The subscription is invalid and is not present on the Push Notification Service. Sending of notifications are disabled. Re-enable notifications from your phone.");
 			result = Status.STATUS_CHANNEL_CLOSED;
 			break;
 		case 406:
