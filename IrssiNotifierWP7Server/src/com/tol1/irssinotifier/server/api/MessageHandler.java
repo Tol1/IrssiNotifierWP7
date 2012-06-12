@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +23,7 @@ import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.Message;
 import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
+import com.tol1.irssinotifier.server.exceptions.XmlGeneratorException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
@@ -61,8 +63,9 @@ public class MessageHandler extends HttpServlet {
 			Message mess = new Message(nick, channel, message, user);
 			
 			if(user.sendToastNotifications && (retries == 0 || toastRetry != null) && ((System.currentTimeMillis() - user.lastToastNotificationSent) > (user.toastNotificationInterval*1000))){
-				String toastMessage = mess.GenerateToastNotification();
+				
 				try {
+					String toastMessage = mess.GenerateToastNotification();
 					HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
 					IrssiNotifier.log.info("Toast notification lähetetty, tulos: "+responseStatus);
@@ -93,11 +96,14 @@ public class MessageHandler extends HttpServlet {
 						AddToQueue(req, retries, id, "toastRetry");
 					}
 				}
+				catch(XmlGeneratorException xge){
+					IrssiNotifier.log.log(Level.SEVERE, "Virhe toast-XML:n luonnissa käyttäjälle "+user.UserID, xge);
+				}
 			}
 			
 			if(user.sendTileNotifications && (retries == 0 || tileRetry != null)){
-				String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 				try {
+					String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 					HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
 					IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
@@ -128,6 +134,9 @@ public class MessageHandler extends HttpServlet {
 					if(retries < 4){
 						AddToQueue(req, retries, id, "tileRetry");
 					}
+				}
+				catch(XmlGeneratorException xge){
+					IrssiNotifier.log.log(Level.SEVERE, "Virhe tile-XML:n luonnissa käyttäjälle "+user.UserID, xge);
 				}
 			}
 			

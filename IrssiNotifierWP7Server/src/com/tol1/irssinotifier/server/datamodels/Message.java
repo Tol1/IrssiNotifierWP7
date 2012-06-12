@@ -19,6 +19,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Parent;
 import com.tol1.irssinotifier.server.IrssiNotifier;
+import com.tol1.irssinotifier.server.exceptions.XmlGeneratorException;
 
 public class Message {
 	@Id public Long id;
@@ -42,7 +43,7 @@ public class Message {
 		this.owner = new Key<IrssiNotifierUser>(user.getClass(), user.UserID);
 	}
 	
-	public String GenerateToastNotification(){
+	public String GenerateToastNotification() throws XmlGeneratorException{
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -72,35 +73,17 @@ public class Message {
 		    return output.toString();
 			
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerFactoryConfigurationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		String toast = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-				+ "<wp:Notification xmlns:wp=\"WPNotification\">"
-					+ "<wp:Toast>"
-						+ "<wp:Text1>"
-							+ this.nick + " - " + this.channel
-						+ "</wp:Text1>"
-						+ "<wp:Text2>"
-							+ this.message
-						+ "</wp:Text2>"
-						+ "<wp:Param>"+IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Toast</wp:Param>"
-				+ "</wp:Toast> "
-			+ "</wp:Notification>";
-		return toast;
+			throw new XmlGeneratorException(e);
+		}
 	}
 	
-	public String GenerateTileNotification(int countValue, String tileUrl){
+	public String GenerateTileNotification(int countValue, String tileUrl) throws XmlGeneratorException{
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -134,31 +117,13 @@ public class Message {
 		    return output.toString();
 			
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerFactoryConfigurationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new XmlGeneratorException(e);
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		String tile = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-				+ "<wp:Notification xmlns:wp=\"WPNotification\">"
-					+ "<wp:Tile>"
-						+ "<wp:BackgroundImage>"
-							+ "/Images/Tile.png"
-						+ "</wp:BackgroundImage>"
-						+ "<wp:Count>"
-							+ countValue
-						+ "</wp:Count>"
-						+ "<wp:Title></wp:Title>"
-				+ "</wp:Tile> "
-			+ "</wp:Notification>";
-		return tile;
+			throw new XmlGeneratorException(e);
+		}
 	}
 }
