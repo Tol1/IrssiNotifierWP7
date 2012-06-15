@@ -75,11 +75,8 @@ public class MessageHandler extends HttpServlet {
 						dao.ofy().put(user);
 					} else {
 						IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
-						if(responseStatus == Status.STATUS_CHANNEL_CLOSED){
-							user.errorOccurred = true;
-							user.sendToastNotifications = false;
-							dao.ofy().put(user);
-							IrssiNotifier.log.severe("Toast notificationit poistettu käytöstä virheestä johtuen");
+						if(responseStatus == Status.STATUS_CHANNEL_CLOSED || responseStatus == Status.STATUS_HOURLY_QUEUEABLE){
+							IrssiNotifier.log.severe("Notificationit poistettu käytöstä virheestä johtuen");
 							
 						}
 						else{
@@ -115,11 +112,8 @@ public class MessageHandler extends HttpServlet {
 					}
 					else{
 						IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
-						if(responseStatus == Status.STATUS_CHANNEL_CLOSED){
-							user.errorOccurred = true;
-							user.sendTileNotifications = false;
-							dao.ofy().put(user);
-							IrssiNotifier.log.severe("Tile notificationit poistettu käytöstä virheestä johtuen");
+						if(responseStatus == Status.STATUS_CHANNEL_CLOSED || responseStatus == Status.STATUS_HOURLY_QUEUEABLE){
+							IrssiNotifier.log.severe("Notificationit poistettu käytöstä virheestä johtuen");
 						}
 						else{
 							try {
@@ -213,18 +207,24 @@ public class MessageHandler extends HttpServlet {
 			break;
 		case 404:
 			user.sendToastNotifications = false;
+			user.sendTileNotifications = false;
+			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: The subscription is invalid and is not present on the Push Notification Service. Sending of notifications are disabled. Re-enable notifications from your phone.");
 			result = Status.STATUS_CHANNEL_CLOSED;
 			break;
 		case 406:
 			user.sendToastNotifications = false;
+			user.sendTileNotifications = false;
+			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: Web service has reached the per-day throttling limit for a subscription.");
 			result = Status.STATUS_HOURLY_QUEUEABLE;
 			break;
 		case 412:
 			user.sendToastNotifications = false;
+			user.sendToastNotifications = false;
+			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: The device is in an inactive state.");
 			result = Status.STATUS_HOURLY_QUEUEABLE;
