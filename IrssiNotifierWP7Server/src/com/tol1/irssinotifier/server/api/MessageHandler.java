@@ -60,6 +60,8 @@ public class MessageHandler extends HttpServlet {
 			String tileRetry = req.getParameter("tileRetry");
 			String toastRetry = req.getParameter("toastRetry");
 			
+			boolean userModified = false;
+			
 			Message mess = new Message(nick, channel, message, user);
 			
 			if(user.sendToastNotifications && (retries == 0 || toastRetry != null) && ((System.currentTimeMillis() - user.lastToastNotificationSent) > (user.toastNotificationInterval*1000))){
@@ -72,7 +74,7 @@ public class MessageHandler extends HttpServlet {
 					if(responseStatus == Status.STATUS_OK) {
 						IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
 						user.lastToastNotificationSent = System.currentTimeMillis();
-						dao.ofy().put(user);
+						userModified = true;
 					} else {
 						IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
 						if(responseStatus == Status.STATUS_CHANNEL_CLOSED || responseStatus == Status.STATUS_HOURLY_QUEUEABLE){
@@ -108,7 +110,7 @@ public class MessageHandler extends HttpServlet {
 					if(responseStatus == Status.STATUS_OK){
 						IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
 						user.tileCount++;
-						dao.ofy().put(user);
+						userModified = true;
 					}
 					else{
 						IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
@@ -137,6 +139,10 @@ public class MessageHandler extends HttpServlet {
 			
 			if(user.sendTileNotifications || user.sendToastNotifications){
 				dao.ofy().put(mess);
+			}
+			
+			if(userModified){
+				dao.ofy().put(user);
 			}
 		} catch (UserNotFoundException e) {
 			IrssiNotifier.printErrorForIrssi(resp.getWriter(), e);

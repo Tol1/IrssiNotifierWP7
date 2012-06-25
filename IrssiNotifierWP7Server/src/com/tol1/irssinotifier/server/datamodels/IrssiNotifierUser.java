@@ -2,17 +2,19 @@ package com.tol1.irssinotifier.server.datamodels;
 
 import javax.persistence.*;
 
+import com.googlecode.objectify.annotation.Unindexed;
+
 public class IrssiNotifierUser {
 	@Id public String UserID;
 	public String UUID;
-	public String ChannelURI;
-	public String guid;
-	public boolean sendToastNotifications;
-	public boolean sendTileNotifications;
-	public boolean errorOccurred;
-	public int tileCount;
-	public int toastNotificationInterval;
-	public long lastToastNotificationSent;
+	@Unindexed public String ChannelURI;
+	@Unindexed public String guid;
+	@Unindexed public boolean sendToastNotifications;
+	@Unindexed public boolean sendTileNotifications;
+	@Unindexed public boolean errorOccurred;
+	@Unindexed public int tileCount;
+	@Unindexed public int toastNotificationInterval;
+	@Unindexed public long lastToastNotificationSent;
 	
 	public IrssiNotifierUser(){}
 	

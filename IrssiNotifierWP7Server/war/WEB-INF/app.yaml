@@ -43,9 +43,7 @@ handlers:
 - url: /cron/clear
   servlet: com.tol1.irssinotifier.server.cron.Clear
   login: admin
-  
-env_variables:
-  DEFAULT_ENCODING: UTF-8
+
   
 welcome_files:
   - index.jsp

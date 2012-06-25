@@ -18,15 +18,16 @@ import org.w3c.dom.Element;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Unindexed;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.exceptions.XmlGeneratorException;
 
 public class Message {
 	@Id public Long id;
 	@Indexed public Long timestamp;
-	public String nick;
-	public String channel;
-	public String message;
+	@Unindexed public String nick;
+	@Unindexed public String channel;
+	@Unindexed public String message;
 	@Parent Key<IrssiNotifierUser> owner;
 	
 	public Message(){
