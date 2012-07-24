@@ -229,7 +229,7 @@ public class MessageHandler extends HttpServlet {
 			break;
 		case 412:
 			user.sendToastNotifications = false;
-			user.sendToastNotifications = false;
+			user.sendTileNotifications = false;
 			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: The device is in an inactive state.");
