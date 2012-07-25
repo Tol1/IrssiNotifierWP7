@@ -43,7 +43,28 @@ handlers:
 - url: /cron/clear
   servlet: com.tol1.irssinotifier.server.cron.Clear
   login: admin
+  
+- url: /appstats/*
+  servlet: com.google.appengine.tools.appstats.AppstatsServlet
+  login: admin
 
+web_xml: |
+  <filter>
+    <filter-name>appstats</filter-name>
+    <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+    <init-param>
+      <param-name>logMessage</param-name>
+      <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+    </init-param>
+    <init-param>
+      <param-name>calculateRpcCosts</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>appstats</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   
 welcome_files:
   - index.jsp
