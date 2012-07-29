@@ -63,9 +63,16 @@ web_xml: |
   </filter>
   <filter-mapping>
     <filter-name>appstats</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/client/*</url-pattern>
+    <url-pattern>/irssi/*</url-pattern>
+    <url-pattern>/cron/*</url-pattern>
   </filter-mapping>
   
 welcome_files:
   - index.jsp
   - index.html
+
+admin_console:
+  pages:
+  - name: Appstats
+    url: /appstats

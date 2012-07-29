@@ -205,6 +205,8 @@
 </filter>
 <filter-mapping>
   <filter-name>appstats</filter-name>
-  <url-pattern>/*</url-pattern>
+  <url-pattern>/client/*</url-pattern>
+  <url-pattern>/irssi/*</url-pattern>
+  <url-pattern>/cron/*</url-pattern>
 </filter-mapping>
 </web-app>

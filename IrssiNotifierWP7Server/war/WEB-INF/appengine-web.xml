@@ -12,4 +12,7 @@
   <code-lock>false</code-lock>
   <sessions-enabled>false</sessions-enabled>
   <warmup-requests-enabled>false</warmup-requests-enabled>
+  <admin-console>
+    <page name='Appstats' url='/appstats'/>
+  </admin-console>
 </appengine-web-app>
