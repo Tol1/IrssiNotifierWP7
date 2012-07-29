@@ -260,10 +260,10 @@ namespace IrssiNotifier.Views
 		public void ClearTileCount(Dispatcher dispatcher)
 		{
 			if (PushContext.Current.IsConnected && IsPushEnabled && IsTileEnabled)
-				{
-					UpdateSettings("clearcount", true, dispatcher, ClearTileCount);
+			{
+				UpdateSettings("clearcount", true, dispatcher, ClearTileCount);
 
-				}
+			}
 		}
 
 		private void UpdateSettings(string param, object value, Dispatcher dispatcher, Action callback = null)
@@ -323,15 +323,19 @@ namespace IrssiNotifier.Views
 					NotifyPropertyChanged("IsTileEnabled");
 				}
 			}
-			else if (!value && hiliteTile != null)
+			else
+			{
+				UpdateSettings("tile", value, Dispatcher);
+			}
+			/*else if (!value && hiliteTile != null)
 			{
 				UpdateSettings("tile", false, Dispatcher);
-				/*var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
+				var answer = MessageBox.Show("Poistetaanko myös tiili?", "Vahvista", MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
 					hiliteTile.Delete();
-				}*/
-			}
+				}
+			}*/
 		}
 
 		private void LogoutClick(object sender, RoutedEventArgs e)
