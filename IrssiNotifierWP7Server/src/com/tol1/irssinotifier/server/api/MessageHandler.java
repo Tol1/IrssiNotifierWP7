@@ -228,9 +228,9 @@ public class MessageHandler extends HttpServlet {
 			result = Status.STATUS_HOURLY_QUEUEABLE;
 			break;
 		case 412:
-			user.sendToastNotifications = false;
-			user.sendTileNotifications = false;
-			user.errorOccurred = true;
+//			user.sendToastNotifications = false;
+//			user.sendTileNotifications = false;
+//			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: The device is in an inactive state.");
 			result = Status.STATUS_HOURLY_QUEUEABLE;
