@@ -253,7 +253,7 @@ namespace IrssiNotifier.Views
 										currentPage.NavigationService.RemoveBackEntry();
 									}
 									PhoneApplicationService.Current.State["logout"] = true;
-									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml?error=true", UriKind.Relative));
 								});
 						return;
 					}
