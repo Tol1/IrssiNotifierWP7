@@ -124,6 +124,24 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ongelma yhdistettäessä palvelimelle. Varmista että puhelimen datayhteys on päällä..
+        /// </summary>
+        public static string ConnectionErrorText {
+            get {
+                return ResourceManager.GetString("ConnectionErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yhteysongelma.
+        /// </summary>
+        public static string ConnectionErrorTitle {
+            get {
+                return ResourceManager.GetString("ConnectionErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jatka.
         /// </summary>
         public static string ContinueButtonText {
@@ -165,6 +183,15 @@ namespace IrssiNotifier.Resources {
         public static string ErrorRegistration {
             get {
                 return ResourceManager.GetString("ErrorRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virhe.
+        /// </summary>
+        public static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
             }
         }
         

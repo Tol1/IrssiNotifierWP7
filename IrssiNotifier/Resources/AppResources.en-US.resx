@@ -138,6 +138,12 @@
   <data name="ConfirmLogoutTitle" xml:space="preserve">
     <value>Confirm logout</value>
   </data>
+  <data name="ConnectionErrorText" xml:space="preserve">
+    <value>Problem connecting server. Please check the data connection status of your phone.</value>
+  </data>
+  <data name="ConnectionErrorTitle" xml:space="preserve">
+    <value>Connection problem</value>
+  </data>
   <data name="ContinueButtonText" xml:space="preserve">
     <value>Continue</value>
   </data>
@@ -152,6 +158,9 @@
   </data>
   <data name="ErrorRegistration" xml:space="preserve">
     <value>Error on registration: {0}</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
   </data>
   <data name="ErrorUserNotFound" xml:space="preserve">
     <value>User account not found. Please relogin.</value>

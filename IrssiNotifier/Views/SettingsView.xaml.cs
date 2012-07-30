@@ -171,8 +171,29 @@ namespace IrssiNotifier.Views
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
-				if (args.Error != null) {
-					dispatcher.BeginInvoke(() => MessageBox.Show(args.Result));
+				if (args.Error != null)
+				{
+					var exception = args.Error as WebException;
+					if (exception != null && exception.Response is HttpWebResponse)
+					{
+						var response = exception.Response as HttpWebResponse;
+						if (response.StatusCode == HttpStatusCode.NotFound)
+						{
+							dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ConnectionErrorText, AppResources.ConnectionErrorTitle, MessageBoxButton.OK));
+							var page = App.GetCurrentPage() as ViewContainerPage;
+							if (page != null)
+							{
+								page.View = new ConnectionProblemView();
+								page.ApplicationBar = null;
+								while (page.NavigationService.CanGoBack)
+								{
+									page.NavigationService.RemoveBackEntry();
+								}
+								return;
+							}
+						}
+					}
+					dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));
 					return;
 				}
 				var result = JObject.Parse(args.Result);

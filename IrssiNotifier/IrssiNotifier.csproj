@@ -102,6 +102,9 @@
     </Compile>
     <Compile Include="Resources\LocalizedStrings.cs" />
     <Compile Include="Utils\BooleanInverter.cs" />
+    <Compile Include="Views\ConnectionProblemView.xaml.cs">
+      <DependentUpon>ConnectionProblemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HiliteView.xaml.cs">
       <DependentUpon>HiliteView.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionProblemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
