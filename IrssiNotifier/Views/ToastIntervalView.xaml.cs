@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using IrssiNotifier.Interfaces;
 using IrssiNotifier.Pages;
 
 namespace IrssiNotifier.Views
@@ -37,19 +38,19 @@ namespace IrssiNotifier.Views
 		private void OkButtonClick(object sender, RoutedEventArgs e)
 		{
 			SettingsView.GetInstance().ToastInterval = ToastInterval;
-			var settingsPage = App.GetCurrentPage() as SettingsPage;
+			var settingsPage = App.GetCurrentPage() as IViewContainerPage;
 			if (settingsPage != null)
 			{
-				settingsPage.contentBorder.Child = SettingsView.GetInstance();
+				settingsPage.View = SettingsView.GetInstance();
 			}
 		}
 
 		private void CancelButtonClick(object sender, RoutedEventArgs e)
 		{
-			var settingsPage = App.GetCurrentPage() as SettingsPage;
+			var settingsPage = App.GetCurrentPage() as IViewContainerPage;
 			if (settingsPage != null)
 			{
-				settingsPage.contentBorder.Child = SettingsView.GetInstance();
+				settingsPage.View = SettingsView.GetInstance();
 			}
 		}
 	}

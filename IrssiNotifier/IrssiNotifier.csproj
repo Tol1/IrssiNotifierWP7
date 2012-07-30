@@ -72,6 +72,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\DiscreteSlider.cs" />
+    <Compile Include="Interfaces\IViewContainerPage.cs" />
     <Compile Include="Model\Hilite.cs" />
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>

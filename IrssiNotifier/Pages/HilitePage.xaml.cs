@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO.IsolatedStorage;
+﻿using System.IO.IsolatedStorage;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Views;
 
@@ -13,7 +12,7 @@ namespace IrssiNotifier.Pages
 			DataContext = this;
 			if (!IsolatedStorageSettings.ApplicationSettings.Contains("userID"))
 			{
-				contentBorder.Child = new InitialView();
+				View = new InitialView();
 			}
 			else
 			{
@@ -23,7 +22,7 @@ namespace IrssiNotifier.Pages
 				}
 				var view = new HiliteView();
 				ApplicationBar = view.ApplicationBar;
-				contentBorder.Child = view;
+				View = view;
 			}
 		}
 	}

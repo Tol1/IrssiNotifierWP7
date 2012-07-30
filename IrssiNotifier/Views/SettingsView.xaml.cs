@@ -6,6 +6,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using IrssiNotifier.Interfaces;
 using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
@@ -344,12 +345,12 @@ namespace IrssiNotifier.Views
 			                             MessageBoxButton.OKCancel);
 			if(answer == MessageBoxResult.OK)
 			{
-				var settingsPage = App.GetCurrentPage() as SettingsPage;
+				var settingsPage = App.GetCurrentPage() as ViewContainerPage;
 				IsBusy = true;
 				if (settingsPage != null)
 				{
-					settingsPage.contentBorder.Child = new WebBrowser {IsScriptEnabled = true, IsEnabled = false};
-					var browser = (WebBrowser) settingsPage.contentBorder.Child;
+					settingsPage.View = new WebBrowser { IsScriptEnabled = true, IsEnabled = false };
+					var browser = (WebBrowser) settingsPage.View;
 					browser.Navigated += (o, args) =>
 					                     	{
 					                     		if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
@@ -378,10 +379,10 @@ namespace IrssiNotifier.Views
 		{
 			if (!IsBusy && IsPushEnabled && IsToastEnabled)
 			{
-				var settingsPage = App.GetCurrentPage() as SettingsPage;
+				var settingsPage = App.GetCurrentPage() as IViewContainerPage;
 				if (settingsPage != null)
 				{
-					settingsPage.contentBorder.Child = new ToastIntervalView();
+					settingsPage.View = new ToastIntervalView();
 				}
 			}
 		}

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO.IsolatedStorage;
+﻿using System.IO.IsolatedStorage;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Views;
 using Microsoft.Phone.Shell;
@@ -26,7 +25,7 @@ namespace IrssiNotifier.Pages
 
 		private void ShowInitialView()
 		{
-			contentBorder.Child = new InitialView();
+			View = new InitialView();
 		}
 
 		private void ShowMainView()
@@ -37,7 +36,7 @@ namespace IrssiNotifier.Pages
 			}
 			var view = new HiliteView();
 			ApplicationBar = view.ApplicationBar;
-			contentBorder.Child = view;
+			View = view;
 		}
 
 		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)

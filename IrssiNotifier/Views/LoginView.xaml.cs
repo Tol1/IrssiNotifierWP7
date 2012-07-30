@@ -1,4 +1,5 @@
 ﻿using System;
+using IrssiNotifier.Interfaces;
 using IrssiNotifier.Pages;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -22,10 +23,10 @@ namespace IrssiNotifier.Views
 				var uri = browser.Source;
 				PhoneApplicationService.Current.State["cookies"] = cookies;
 				PhoneApplicationService.Current.State["cookiesUri"] = uri;
-				var loginPage = App.GetCurrentPage() as LoginPage;
+				var loginPage = App.GetCurrentPage() as IViewContainerPage;
 				if (loginPage != null)
 				{
-					loginPage.contentBorder.Child = new RegisterView();
+					loginPage.View = new RegisterView();
 				}
 			}
 			browser.IsEnabled = true;
