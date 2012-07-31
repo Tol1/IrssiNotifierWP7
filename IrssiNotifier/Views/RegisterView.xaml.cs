@@ -38,7 +38,7 @@ namespace IrssiNotifier.Views
 				}
 				else
 				{
-					Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorRegistration, parsed["errorMessage"])));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorRegistration, parsed["errorMessage"]), AppResources.ErrorTitle, MessageBoxButton.OK));
 					//TODO unsuccessful
 				}
 			};

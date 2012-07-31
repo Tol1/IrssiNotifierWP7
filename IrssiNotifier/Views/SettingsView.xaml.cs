@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using IrssiNotifier.Interfaces;
-using IrssiNotifier.Pages;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
 using Microsoft.Phone.Controls;
@@ -59,10 +58,16 @@ namespace IrssiNotifier.Views
 							return;
 						}
 					}
-					PushContext.Current.IsToastEnabled = value;
-					UpdateSettings("toast", value, Dispatcher);
-					NotifyPropertyChanged("IsToastEnabled");
-					NotifyPropertyChanged("IntervalBrush");
+					UpdateSettings("toast", value, Dispatcher, success =>
+					                                           	{
+					                                           		if (success)
+					                                           		{
+					                                           			PushContext.Current.IsToastEnabled = value;
+					                                           		}
+																	NotifyPropertyChanged("IsToastEnabled");
+																	NotifyPropertyChanged("IntervalBrush");
+					                                           	});
+					
 				}
 			}
 		}
@@ -74,8 +79,6 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsTileEnabled != value)
 				{
-					PushContext.Current.IsTileEnabled = value;
-					NotifyPropertyChanged("IsTileEnabled");
 					PinTile(value);
 				}
 				
@@ -89,9 +92,14 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsRawEnabled != value)
 				{
-					PushContext.Current.IsRawEnabled = value;
-					UpdateSettings("raw", value, Dispatcher);
-					NotifyPropertyChanged("IsRawEnabled");
+					UpdateSettings("raw", value, Dispatcher, success =>
+					                                         	{
+					                                         		if (success)
+					                                         		{
+					                                         			PushContext.Current.IsRawEnabled = value;
+					                                         		}
+					                                         		NotifyPropertyChanged("IsRawEnabled");
+					                                         	});
 				}
 			}
 		}
@@ -150,9 +158,14 @@ namespace IrssiNotifier.Views
 			{
 				if (GetOrCreate("Settings.ToastInterval", 15) != value)
 				{
-					SetOrCreate("Settings.ToastInterval", value);
-					UpdateSettings("toastinterval", value, Dispatcher);
-					NotifyPropertyChanged("ToastInterval");
+					UpdateSettings("toastinterval", value, Dispatcher, success =>
+					                                                   	{
+					                                                   		if (success)
+					                                                   		{
+					                                                   			SetOrCreate("Settings.ToastInterval", value);
+					                                                   		}
+					                                                   		NotifyPropertyChanged("ToastInterval");
+					                                                   	});
 				}
 			}
 		}
@@ -208,19 +221,21 @@ namespace IrssiNotifier.Views
 						{
 							dispatcher.BeginInvoke(() =>
 							                       	{
-							                       		MessageBox.Show(AppResources.LiveTileRemovedText);
-							                       		IsTileEnabled = false;
+							                       		MessageBox.Show(AppResources.LiveTileRemovedText, AppResources.ErrorTitle, MessageBoxButton.OK);
+							                       		IsTileEnabled = tileStatus = false;
 							                       	});
 						}
 					}
+					SkipUpdateBackend = true;
 					IsTileEnabled = tileStatus;
 					IsToastEnabled = toastStatus;
+					SkipUpdateBackend = false;
 					SetOrCreate("Settings.ToastInterval", int.Parse(result["toastInterval"].ToString()));
 					NotifyPropertyChanged("ToastInterval");
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
 						dispatcher.BeginInvoke( () =>
-							MessageBox.Show(AppResources.BackendErrorOccurredText));
+							MessageBox.Show(AppResources.BackendErrorOccurredText, AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
 				}
 				else
@@ -233,11 +248,11 @@ namespace IrssiNotifier.Views
 									switch (result["exceptionType"].ToString())
 									{
 										case "UserNotFoundException":
-											MessageBox.Show(AppResources.ErrorUserNotFound);
+											MessageBox.Show(AppResources.ErrorUserNotFound, AppResources.ErrorTitle, MessageBoxButton.OK);
 											break;
 										case "InvalidGUIDException":
 											MessageBox.Show(
-												AppResources.ErrorGuidNotFound);
+												AppResources.ErrorGuidNotFound, AppResources.ErrorTitle, MessageBoxButton.OK);
 											break;
 									}
 									PushContext.Current.Disconnect();
@@ -259,7 +274,7 @@ namespace IrssiNotifier.Views
 					}
 					else
 					{
-						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
+						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
 				}
 				ClearTileCount();
@@ -271,11 +286,16 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
 		}
 
-		private static void ClearTileCount()
+		private bool SkipUpdateBackend { get; set; }
+
+		private static void ClearTileCount(bool success = true)
 		{
-			foreach (var tile in ShellTile.ActiveTiles)
+			if (success)
 			{
-				tile.Update(new StandardTileData {Count = 0});
+				foreach (var tile in ShellTile.ActiveTiles)
+				{
+					tile.Update(new StandardTileData {Count = 0});
+				}
 			}
 		}
 
@@ -288,27 +308,45 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		private void UpdateSettings(string param, object value, Dispatcher dispatcher, Action callback = null)
+		private void UpdateSettings(string param, object value, Dispatcher dispatcher, Action<bool> callback)
 		{
+			if(SkipUpdateBackend)
+			{
+				callback(true);
+				return;
+			}
 			IsBusy = true;
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender1, args) =>
 			{
 				if (args.Error != null)
 				{
-					dispatcher.BeginInvoke(() => MessageBox.Show(args.Result));
-					return;
-				}
-				var result = JObject.Parse(args.Result);
-				if (!bool.Parse(result["success"].ToString()))
-				{
-					dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
+					var errorText = args.Error.Message;
+					var errorTitle = AppResources.ErrorTitle;
+					var exception = args.Error as WebException;
+					if (exception != null && exception.Response is HttpWebResponse)
+					{
+						var response = exception.Response as HttpWebResponse;
+						if (response.StatusCode == HttpStatusCode.NotFound)
+						{
+							errorText = AppResources.ConnectionErrorText;
+							errorTitle = AppResources.ConnectionErrorTitle;
+						}
+					}
+					dispatcher.BeginInvoke(() => MessageBox.Show(errorText, errorTitle, MessageBoxButton.OK));
+					callback(false);
 				}
 				else
 				{
-					if (callback != null)
+					var result = JObject.Parse(args.Result);
+					if (!bool.Parse(result["success"].ToString()))
 					{
-						callback();
+						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
+						callback(false);
+					}
+					else
+					{
+						callback(true);
 					}
 				}
 				IsBusy = false;
@@ -327,16 +365,24 @@ namespace IrssiNotifier.Views
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					UpdateSettings("tile", true, Dispatcher, () =>
+					UpdateSettings("tile", true, Dispatcher, success =>
 					                                         	{
-					                                         		var newTileData = new StandardTileData
-					                                         		                  	{
-					                                         		                  		BackgroundImage =
-					                                         		                  			new Uri("/Images/Tile.png", UriKind.Relative),
-					                                         		                  		Count = 0
-					                                         		                  	};
-					                                         		ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
-					                                         		                 newTileData);
+																	if (success)
+																	{
+																		var newTileData = new StandardTileData
+																		                  	{
+																		                  		BackgroundImage =
+																		                  			new Uri("/Images/Tile.png", UriKind.Relative),
+																		                  		Count = 0
+																		                  	};
+																		ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
+																		                 newTileData);
+																	}
+																	else
+																	{
+																		PushContext.Current.IsTileEnabled = false;
+																		NotifyPropertyChanged("IsTileEnabled");
+																	}
 					                                         	});
 				}
 				else
@@ -347,7 +393,18 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				UpdateSettings("tile", value, Dispatcher);
+				UpdateSettings("tile", value, Dispatcher, success =>
+				                                          	{
+				                                          		if(success)
+				                                          		{
+				                                          			PushContext.Current.IsTileEnabled = value;
+				                                          		}
+																else
+				                                          		{
+				                                          			PushContext.Current.IsTileEnabled = !value;
+				                                          		}
+																NotifyPropertyChanged("IsTileEnabled");
+				                                          	});
 			}
 			/*else if (!value && hiliteTile != null)
 			{

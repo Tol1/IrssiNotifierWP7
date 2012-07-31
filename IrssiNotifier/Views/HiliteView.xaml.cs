@@ -122,7 +122,7 @@ namespace IrssiNotifier.Views
 				var result = JObject.Parse(response);
 				if (!bool.Parse(result["success"].ToString()))
 				{
-					Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString()));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 				}
 				else
 				{
@@ -183,7 +183,7 @@ namespace IrssiNotifier.Views
 			}
 			catch (Exception e)
 			{
-				Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorFetchingMessagesEx, e)));
+				Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorFetchingMessagesEx, e), AppResources.ErrorTitle, MessageBoxButton.OK));
 			}
 			IsBusy = false;
 		}
@@ -197,7 +197,7 @@ namespace IrssiNotifier.Views
 				if (args.Error != null)
 				{
 					IsBusy = false;
-					Dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ErrorFetchingMessages));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ErrorFetchingMessages, AppResources.ErrorTitle, MessageBoxButton.OK));
 					return;
 				}
 				ParseResult(args.Result);
