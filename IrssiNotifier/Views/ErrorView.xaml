@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="IrssiNotifier.Views.ConnectionProblemView"
+﻿<UserControl x:Class="IrssiNotifier.Views.ErrorView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -28,10 +28,10 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Path=Strings.ConnectionErrorTitle, Source={StaticResource Strings}}" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
+                <TextBlock Text="{Binding Path=TitleText}" Grid.Row="0" Style="{StaticResource PhoneTextTitle2Style}"/>
                 <StackPanel Grid.Row="1">
-                    <TextBlock Text="{Binding Path=Strings.ConnectionErrorText, Source={StaticResource Strings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
-                    <TextBlock Text="{Binding Path=Strings.ConnectionErrorText2, Source={StaticResource Strings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Text="{Binding Path=MessageText1}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
+                    <TextBlock Text="{Binding Path=MessageText2}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
                 </StackPanel>
             </Grid>
             <StackPanel VerticalAlignment="Bottom">

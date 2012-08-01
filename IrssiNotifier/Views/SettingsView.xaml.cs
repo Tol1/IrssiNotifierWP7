@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using System.Linq;
@@ -187,27 +188,31 @@ namespace IrssiNotifier.Views
 			{
 				if (args.Error != null)
 				{
+					var errorTitleText = AppResources.ErrorTitle;
+					var errorMessage = args.Error.Message;
+					var errorMessage2 = "";
 					var exception = args.Error as WebException;
 					if (exception != null && exception.Response is HttpWebResponse)
 					{
 						var response = exception.Response as HttpWebResponse;
 						if (response.StatusCode == HttpStatusCode.NotFound)
 						{
-							Dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ConnectionErrorText, AppResources.ConnectionErrorTitle, MessageBoxButton.OK));
-							var page = App.GetCurrentPage() as ViewContainerPage;
-							if (page != null)
-							{
-								page.View = new ConnectionProblemView();
-								page.ApplicationBar = null;
-								while (page.NavigationService.CanGoBack)
-								{
-									page.NavigationService.RemoveBackEntry();
-								}
-								return;
-							}
+							errorTitleText = AppResources.ConnectionErrorTitle;
+							errorMessage = AppResources.ConnectionErrorText;
+							errorMessage2 = AppResources.ConnectionErrorText2;
 						}
 					}
-					Dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));//TODO geneerinen virhenäkymä
+					Dispatcher.BeginInvoke(() => MessageBox.Show(errorMessage, errorTitleText, MessageBoxButton.OK));
+					var page = App.GetCurrentPage() as ViewContainerPage;
+					if (page != null)
+					{
+						page.View = new ErrorView(errorTitleText, errorMessage, errorMessage2);
+						page.ApplicationBar = null;
+						while (page.NavigationService.CanGoBack)
+						{
+							page.NavigationService.RemoveBackEntry();
+						}
+					}
 					return;
 				}
 				var result = JObject.Parse(args.Result);
