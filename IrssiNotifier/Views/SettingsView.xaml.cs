@@ -58,7 +58,7 @@ namespace IrssiNotifier.Views
 							return;
 						}
 					}
-					UpdateSettings("toast", value, Dispatcher, success =>
+					UpdateSettings("toast", value, success =>
 					                                           	{
 					                                           		if (success)
 					                                           		{
@@ -92,7 +92,7 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsRawEnabled != value)
 				{
-					UpdateSettings("raw", value, Dispatcher, success =>
+					UpdateSettings("raw", value, success =>
 					                                         	{
 					                                         		if (success)
 					                                         		{
@@ -160,7 +160,7 @@ namespace IrssiNotifier.Views
 			{
 				if (GetOrCreate("Settings.ToastInterval", 15) != value)
 				{
-					UpdateSettings("toastinterval", value, Dispatcher, success =>
+					UpdateSettings("toastinterval", value, success =>
 					                                                   	{
 					                                                   		if (success)
 					                                                   		{
@@ -279,7 +279,7 @@ namespace IrssiNotifier.Views
 						Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
 				}
-				ClearTileCount();
+				ClearLocalTileCount();
 				if (callback != null) callback();
 				IsBusy = false;
 			};
@@ -291,7 +291,7 @@ namespace IrssiNotifier.Views
 
 		private bool SkipUpdateBackend { get; set; }
 
-		private static void ClearTileCount(bool success = true)
+		private static void ClearLocalTileCount(bool success = true)
 		{
 			if (success)
 			{
@@ -302,16 +302,16 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		public void ClearTileCount(Dispatcher dispatcher)
+		public void ClearTileCount()
 		{
 			if (PushContext.Current.IsConnected && IsPushEnabled && IsTileEnabled)
 			{
-				UpdateSettings("clearcount", true, dispatcher, ClearTileCount);
+				UpdateSettings("clearcount", true, ClearLocalTileCount);
 
 			}
 		}
 
-		private void UpdateSettings(string param, object value, Dispatcher dispatcher, Action<bool> callback)
+		private void UpdateSettings(string param, object value, Action<bool> callback)
 		{
 			if(SkipUpdateBackend)
 			{
@@ -336,7 +336,7 @@ namespace IrssiNotifier.Views
 							errorTitle = AppResources.ConnectionErrorTitle;
 						}
 					}
-					dispatcher.BeginInvoke(() => MessageBox.Show(errorText, errorTitle, MessageBoxButton.OK));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(errorText, errorTitle, MessageBoxButton.OK));
 					callback(false);
 				}
 				else
@@ -344,7 +344,7 @@ namespace IrssiNotifier.Views
 					var result = JObject.Parse(args.Result);
 					if (!bool.Parse(result["success"].ToString()))
 					{
-						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
+						Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 						callback(false);
 					}
 					else
@@ -368,7 +368,7 @@ namespace IrssiNotifier.Views
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					UpdateSettings("tile", true, Dispatcher, success =>
+					UpdateSettings("tile", true, success =>
 					                                         	{
 																	if (success)
 																	{
@@ -396,7 +396,7 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				UpdateSettings("tile", value, Dispatcher, success =>
+				UpdateSettings("tile", value, success =>
 				                                          	{
 				                                          		if(success)
 				                                          		{
@@ -480,12 +480,12 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		private void SetOrCreate<T>(string key, T value)
+		private static void SetOrCreate<T>(string key, T value)
 		{
 			IsolatedStorageSettings.ApplicationSettings[key] = value;
 		}
 
-		private T GetOrCreate<T>(string key, T defaultValue = default(T))
+		private static T GetOrCreate<T>(string key, T defaultValue = default(T))
 		{
 			T value;
 			if (IsolatedStorageSettings.ApplicationSettings.TryGetValue(key, out value))

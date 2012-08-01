@@ -212,7 +212,7 @@ namespace IrssiNotifier.Views
 		public void RefreshButtonClick(object sender, EventArgs e)
 		{
 			Fetch(true);
-			SettingsView.GetInstance().ClearTileCount(Dispatcher);
+			SettingsView.GetInstance().ClearTileCount();
 		}
 
 		public void SettingsButtonClick(object sender, EventArgs e)
