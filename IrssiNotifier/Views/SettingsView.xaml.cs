@@ -113,7 +113,7 @@ namespace IrssiNotifier.Views
 				{
 					if (value)
 					{
-						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, Dispatcher));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri));
 					}
 					else
 					{
@@ -178,7 +178,7 @@ namespace IrssiNotifier.Views
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public void RegisterChannelUri(Uri channelUri, Dispatcher dispatcher)
+		public void RegisterChannelUri(Uri channelUri)
 		{
 			IsBusy = true;
 			var webclient = new WebClient();
@@ -192,7 +192,7 @@ namespace IrssiNotifier.Views
 						var response = exception.Response as HttpWebResponse;
 						if (response.StatusCode == HttpStatusCode.NotFound)
 						{
-							dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ConnectionErrorText, AppResources.ConnectionErrorTitle, MessageBoxButton.OK));
+							Dispatcher.BeginInvoke(() => MessageBox.Show(AppResources.ConnectionErrorText, AppResources.ConnectionErrorTitle, MessageBoxButton.OK));
 							var page = App.GetCurrentPage() as ViewContainerPage;
 							if (page != null)
 							{
@@ -206,7 +206,7 @@ namespace IrssiNotifier.Views
 							}
 						}
 					}
-					dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));
 					return;
 				}
 				var result = JObject.Parse(args.Result);
@@ -219,7 +219,7 @@ namespace IrssiNotifier.Views
 						var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 						if (hiliteTile == null && IsPushEnabled)
 						{
-							dispatcher.BeginInvoke(() =>
+							Dispatcher.BeginInvoke(() =>
 							                       	{
 							                       		MessageBox.Show(AppResources.LiveTileRemovedText, AppResources.ErrorTitle, MessageBoxButton.OK);
 							                       		IsTileEnabled = tileStatus = false;
@@ -234,7 +234,7 @@ namespace IrssiNotifier.Views
 					NotifyPropertyChanged("ToastInterval");
 					if(bool.Parse(result["errorStatus"].ToString()))
 					{
-						dispatcher.BeginInvoke( () =>
+						Dispatcher.BeginInvoke( () =>
 							MessageBox.Show(AppResources.BackendErrorOccurredText, AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
 				}
@@ -242,7 +242,7 @@ namespace IrssiNotifier.Views
 				{
 					if (result["exceptionType"].ToString() == "UserNotFoundException" || result["exceptionType"].ToString() == "InvalidGUIDException")
 					{
-						dispatcher.BeginInvoke(
+						Dispatcher.BeginInvoke(
 							() =>
 								{
 									switch (result["exceptionType"].ToString())
@@ -274,7 +274,7 @@ namespace IrssiNotifier.Views
 					}
 					else
 					{
-						dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
+						Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
 				}
 				ClearTileCount();
@@ -462,6 +462,14 @@ namespace IrssiNotifier.Views
 				{
 					settingsPage.View = new ToastIntervalView();
 				}
+			}
+		}
+
+		public void Connect()
+		{
+			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
+			{
+				PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri));
 			}
 		}
 

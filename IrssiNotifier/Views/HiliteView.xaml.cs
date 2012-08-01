@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using IrssiNotifier.Model;
-using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
@@ -23,10 +22,7 @@ namespace IrssiNotifier.Views
 		{
 			InitializeComponent();
 			DataContext = this;
-			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
-			{
-				PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
-			}
+			SettingsView.GetInstance().Connect();
 			Fetch(true);
 			GenerateLocalizedAppBar();
 		}

@@ -1,5 +1,4 @@
 ﻿using System.IO.IsolatedStorage;
-using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Views;
 
 namespace IrssiNotifier.Pages
@@ -16,10 +15,7 @@ namespace IrssiNotifier.Pages
 			}
 			else
 			{
-				if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
-				{
-					PushContext.Current.Connect(Dispatcher, c => SettingsView.GetInstance().RegisterChannelUri(c.ChannelUri, Dispatcher));
-				}
+				SettingsView.GetInstance().Connect();
 				var view = new HiliteView();
 				ApplicationBar = view.ApplicationBar;
 				View = view;
