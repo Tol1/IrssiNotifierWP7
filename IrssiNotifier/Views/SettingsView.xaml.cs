@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using IrssiNotifier.Interfaces;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
@@ -59,15 +58,15 @@ namespace IrssiNotifier.Views
 						}
 					}
 					UpdateSettings("toast", value, success =>
-					                                           	{
-					                                           		if (success)
-					                                           		{
-					                                           			PushContext.Current.IsToastEnabled = value;
-					                                           		}
-																	NotifyPropertyChanged("IsToastEnabled");
-																	NotifyPropertyChanged("IntervalBrush");
-					                                           	});
-					
+					                               	{
+					                               		if (success)
+					                               		{
+					                               			PushContext.Current.IsToastEnabled = value;
+					                               		}
+					                               		NotifyPropertyChanged("IsToastEnabled");
+					                               		NotifyPropertyChanged("IntervalBrush");
+					                               	});
+
 				}
 			}
 		}
@@ -93,13 +92,13 @@ namespace IrssiNotifier.Views
 				if (PushContext.Current.IsRawEnabled != value)
 				{
 					UpdateSettings("raw", value, success =>
-					                                         	{
-					                                         		if (success)
-					                                         		{
-					                                         			PushContext.Current.IsRawEnabled = value;
-					                                         		}
-					                                         		NotifyPropertyChanged("IsRawEnabled");
-					                                         	});
+					                             	{
+					                             		if (success)
+					                             		{
+					                             			PushContext.Current.IsRawEnabled = value;
+					                             		}
+					                             		NotifyPropertyChanged("IsRawEnabled");
+					                             	});
 				}
 			}
 		}
@@ -228,10 +227,12 @@ namespace IrssiNotifier.Views
 							                       	});
 						}
 					}
+
 					SkipUpdateBackend = true;
 					IsTileEnabled = tileStatus;
 					IsToastEnabled = toastStatus;
 					SkipUpdateBackend = false;
+
 					SetOrCreate("Settings.ToastInterval", int.Parse(result["toastInterval"].ToString()));
 					NotifyPropertyChanged("ToastInterval");
 					if(bool.Parse(result["errorStatus"].ToString()))
@@ -272,12 +273,12 @@ namespace IrssiNotifier.Views
 									PhoneApplicationService.Current.State["logout"] = true;
 									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml?error=true", UriKind.Relative));
 								});
-						return;
 					}
 					else
 					{
 						Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
 					}
+					return;
 				}
 				ClearLocalTileCount();
 				if (callback != null) callback();
@@ -369,24 +370,24 @@ namespace IrssiNotifier.Views
 				if (answer == MessageBoxResult.OK)
 				{
 					UpdateSettings("tile", true, success =>
-					                                         	{
-																	if (success)
-																	{
-																		var newTileData = new StandardTileData
-																		                  	{
-																		                  		BackgroundImage =
-																		                  			new Uri("/Images/Tile.png", UriKind.Relative),
-																		                  		Count = 0
-																		                  	};
-																		ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
-																		                 newTileData);
-																	}
-																	else
-																	{
-																		PushContext.Current.IsTileEnabled = false;
-																		NotifyPropertyChanged("IsTileEnabled");
-																	}
-					                                         	});
+					                             	{
+					                             		if (success)
+					                             		{
+					                             			var newTileData = new StandardTileData
+					                             			                  	{
+					                             			                  		BackgroundImage =
+					                             			                  			new Uri("/Images/Tile.png", UriKind.Relative),
+					                             			                  		Count = 0
+					                             			                  	};
+					                             			ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
+					                             			                 newTileData);
+					                             		}
+					                             		else
+					                             		{
+					                             			PushContext.Current.IsTileEnabled = false;
+					                             			NotifyPropertyChanged("IsTileEnabled");
+					                             		}
+					                             	});
 				}
 				else
 				{
@@ -397,17 +398,17 @@ namespace IrssiNotifier.Views
 			else
 			{
 				UpdateSettings("tile", value, success =>
-				                                          	{
-				                                          		if(success)
-				                                          		{
-				                                          			PushContext.Current.IsTileEnabled = value;
-				                                          		}
-																else
-				                                          		{
-				                                          			PushContext.Current.IsTileEnabled = !value;
-				                                          		}
-																NotifyPropertyChanged("IsTileEnabled");
-				                                          	});
+				                              	{
+				                              		if (success)
+				                              		{
+				                              			PushContext.Current.IsTileEnabled = value;
+				                              		}
+				                              		else
+				                              		{
+				                              			PushContext.Current.IsTileEnabled = !value;
+				                              		}
+				                              		NotifyPropertyChanged("IsTileEnabled");
+				                              	});
 			}
 			/*else if (!value && hiliteTile != null)
 			{
