@@ -133,6 +133,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Voit yrittää yhdistämistä uudelleen klikkaamalla &quot;Yritä uudelleen&quot;..
+        /// </summary>
+        public static string ConnectionErrorText2 {
+            get {
+                return ResourceManager.GetString("ConnectionErrorText2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yhteysongelma.
         /// </summary>
         public static string ConnectionErrorTitle {
@@ -174,6 +183,15 @@ namespace IrssiNotifier.Resources {
         public static string ErrorGuidNotFound {
             get {
                 return ResourceManager.GetString("ErrorGuidNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tapahtui virhe.
+        /// </summary>
+        public static string ErrorPageTitle {
+            get {
+                return ResourceManager.GetString("ErrorPageTitle", resourceCulture);
             }
         }
         
@@ -345,6 +363,15 @@ namespace IrssiNotifier.Resources {
         public static string RegisterButtonText {
             get {
                 return ResourceManager.GetString("RegisterButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yritä uudelleen.
+        /// </summary>
+        public static string RetryButtonText {
+            get {
+                return ResourceManager.GetString("RetryButtonText", resourceCulture);
             }
         }
         

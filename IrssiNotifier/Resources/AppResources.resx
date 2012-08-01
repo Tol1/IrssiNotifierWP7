@@ -141,6 +141,9 @@
   <data name="ConnectionErrorText" xml:space="preserve">
     <value>Ongelma yhdistettäessä palvelimelle. Varmista että puhelimen datayhteys on päällä.</value>
   </data>
+  <data name="ConnectionErrorText2" xml:space="preserve">
+    <value>Voit yrittää yhdistämistä uudelleen klikkaamalla "Yritä uudelleen".</value>
+  </data>
   <data name="ConnectionErrorTitle" xml:space="preserve">
     <value>Yhteysongelma</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="ErrorGuidNotFound" xml:space="preserve">
     <value>Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Tapahtui virhe</value>
   </data>
   <data name="ErrorRegistration" xml:space="preserve">
     <value>Virhe rekisteröinnissä: {0}</value>
@@ -212,6 +218,9 @@
   </data>
   <data name="RegisterButtonText" xml:space="preserve">
     <value>Rekisteröidy</value>
+  </data>
+  <data name="RetryButtonText" xml:space="preserve">
+    <value>Yritä uudelleen</value>
   </data>
   <data name="SettingsButtonText" xml:space="preserve">
     <value>Asetukset</value>
