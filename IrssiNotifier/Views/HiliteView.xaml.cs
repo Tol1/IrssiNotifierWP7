@@ -22,8 +22,8 @@ namespace IrssiNotifier.Views
 		{
 			InitializeComponent();
 			DataContext = this;
-			SettingsView.GetInstance().Connect();
-			Fetch(true);
+			IsBusy = true;
+			SettingsView.GetInstance().Connect(() => Fetch(true));
 			GenerateLocalizedAppBar();
 		}
 

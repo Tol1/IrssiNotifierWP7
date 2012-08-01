@@ -15,10 +15,13 @@ namespace IrssiNotifier.Pages
 			}
 			else
 			{
-				SettingsView.GetInstance().Connect();
-				var view = new HiliteView();
-				ApplicationBar = view.ApplicationBar;
-				View = view;
+				View = new LoadingView();
+				SettingsView.GetInstance().Connect(() =>
+				                                   	{
+				                                   		var view = new HiliteView();
+				                                   		ApplicationBar = view.ApplicationBar;
+				                                   		View = view;
+				                                   	});
 			}
 		}
 	}

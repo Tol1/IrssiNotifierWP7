@@ -16,9 +16,14 @@ namespace IrssiNotifier.Views
 			var page = App.GetCurrentPage() as ViewContainerPage;
 			if(page != null)
 			{
-				var view = new HiliteView();
-				page.View = view;
-				page.ApplicationBar = view.ApplicationBar;
+				page.View = new LoadingView();
+				SettingsView.GetInstance().Connect(() =>
+				                                   	{
+				                                   		var view = new HiliteView();
+				                                   		page.View = view;
+				                                   		page.ApplicationBar = view.ApplicationBar;
+				                                   	});
+
 			}
 		}
 	}

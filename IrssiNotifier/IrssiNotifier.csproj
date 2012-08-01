@@ -111,6 +111,9 @@
     <Compile Include="Views\InitialView.xaml.cs">
       <DependentUpon>InitialView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LoadingView.xaml.cs">
+      <DependentUpon>LoadingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -158,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InitialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoadingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

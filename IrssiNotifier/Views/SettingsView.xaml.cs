@@ -111,13 +111,15 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsConnected != value)
 				{
+					IsBusy = true;
 					if (value)
 					{
-						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, () => IsBusy = false));
 					}
 					else
 					{
 						PushContext.Current.Disconnect();
+						IsBusy = false;
 					}
 					PushContext.Current.IsPushEnabled = value;
 					NotifyPropertyChanged("IsPushEnabled");
@@ -178,7 +180,7 @@ namespace IrssiNotifier.Views
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public void RegisterChannelUri(Uri channelUri)
+		public void RegisterChannelUri(Uri channelUri, Action callback)
 		{
 			IsBusy = true;
 			var webclient = new WebClient();
@@ -206,7 +208,7 @@ namespace IrssiNotifier.Views
 							}
 						}
 					}
-					Dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));
+					Dispatcher.BeginInvoke(() => MessageBox.Show(args.Error.Message, AppResources.ErrorTitle, MessageBoxButton.OK));//TODO geneerinen virhenäkymä
 					return;
 				}
 				var result = JObject.Parse(args.Result);
@@ -278,6 +280,7 @@ namespace IrssiNotifier.Views
 					}
 				}
 				ClearTileCount();
+				if (callback != null) callback();
 				IsBusy = false;
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
@@ -465,11 +468,15 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		public void Connect()
+		public void Connect(Action callback)
 		{
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri));
+				PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, callback));
+			}
+			else
+			{
+				callback();
 			}
 		}
 

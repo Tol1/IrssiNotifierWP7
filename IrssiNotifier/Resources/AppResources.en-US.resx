@@ -189,6 +189,9 @@
   <data name="LiveTileRemovedText" xml:space="preserve">
     <value>Live tile has been deleted. Live tile notifications are disabled.</value>
   </data>
+  <data name="LoadingText" xml:space="preserve">
+    <value>Connecting server...</value>
+  </data>
   <data name="LoginTitle" xml:space="preserve">
     <value>Login</value>
   </data>

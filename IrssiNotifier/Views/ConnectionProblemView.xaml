@@ -37,7 +37,6 @@
             <StackPanel VerticalAlignment="Bottom">
                 <Button x:Name="RetryButton" Click="RetryClick" Content="{Binding Path=Strings.RetryButtonText, Source={StaticResource Strings}}"/>
             </StackPanel>
-
         </Grid>
     </Grid>
 </UserControl>

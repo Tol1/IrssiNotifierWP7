@@ -29,10 +29,14 @@ namespace IrssiNotifier.Pages
 
 		private void ShowMainView()
 		{
-			SettingsView.GetInstance().Connect();
-			var view = new HiliteView();
-			ApplicationBar = view.ApplicationBar;
-			View = view;
+			View = new LoadingView();
+			SettingsView.GetInstance().Connect(() =>
+			                                   	{
+			                                   		var view = new HiliteView();
+			                                   		ApplicationBar = view.ApplicationBar;
+			                                   		View = view;
+			                                   	});
+
 		}
 
 		protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)

@@ -189,6 +189,9 @@
   <data name="LiveTileRemovedText" xml:space="preserve">
     <value>Livetiili poistettu. Poistetaan livetiili-päivitykset käytöstä.</value>
   </data>
+  <data name="LoadingText" xml:space="preserve">
+    <value>Yhdistetään palvelimelle...</value>
+  </data>
   <data name="LoginTitle" xml:space="preserve">
     <value>Kirjautuminen</value>
   </data>

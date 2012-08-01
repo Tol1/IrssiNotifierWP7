@@ -277,6 +277,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yhdistetään palvelimelle....
+        /// </summary>
+        public static string LoadingText {
+            get {
+                return ResourceManager.GetString("LoadingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kirjautuminen.
         /// </summary>
         public static string LoginTitle {
