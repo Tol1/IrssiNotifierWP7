@@ -8,10 +8,11 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="480" d:DesignWidth="480">
+    d:DesignHeight="800" d:DesignWidth="480">
     
     <Grid x:Name="LayoutRoot">
-        <toolkit:PerformanceProgressBar IsIndeterminate="True"/>
+        <Image Source="/Images/LoadingBackground.png" Opacity="0.4" />
         <TextBlock Text="{Binding Path=Strings.LoadingText, Source={StaticResource Strings}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,50"/>
+        <toolkit:PerformanceProgressBar IsIndeterminate="True"/>
     </Grid>
 </UserControl>
