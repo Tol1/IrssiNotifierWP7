@@ -80,7 +80,6 @@ namespace IrssiNotifier.Views
 				{
 					PinTile(value);
 				}
-				
 			}
 		}
 
@@ -225,10 +224,10 @@ namespace IrssiNotifier.Views
 						if (hiliteTile == null && IsPushEnabled)
 						{
 							Dispatcher.BeginInvoke(() =>
-							                       	{
-							                       		MessageBox.Show(AppResources.LiveTileRemovedText, AppResources.ErrorTitle, MessageBoxButton.OK);
-							                       		IsTileEnabled = tileStatus = false;
-							                       	});
+																			{
+																				MessageBox.Show(AppResources.LiveTileRemovedText, AppResources.ErrorTitle, MessageBoxButton.OK);
+																				IsTileEnabled = tileStatus = false;
+																			});
 						}
 					}
 
@@ -275,7 +274,7 @@ namespace IrssiNotifier.Views
 										currentPage.NavigationService.RemoveBackEntry();
 									}
 									PhoneApplicationService.Current.State["logout"] = true;
-									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml?error=true", UriKind.Relative));
+									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml?error="+DateTime.Now.Ticks, UriKind.Relative));
 								});
 					}
 					else
@@ -290,7 +289,7 @@ namespace IrssiNotifier.Views
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
-			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                            "apiToken=" + UserId + "&guid=" +
 			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
 		}
 
@@ -361,7 +360,7 @@ namespace IrssiNotifier.Views
 			};
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST",
-			                            "apiToken=" + IsolatedStorageSettings.ApplicationSettings["userID"] + "&guid=" +
+			                            "apiToken=" + UserId + "&guid=" +
 			                            App.AppGuid + "&" + param + "=" + value + "&version=" + App.Version);
 		}
 
@@ -456,7 +455,7 @@ namespace IrssiNotifier.Views
 					                     			settingsPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 					                     		}
 					                     	};
-					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));
+					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));	//TODO navigationFailed
 				}
 			}
 		}
