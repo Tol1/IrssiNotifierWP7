@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using IrssiNotifier.Interfaces;
-using IrssiNotifier.Pages;
 
 namespace IrssiNotifier.Views
 {

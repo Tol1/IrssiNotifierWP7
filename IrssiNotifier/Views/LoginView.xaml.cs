@@ -1,6 +1,5 @@
 ﻿using System;
 using IrssiNotifier.Interfaces;
-using IrssiNotifier.Pages;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
