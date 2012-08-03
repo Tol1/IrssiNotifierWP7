@@ -12,7 +12,7 @@
     
     <Grid x:Name="LayoutRoot">
         <Image Source="/SplashScreenImage.jpg" Opacity="0.4" Stretch="None" VerticalAlignment="Bottom" />
-        <TextBlock Text="{Binding Path=Strings.LoadingText, Source={StaticResource Strings}}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="10" Margin="0,0,0,250"/>
-        <toolkit:PerformanceProgressBar IsIndeterminate="True" Margin="0,0,0,250" VerticalAlignment="Bottom" />
+        <TextBlock Text="{Binding Path=Strings.LoadingText, Source={StaticResource Strings}}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="0,0,0,20" Margin="0,0,0,230"/>
+        <toolkit:PerformanceProgressBar IsIndeterminate="True" Margin="0,0,0,230" VerticalAlignment="Bottom" />
     </Grid>
 </UserControl>
