@@ -159,6 +159,9 @@
   <data name="ErrorGuidNotFound" xml:space="preserve">
     <value>Your phone is not registered or it's identification data has been changed. Please re-register.</value>
   </data>
+  <data name="ErrorLogoutFailed" xml:space="preserve">
+    <value>Logout from Google failed. Please check your data connection. Re-registration with another account may not be possible without logging out. Do you want to continue without logging out from Google?</value>
+  </data>
   <data name="ErrorPageTitle" xml:space="preserve">
     <value>Error occurred</value>
   </data>
@@ -166,7 +169,7 @@
     <value>Error on registration: {0}</value>
   </data>
   <data name="ErrorRegistrationTryAgain" xml:space="preserve">
-    <value>Please check the internet connection of your phone and try registration again later.</value>
+    <value>Please check the data connection of your phone and try registration again later.</value>
   </data>
   <data name="ErrorTitle" xml:space="preserve">
     <value>Error</value>

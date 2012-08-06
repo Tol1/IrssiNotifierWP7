@@ -187,6 +187,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uloskirjautuminen Googlesta epäonnistui. Tarkista puhelimen datayhteys. Puhelimen uudelleenrekisteröinti toisella käyttäjätunnuksella ei välttämättä onnistu. Haluatko jatkaa kirjautumatta ulos Googlesta?.
+        /// </summary>
+        public static string ErrorLogoutFailed {
+            get {
+                return ResourceManager.GetString("ErrorLogoutFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tapahtui virhe.
         /// </summary>
         public static string ErrorPageTitle {
@@ -205,7 +214,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Varmistakaa puhelimenne internet-yhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen..
+        ///   Looks up a localized string similar to Varmistakaa puhelimenne datayhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen..
         /// </summary>
         public static string ErrorRegistrationTryAgain {
             get {

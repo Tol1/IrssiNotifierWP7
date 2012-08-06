@@ -4,6 +4,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using IrssiNotifier.Interfaces;
 using IrssiNotifier.PushNotificationContext;
@@ -440,24 +441,50 @@ namespace IrssiNotifier.Views
 					                     	{
 					                     		if (args.Uri.ToString().EndsWith("client/logout/logoutsuccess"))
 					                     		{
-					                     			IsPushEnabled = false;
-					                     			IsTileEnabled = false;
-					                     			IsToastEnabled = false;
-					                     			IsolatedStorageSettings.ApplicationSettings.Remove("userID");
-					                     			App.AppGuid = Guid.NewGuid().ToString();
-					                     			IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
-					                     			while (settingsPage.NavigationService.CanGoBack)
-					                     			{
-					                     				settingsPage.NavigationService.RemoveBackEntry();
-					                     			}
-					                     			IsBusy = false;
-					                     			PhoneApplicationService.Current.State["logout"] = true;
-					                     			settingsPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+					                     			HandleLogout(settingsPage);
+					                     		}
+												else
+					                     		{
+													ConfirmLogoutWithoutGoogle(settingsPage);
 					                     		}
 					                     	};
-					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));	//TODO navigationFailed
+					browser.NavigationFailed += (o, args) => ConfirmLogoutWithoutGoogle(settingsPage);
+					browser.Navigate(new Uri(App.Baseaddress + "client/logouts"));
 				}
 			}
+		}
+
+		private void ConfirmLogoutWithoutGoogle(ViewContainerPage settingsPage)
+		{
+			var continueAnswer = MessageBox.Show(AppResources.ErrorLogoutFailed,
+			                                     AppResources.ErrorTitle,
+			                                     MessageBoxButton.OKCancel);
+			if (continueAnswer == MessageBoxResult.OK)
+			{
+				HandleLogout(settingsPage);
+			}
+			else
+			{
+				IsBusy = false;
+				settingsPage.View = GetInstance();
+			}
+		}
+
+		private void HandleLogout(Page settingsPage)
+		{
+			IsPushEnabled = false;
+			IsTileEnabled = false;
+			IsToastEnabled = false;
+			IsolatedStorageSettings.ApplicationSettings.Remove("userID");
+			App.AppGuid = Guid.NewGuid().ToString();
+			IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
+			while (settingsPage.NavigationService.CanGoBack)
+			{
+				settingsPage.NavigationService.RemoveBackEntry();
+			}
+			IsBusy = false;
+			PhoneApplicationService.Current.State["logout"] = true;
+			settingsPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 		}
 
 		private void IntervalTimeOnTap(object sender, GestureEventArgs e)

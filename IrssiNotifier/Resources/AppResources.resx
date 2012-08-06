@@ -159,6 +159,9 @@
   <data name="ErrorGuidNotFound" xml:space="preserve">
     <value>Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja rekisteröi puhelin uudelleen.</value>
   </data>
+  <data name="ErrorLogoutFailed" xml:space="preserve">
+    <value>Uloskirjautuminen Googlesta epäonnistui. Tarkista puhelimen datayhteys. Puhelimen uudelleenrekisteröinti toisella käyttäjätunnuksella ei välttämättä onnistu. Haluatko jatkaa kirjautumatta ulos Googlesta?</value>
+  </data>
   <data name="ErrorPageTitle" xml:space="preserve">
     <value>Tapahtui virhe</value>
   </data>
@@ -166,7 +169,7 @@
     <value>Virhe rekisteröinnissä: {0}</value>
   </data>
   <data name="ErrorRegistrationTryAgain" xml:space="preserve">
-    <value>Varmistakaa puhelimenne internet-yhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen.</value>
+    <value>Varmistakaa puhelimenne datayhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen.</value>
   </data>
   <data name="ErrorTitle" xml:space="preserve">
     <value>Virhe</value>
