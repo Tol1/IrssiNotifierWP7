@@ -157,7 +157,7 @@
     <value>Virhe viestien noutamisessa: {0}</value>
   </data>
   <data name="ErrorGuidNotFound" xml:space="preserve">
-    <value>Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen.</value>
+    <value>Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja rekisteröi puhelin uudelleen.</value>
   </data>
   <data name="ErrorPageTitle" xml:space="preserve">
     <value>Tapahtui virhe</value>
@@ -165,11 +165,14 @@
   <data name="ErrorRegistration" xml:space="preserve">
     <value>Virhe rekisteröinnissä: {0}</value>
   </data>
+  <data name="ErrorRegistrationTryAgain" xml:space="preserve">
+    <value>Varmistakaa puhelimenne internet-yhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen.</value>
+  </data>
   <data name="ErrorTitle" xml:space="preserve">
     <value>Virhe</value>
   </data>
   <data name="ErrorUserNotFound" xml:space="preserve">
-    <value>Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen.</value>
+    <value>Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja rekisteröidy uudelleen.</value>
   </data>
   <data name="FrontPageTitle" xml:space="preserve">
     <value>Etusivu</value>

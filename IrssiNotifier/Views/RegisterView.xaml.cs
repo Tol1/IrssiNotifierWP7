@@ -22,6 +22,15 @@ namespace IrssiNotifier.Views
 			var webclient = new WebClient();
 			webclient.UploadStringCompleted += (sender, args) =>
 			{
+				if(args.Error != null)
+				{
+					Dispatcher.BeginInvoke(() =>
+						MessageBox.Show(string.Format(AppResources.ErrorRegistration, args.Error.Message) + "\n\n" + AppResources.ErrorRegistrationTryAgain, AppResources.ErrorTitle,
+										MessageBoxButton.OK));
+					PhoneApplicationService.Current.State["logout"] = true;
+					App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+					return;
+				}
 				var result = args.Result;
 				var parsed = JObject.Parse(result);
 				IsBusy = false;
@@ -39,7 +48,8 @@ namespace IrssiNotifier.Views
 				else
 				{
 					Dispatcher.BeginInvoke(() => MessageBox.Show(string.Format(AppResources.ErrorRegistration, parsed["errorMessage"]), AppResources.ErrorTitle, MessageBoxButton.OK));
-					//TODO unsuccessful
+					PhoneApplicationService.Current.State["logout"] = true;		//Navigointi etusivulle, elegantimpia ratkaisuja?
+					App.GetCurrentPage().NavigationService.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 				}
 			};
 			var cookies = PhoneApplicationService.Current.State["cookies"] as CookieCollection;

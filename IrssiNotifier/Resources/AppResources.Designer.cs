@@ -178,7 +178,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja kirjaudu uudelleen..
+        ///   Looks up a localized string similar to Puhelintasi ei ole rekisteröity palveluun tai sen tunniste on muuttunut. Ole hyvä ja rekisteröi puhelin uudelleen..
         /// </summary>
         public static string ErrorGuidNotFound {
             get {
@@ -205,6 +205,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Varmistakaa puhelimenne internet-yhteyden toiminta ja yrittäkää rekisteröintiä myöhemmin uudelleen..
+        /// </summary>
+        public static string ErrorRegistrationTryAgain {
+            get {
+                return ResourceManager.GetString("ErrorRegistrationTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Virhe.
         /// </summary>
         public static string ErrorTitle {
@@ -214,7 +223,7 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja kirjaudu uudelleen..
+        ///   Looks up a localized string similar to Käyttäjätietojasi ei löytynyt palvelusta. Ole hyvä ja rekisteröidy uudelleen..
         /// </summary>
         public static string ErrorUserNotFound {
             get {
