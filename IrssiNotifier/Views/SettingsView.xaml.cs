@@ -449,7 +449,7 @@ namespace IrssiNotifier.Views
 					                     		}
 					                     	};
 					browser.NavigationFailed += (o, args) => ConfirmLogoutWithoutGoogle(settingsPage);
-					browser.Navigate(new Uri(App.Baseaddress + "client/logouts"));
+					browser.Navigate(new Uri(App.Baseaddress + "client/logout"));
 				}
 			}
 		}
