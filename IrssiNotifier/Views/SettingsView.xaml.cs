@@ -111,6 +111,7 @@ namespace IrssiNotifier.Views
 				if (PushContext.Current.IsConnected != value)
 				{
 					IsBusy = true;
+					PushContext.Current.IsPushEnabled = value;
 					if (value)
 					{
 						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, () => IsBusy = false));
@@ -120,7 +121,6 @@ namespace IrssiNotifier.Views
 						PushContext.Current.Disconnect();
 						IsBusy = false;
 					}
-					PushContext.Current.IsPushEnabled = value;
 					NotifyPropertyChanged("IsPushEnabled");
 					NotifyPropertyChanged("IsSettingsEnabled");
 					NotifyPropertyChanged("IntervalBrush");

@@ -197,8 +197,15 @@ namespace IrssiNotifier.PushNotificationContext
         }
 
         private void SubscribeToNotificationEvents()
-        {            
-            // Register to raw notifications.
+        {
+        	NotificationChannel.ErrorOccurred += (sender, args) =>
+        	                                     	{
+        	                                     		if (args.ErrorType == ChannelErrorType.ChannelOpenFailed)
+        	                                     		{
+															//TODO try again
+        	                                     		}
+        	                                     	};
+			// Register to raw notifications.
             NotificationChannel.HttpNotificationReceived += (s, e) =>
             {
                 if (IsPushEnabled & IsRawEnabled)

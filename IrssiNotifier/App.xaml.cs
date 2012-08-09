@@ -3,6 +3,7 @@ using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Navigation;
 using IrssiNotifier.PushNotificationContext;
+using IrssiNotifier.Resources;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
@@ -96,6 +97,7 @@ namespace IrssiNotifier
 			{
 				_pushContext = PushContext.Current;
 			}
+			_pushContext.Error += OnPushContextError;
 		}
 
 		// Code to execute when the application is activated (brought to foreground)
@@ -109,6 +111,15 @@ namespace IrssiNotifier
 			catch (InvalidOperationException)
 			{
 				_pushContext = PushContext.Current;
+			}
+			_pushContext.Error += OnPushContextError;
+		}
+
+		private static void OnPushContextError(object sender, PushContextErrorEventArgs args)
+		{
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				MessageBox.Show("Push Context Error: "+args.Exception.Message, AppResources.ErrorTitle, MessageBoxButton.OK);
 			}
 		}
 
