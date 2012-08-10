@@ -195,6 +195,9 @@
   <data name="LiveTileRemovedText" xml:space="preserve">
     <value>Live tile has been deleted. Live tile notifications are disabled.</value>
   </data>
+  <data name="LoadingChannelText" xml:space="preserve">
+    <value>Opening Notification Channel...</value>
+  </data>
   <data name="LoadingText" xml:space="preserve">
     <value>Connecting server...</value>
   </data>

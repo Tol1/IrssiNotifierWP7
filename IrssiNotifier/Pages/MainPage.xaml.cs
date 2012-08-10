@@ -35,7 +35,7 @@ namespace IrssiNotifier.Pages
 			                                   		var view = new HiliteView();
 			                                   		ApplicationBar = view.ApplicationBar;
 			                                   		View = view;
-			                                   	});
+			                                   	}, View as LoadingView);
 
 		}
 

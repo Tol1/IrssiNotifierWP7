@@ -295,6 +295,15 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Avataan notifikaatiokanavaa....
+        /// </summary>
+        public static string LoadingChannelText {
+            get {
+                return ResourceManager.GetString("LoadingChannelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yhdistetään palvelimelle....
         /// </summary>
         public static string LoadingText {

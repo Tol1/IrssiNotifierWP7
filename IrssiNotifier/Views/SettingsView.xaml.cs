@@ -111,15 +111,19 @@ namespace IrssiNotifier.Views
 				if (PushContext.Current.IsConnected != value)
 				{
 					IsBusy = true;
-					PushContext.Current.IsPushEnabled = value;
 					if (value)
 					{
-						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, () => IsBusy = false));
+						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, () =>
+						                                                                              {
+						                                                                              	IsBusy = false;
+						                                                                              	PushContext.Current.IsPushEnabled = true;
+						                                                                              }));
 					}
 					else
 					{
-						PushContext.Current.Disconnect();
 						IsBusy = false;
+						PushContext.Current.IsPushEnabled = false;
+						PushContext.Current.Disconnect();
 					}
 					NotifyPropertyChanged("IsPushEnabled");
 					NotifyPropertyChanged("IsSettingsEnabled");
@@ -262,10 +266,10 @@ namespace IrssiNotifier.Views
 												AppResources.ErrorGuidNotFound, AppResources.ErrorTitle, MessageBoxButton.OK);
 											break;
 									}
-									PushContext.Current.Disconnect();
 									PushContext.Current.IsPushEnabled = false;
 									PushContext.Current.IsTileEnabled = false;
 									PushContext.Current.IsToastEnabled = false;
+									PushContext.Current.Disconnect();
 									IsolatedStorageSettings.ApplicationSettings.Remove("userID");
 									App.AppGuid = Guid.NewGuid().ToString();
 									IsolatedStorageSettings.ApplicationSettings["GUID"] = App.AppGuid;
@@ -499,11 +503,18 @@ namespace IrssiNotifier.Views
 			}
 		}
 
-		public void Connect(Action callback)
+		public void Connect(Action callback, LoadingView loadingView = null)
 		{
 			if (PushContext.Current.IsPushEnabled && !PushContext.Current.IsConnected)
 			{
-				PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, callback));
+				PushContext.Current.Connect(Dispatcher, c =>
+				                                        {
+				                                        	if (loadingView != null)
+				                                        	{
+				                                        		loadingView.Text = AppResources.LoadingText;
+				                                        	}
+				                                        	RegisterChannelUri(c.ChannelUri, callback);
+				                                        });
 			}
 			else
 			{

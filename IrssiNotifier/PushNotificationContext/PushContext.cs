@@ -3,358 +3,365 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Phone.Notification;
 
 namespace IrssiNotifier.PushNotificationContext
 {
-    public sealed class PushContext : INotifyPropertyChanged
-    {
-        #region Fields
+	public sealed class PushContext : INotifyPropertyChanged
+	{
+		#region Fields
 
-        private readonly IsolatedStorageSettings _settings = IsolatedStorageSettings.ApplicationSettings;
-        private static PushContext _current;
-        private bool _isConnected; 
+		private readonly IsolatedStorageSettings _settings = IsolatedStorageSettings.ApplicationSettings;
+		private static PushContext _current;
+		private bool _isConnected;
 
-        #endregion
+		#endregion
 
-        #region Properties
-        private Dispatcher Dispatcher { get; set; }
+		#region Properties
 
-        public string ChannelName { get; private set; }
-        public string ServiceName { get; private set; }
-        public IList<Uri> AllowedDomains { get; private set; }
-        public HttpNotificationChannel NotificationChannel { get; private set; }
+		private Dispatcher Dispatcher { get; set; }
 
-        public static PushContext Current
-        {
-            get { return _current; }
-        }
+		public string ChannelName { get; private set; }
+		public string ServiceName { get; private set; }
+		public IList<Uri> AllowedDomains { get; private set; }
+		public HttpNotificationChannel NotificationChannel { get; private set; }
 
-        public bool IsConnected
-        {
-            get { return _isConnected; }
-            set
-            {
-                if (_isConnected != value)
-                {
-                    _isConnected = value;
-                    NotifyPropertyChanged("IsConnected");
-                }
-            }
-        }
+		public static PushContext Current
+		{
+			get { return _current; }
+		}
 
-        public bool IsPushEnabled
-        {
-            get { return GetOrCreate("PushContext.IsPushEnabled", false); }
-            set
-            {
-                SetOrCreate("PushContext.IsPushEnabled", value);
-                UpdateNotificationBindings();
-                NotifyPropertyChanged("IsPushEnabled");
-            }
-        }
+		public bool IsConnected
+		{
+			get { return _isConnected; }
+			set
+			{
+				if (_isConnected != value)
+				{
+					_isConnected = value;
+					NotifyPropertyChanged("IsConnected");
+				}
+			}
+		}
 
-        public bool IsTileEnabled
-        {
-            get { return GetOrCreate("PushContext.IsTileEnabled", true); }
-            set
-            {
-                SetOrCreate("PushContext.IsTileEnabled", value);
-                UpdateNotificationBindings();
-                NotifyPropertyChanged("IsTileEnabled");
-            }
-        }
+		public bool IsPushEnabled
+		{
+			get { return GetOrCreate("PushContext.IsPushEnabled", false); }
+			set
+			{
+				SetOrCreate("PushContext.IsPushEnabled", value);
+				UpdateNotificationBindings();
+				NotifyPropertyChanged("IsPushEnabled");
+			}
+		}
 
-        public bool IsToastEnabled
-        {
-            get { return GetOrCreate("PushContext.IsToastEnabled", true); }
-            set
-            {
-                SetOrCreate("PushContext.IsToastEnabled", value);
-                UpdateNotificationBindings();
-                NotifyPropertyChanged("IsToastEnabled");
-            }
-        }
+		public bool IsTileEnabled
+		{
+			get { return GetOrCreate("PushContext.IsTileEnabled", true); }
+			set
+			{
+				SetOrCreate("PushContext.IsTileEnabled", value);
+				UpdateNotificationBindings();
+				NotifyPropertyChanged("IsTileEnabled");
+			}
+		}
 
-        public bool IsRawEnabled
-        {
-            get { return GetOrCreate("PushContext.IsRawEnabled", true); }
-            set
-            {
-                SetOrCreate("PushContext.IsRawEnabled", value);
-                NotifyPropertyChanged("IsRawEnabled");
-            }
-        }
-        #endregion
+		public bool IsToastEnabled
+		{
+			get { return GetOrCreate("PushContext.IsToastEnabled", true); }
+			set
+			{
+				SetOrCreate("PushContext.IsToastEnabled", value);
+				UpdateNotificationBindings();
+				NotifyPropertyChanged("IsToastEnabled");
+			}
+		}
 
-        #region Events
-        public event EventHandler<PushContextErrorEventArgs> Error;
-        public event EventHandler<PushContextEventArgs> ChannelPrepared;
-        public event EventHandler<HttpNotificationEventArgs> RawNotification;
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        #endregion
+		public bool IsRawEnabled
+		{
+			get { return GetOrCreate("PushContext.IsRawEnabled", true); }
+			set
+			{
+				SetOrCreate("PushContext.IsRawEnabled", value);
+				NotifyPropertyChanged("IsRawEnabled");
+			}
+		}
 
-        #region Ctor
+		#endregion
 
-        public PushContext(string channelName, string serviceName, IList<Uri> allowedDomains)
-        {
-            if (_current != null)
-            {
-                throw new InvalidOperationException("There should be no more than one push context.");
-            }
+		#region Events
 
-            ChannelName = channelName;
-            ServiceName = serviceName;
-            AllowedDomains = allowedDomains;
+		public event EventHandler<PushContextErrorEventArgs> Error;
+		public event EventHandler<PushContextEventArgs> ChannelPrepared;
+		public event EventHandler<HttpNotificationEventArgs> RawNotification;
+		public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-            _current = this;
-        }
+		#endregion
 
-        #endregion
+		#region Ctor
 
-        #region Public Methods
-        public void Connect(Dispatcher dispatcher, Action<HttpNotificationChannel> prepared)
-        {
-        	Dispatcher = dispatcher;
-            if (IsConnected)
-            {
-                prepared(NotificationChannel);
-                return;
-            }
+		public PushContext(string channelName, string serviceName, IList<Uri> allowedDomains)
+		{
+			if (_current != null)
+			{
+				throw new InvalidOperationException("There should be no more than one push context.");
+			}
 
-            try
-            {
-                // First, try to pick up an existing channel.
-                NotificationChannel = HttpNotificationChannel.Find(ChannelName);
+			ChannelName = channelName;
+			ServiceName = serviceName;
+			AllowedDomains = allowedDomains;
 
-                if (NotificationChannel == null)
-                {
-                    // Create new channel and subscribe events.
-                    CreateChannel(prepared);
-                }
-                else
-                {
-                    // Channel exists, no need to create a new one.
-                    SubscribeToNotificationEvents();
-                    PrepareChannel(prepared);
-                }
+			_current = this;
+		}
 
-                IsConnected = true;
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		#endregion
 
-        public void Disconnect()
-        {
-            if (!IsConnected)
-            {
-                return;
-            }
+		#region Public Methods
 
-            try
-            {
-                if (NotificationChannel != null)
-                {
-                    UnbindFromTileNotifications();
-                    UnbindFromToastNotifications();
-                    NotificationChannel.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-            finally
-            {
-                NotificationChannel = null;
-                IsConnected = false;
-            }
-        } 
-        #endregion
+		public void Connect(Dispatcher dispatcher, Action<HttpNotificationChannel> prepared)
+		{
+			Dispatcher = dispatcher;
+			if (IsConnected)
+			{
+				prepared(NotificationChannel);
+				return;
+			}
 
-        #region Privates
-        /// <summary>
-        /// Create channel, subscribe to channel events and open the channel.
-        /// </summary>
-        private void CreateChannel(Action<HttpNotificationChannel> prepared)
-        {
-            // Create a new channel.
-            NotificationChannel = new HttpNotificationChannel(ChannelName, ServiceName);
+			try
+			{
+				// First, try to pick up an existing channel.
+				NotificationChannel = HttpNotificationChannel.Find(ChannelName);
 
-            // Register to UriUpdated event. This occurs when channel successfully opens.
-            NotificationChannel.ChannelUriUpdated += (s, e) => Dispatcher.BeginInvoke(() => PrepareChannel(prepared));
+				if (NotificationChannel == null)
+				{
+					// Create new channel and subscribe events.
+					CreateChannel(prepared);
+				}
+				else
+				{
+					// Channel exists, no need to create a new one.
+					SubscribeToNotificationEvents();
+					PrepareChannel(prepared);
+				}
 
-            SubscribeToNotificationEvents();
+				IsConnected = true;
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-            // Trying to Open the channel.
-            NotificationChannel.Open();
-        }
+		public void Disconnect()
+		{
+			if (!IsConnected)
+			{
+				return;
+			}
 
-        private void SubscribeToNotificationEvents()
-        {
-        	NotificationChannel.ErrorOccurred += (sender, args) =>
-        	                                     	{
-        	                                     		if (args.ErrorType == ChannelErrorType.ChannelOpenFailed)
-        	                                     		{
-															//TODO try again
-        	                                     		}
-        	                                     	};
+			try
+			{
+				if (NotificationChannel != null)
+				{
+					UnbindFromTileNotifications();
+					UnbindFromToastNotifications();
+					NotificationChannel.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+			finally
+			{
+				NotificationChannel = null;
+				IsConnected = false;
+			}
+		}
+
+		#endregion
+
+		#region Privates
+
+		/// <summary>
+		/// Create channel, subscribe to channel events and open the channel.
+		/// </summary>
+		private void CreateChannel(Action<HttpNotificationChannel> prepared)
+		{
+			// Create a new channel.
+			NotificationChannel = new HttpNotificationChannel(ChannelName, ServiceName);
+
+			// Register to UriUpdated event. This occurs when channel successfully opens.
+			NotificationChannel.ChannelUriUpdated += (s, e) => Dispatcher.BeginInvoke(() => PrepareChannel(prepared));
+
+			SubscribeToNotificationEvents();
+
+			// Trying to Open the channel.
+			NotificationChannel.Open();
+		}
+
+		private void SubscribeToNotificationEvents()
+		{
+			NotificationChannel.ErrorOccurred += (sender, args) =>
+			                                     {
+			                                     	if (args.ErrorType == ChannelErrorType.ChannelOpenFailed)
+			                                     	{
+			                                     		NotificationChannel.Close();
+			                                     		NotificationChannel.Open();
+			                                     	}
+			                                     };
 			// Register to raw notifications.
-            NotificationChannel.HttpNotificationReceived += (s, e) =>
-            {
-                if (IsPushEnabled & IsRawEnabled)
-                {
-                    Dispatcher.BeginInvoke(() => OnRawNotification(e));
-                }
-            };
-        }
+			NotificationChannel.HttpNotificationReceived += (s, e) =>
+			                                                {
+			                                                	if (IsPushEnabled & IsRawEnabled)
+			                                                	{
+			                                                		Dispatcher.BeginInvoke(() => OnRawNotification(e));
+			                                                	}
+			                                                };
+		}
 
-        private void OnRawNotification(HttpNotificationEventArgs e)
-        {
-            if (RawNotification != null)
-            {
-                RawNotification(this, e);
-            }
-        }
+		private void OnRawNotification(HttpNotificationEventArgs e)
+		{
+			if (RawNotification != null)
+			{
+				RawNotification(this, e);
+			}
+		}
 
-        private void PrepareChannel(Action<HttpNotificationChannel> prepared)
-        {
-            try
-            {
-                // OnChannelPrepared(new PushContextEventArgs(NotificationChannel));
-                prepared(NotificationChannel);
-                UpdateNotificationBindings();
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		private void PrepareChannel(Action<HttpNotificationChannel> prepared)
+		{
+			try
+			{
+				// OnChannelPrepared(new PushContextEventArgs(NotificationChannel));
+				prepared(NotificationChannel);
+				UpdateNotificationBindings();
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-        private void OnError(Exception exception)
-        {
-            if (Error != null)
-            {
-                Error(this, new PushContextErrorEventArgs(exception));
-            }
-        }
+		private void OnError(Exception exception)
+		{
+			if (Error != null)
+			{
+				Error(this, new PushContextErrorEventArgs(exception));
+			}
+		}
 
-        private void OnChannelPrepared(PushContextEventArgs args)
-        {
-            if (ChannelPrepared != null)
-            {
-                ChannelPrepared(this, args);
-            }
-        }
+		private void OnChannelPrepared(PushContextEventArgs args)
+		{
+			if (ChannelPrepared != null)
+			{
+				ChannelPrepared(this, args);
+			}
+		}
 
-        private void BindToTileNotifications()
-        {
-            try
-            {
-                if (NotificationChannel != null && !NotificationChannel.IsShellTileBound)
-                {
-                    var listOfAllowedDomains = new Collection<Uri>(AllowedDomains);
-                    NotificationChannel.BindToShellTile(listOfAllowedDomains);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		private void BindToTileNotifications()
+		{
+			try
+			{
+				if (NotificationChannel != null && !NotificationChannel.IsShellTileBound)
+				{
+					var listOfAllowedDomains = new Collection<Uri>(AllowedDomains);
+					NotificationChannel.BindToShellTile(listOfAllowedDomains);
+				}
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-        private void BindToToastNotifications()
-        {
-            try
-            {
-                if (NotificationChannel != null && !NotificationChannel.IsShellToastBound)
-                {
-                    NotificationChannel.BindToShellToast();
-                }
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		private void BindToToastNotifications()
+		{
+			try
+			{
+				if (NotificationChannel != null && !NotificationChannel.IsShellToastBound)
+				{
+					NotificationChannel.BindToShellToast();
+				}
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-        private void UnbindFromTileNotifications()
-        {
-            try
-            {
-                if (NotificationChannel.IsShellTileBound)
-                {
-                    NotificationChannel.UnbindToShellTile();
-                }
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		private void UnbindFromTileNotifications()
+		{
+			try
+			{
+				if (NotificationChannel.IsShellTileBound)
+				{
+					NotificationChannel.UnbindToShellTile();
+				}
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-        private void UnbindFromToastNotifications()
-        {
-            try
-            {
-                if (NotificationChannel.IsShellToastBound)
-                {
-                    NotificationChannel.UnbindToShellToast();
-                }
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
-        }
+		private void UnbindFromToastNotifications()
+		{
+			try
+			{
+				if (NotificationChannel.IsShellToastBound)
+				{
+					NotificationChannel.UnbindToShellToast();
+				}
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
 
-        private void UpdateNotificationBindings()
-        {
-            if (IsPushEnabled && IsTileEnabled)
-            {
-                BindToTileNotifications();
-            }
-            else
-            {
-                UnbindFromTileNotifications();
-            }
+		private void UpdateNotificationBindings()
+		{
+			if (IsPushEnabled && IsTileEnabled)
+			{
+				BindToTileNotifications();
+			}
+			else
+			{
+				UnbindFromTileNotifications();
+			}
 
-            if (IsPushEnabled && IsToastEnabled)
-            {
-                BindToToastNotifications();
-            }
-            else
-            {
-                UnbindFromToastNotifications();
-            }
-        }
+			if (IsPushEnabled && IsToastEnabled)
+			{
+				BindToToastNotifications();
+			}
+			else
+			{
+				UnbindFromToastNotifications();
+			}
+		}
 
-        private T GetOrCreate<T>(string key, T defaultValue = default(T))
-        {
-            T value;
-            if (_settings.TryGetValue(key, out value))
-            {
-                return value;
-            }
+		private T GetOrCreate<T>(string key, T defaultValue = default(T))
+		{
+			T value;
+			if (_settings.TryGetValue(key, out value))
+			{
+				return value;
+			}
 
-            return defaultValue;
-        }
+			return defaultValue;
+		}
 
-        private void SetOrCreate<T>(string key, T value)
-        {
-            _settings[key] = value;
-        }
+		private void SetOrCreate<T>(string key, T value)
+		{
+			_settings[key] = value;
+		}
 
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        } 
-        #endregion        
-    }
+		private void NotifyPropertyChanged(string propertyName)
+		{
+			PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		#endregion
+	}
 }
