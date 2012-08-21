@@ -3,7 +3,7 @@
 
 use Irssi;
 use POSIX;
-require LWP::UserAgent;
+require CGI::Util;
 use vars qw($VERSION %IRSSI);
 
 $VERSION = "1";
@@ -14,7 +14,7 @@ $VERSION = "1";
 	description	=> "Send notifications about irssi highlights to server",
 	license		=> "Apache License, version 2.0",
 	url			=> "http://irssinotifierwp.appspot.com",
-	changed		=> "2012-08-08"
+	changed		=> "2012-08-21"
 );
 
 my $lastMsg;
@@ -26,8 +26,6 @@ my $lastKeyboardActivity = time;
 
 my $in_progress = 0;
 my @messageQueue;
-my $ua = LWP::UserAgent->new( agent => "irssinotifierWP7script/$VERSION" );
-$ua->timeout(30);
 
 sub private {
 	my ($server, $msg, $nick, $address) = @_;
@@ -76,9 +74,18 @@ sub hilite {
 		Irssi::print("IrssiNotifier: Set API token to send notifications: /set irssinotifierwp_api_token [token]");
 		return;
 	}
+
+	`/usr/bin/env wget --version`;
+	if ($? != 0) {
+		Irssi::print("IrssiNotifier: You'll need to install Wget to use IrssiNotifier");
+		return;
+	}
 	
-#	Irssi::print($lastMsg);	
-	if($in_progress){	#Jonoon
+	$lastMsg = CGI::Util::escape($lastMsg);
+	$lastNick = CGI::Util::escape($lastNick);
+	$lastTarget = CGI::Util::escape($lastTarget);
+	
+	if($in_progress){ # Jonoon
 		my @message = ($lastMsg, $lastNick, $lastTarget);
 		unshift(@messageQueue, \@message);
 		return;
@@ -118,21 +125,21 @@ sub pipe_and_fork {
 		$tag = Irssi::input_add(fileno($read_handle), Irssi::INPUT_READ, \&pipe_input, \@args);
 	}
 	else { # child
-		my $result = $ua->post(
-			"https://irssinotifierwp.appspot.com/irssi/message",
-			{
-				apiToken => $api_token,
-				message => $message,
-				channel => $target,
-				nick => $nick,
-				version => $VERSION
-			}
-		);
-		if ($result->is_error) {
-			
+		my $data = "--post-data \"apiToken=$api_token\&message=$message\&channel=$target\&nick=$nick\&version=$VERSION\"";
+		
+		my $result = `/usr/bin/env wget --no-check-certificate --user-agent="irssinotifierWP7script/$VERSION" -qO- /dev/null $data https://irssinotifierwp.appspot.com/irssi/message`;
+		if ($? != 0) {
+			# Something went wrong, might be network error or authorization issue. Probably no need to alert user, though.
+			# Irssi::print("IrssiNotifier: Sending hilight to server failed, check http://irssinotifierwp.appspot.com for updates");
+			# return;
 		}
-		if (length($result->decoded_content) > 0) {
-			print $write_handle $result->decoded_content;
+		else{
+			if (length($result) > 0) {
+				print $write_handle $result;
+			}
+		#	else{
+		#		print $write_handle "Ei ongelmia";
+		#	}
 		}
 		
 		close($write_handle);
