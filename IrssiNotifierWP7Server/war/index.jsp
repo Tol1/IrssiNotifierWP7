@@ -35,7 +35,7 @@
 		<p>Sovelluksen käyttöön vaaditaan Google-tunnukset palveluun
 			kirjautumista ja puhelimen rekisteröintiä varten. Lisäksi
 			vaatimuksena on luonnollisesti irssi. Irssiin tarvittava perl-skripti
-			vaatii lisäksi palvelimelta wget-sovelluksen sekä openssl-kirjaston.
+			vaatii lisäksi palvelimelta wget-sovelluksen.
 		</p>
 		<p>
 			Sovelluksen innoittajana toimi Lauri "murgo" Härsilän kehittämä <a
@@ -91,7 +91,7 @@
 				<code class="emphasis">
 					mkdir -p ~/.irssi/scripts/autorun;
 					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts/irssinotifierwp7.pl;
-					ln -s ~/.irssi/scripts/irssinotifier.pl ~/.irssi/scripts/autorun/irssinotifier.pl;
+					ln -s ~/.irssi/scripts/irssinotifierwp7.pl ~/.irssi/scripts/autorun/irssinotifierwp7.pl;
 				</code>
 			 </li>
 			 <li>Lataa skripti irssiin komennolla <span class="emphasis">/script load irssinotifierwp7.pl</span> (Tämä siis irssiin!)</li>
