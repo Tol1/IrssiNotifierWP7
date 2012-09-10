@@ -9,8 +9,16 @@
 	import="com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser"%>
 <%@ page
 	import="com.tol1.irssinotifier.server.exceptions.UserNotFoundException"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<c:set var="loc" value="fi_FI"/>
+<c:if test="${!(empty param.locale)}">
+  <c:set var="loc" value="${param.locale}"/>
+</c:if>
+<fmt:setLocale value="${loc}" />
+<fmt:bundle basename="site">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>IrssiNotifier for Windows Phone</title>
@@ -26,90 +34,113 @@
 	<div class="root">
 		<h1>Irssi Notifier for Windows Phone</h1>
 
-		<p>Irssi Notifier on sovellus, jonka avulla on mahdollista saada
-			irssin hilighteistä ja yksityisviesteistä notifikaatio suoraan
-			Windows Phone -käyttöjärjestelmää käyttävään matkapuhelimeen. Palvelu
-			käyttää WP7-käyttöjärjestelmän "Push notification"-palvelua, ja
-			ilmoitus uudesta viestistä on saatavilla sekä ponnahdusviestinä että
-			päivittyvän livetiilen kautta.</p>
-		<p>Sovelluksen käyttöön vaaditaan Google-tunnukset palveluun
-			kirjautumista ja puhelimen rekisteröintiä varten. Lisäksi
-			vaatimuksena on luonnollisesti irssi. Irssiin tarvittava perl-skripti
-			vaatii lisäksi palvelimelta wget-sovelluksen.
+		<p><fmt:message key="description1"/></p>
+		<p><fmt:message key="description2"/></p>
+		<p>
+			<fmt:message key="description3">
+				<fmt:param>
+					<a href="http://irssinotifier.appspot.com">Irssi Notifier</a>
+				</fmt:param>
+			</fmt:message>
 		</p>
 		<p>
-			Sovelluksen innoittajana toimi Lauri "murgo" Härsilän kehittämä <a
-				href="http://irssinotifier.appspot.com">Irssi Notifier</a>-sovellus
-			Android-käyttöjärjestelmää käyttäville laitteille.
-		</p>
-		<p>
-			<a href="<%=userService.createLoginURL(request.getRequestURI())%>">Kirjaudu
-				sisään</a> nähdäksesi lisätietoja ja ohjeita sovelluksen käyttämisestä.
+			<fmt:message key="loginDescription">
+				<fmt:param>
+					<a href="<%=userService.createLoginURL(request.getRequestURI())%>"><fmt:message key="loginText"/></a>
+				</fmt:param>
+			</fmt:message>
 		</p>
 	</div>
 	<%
 		} else {
 	%>
 	<div class="root">
-		<h1>Tervetuloa!</h1>
+		<h1><fmt:message key="welcomeText"/></h1>
 		<%
 			IrssiNotifierUser inUser = null;
 			try {
 				inUser = IrssiNotifier.getUser(dao, user);
 				%>
 				<p>
-					Puhelimesi on rekisteröity palveluun, ja sen yksilöllinen tunnus on <span class="emphasis"><%=inUser.UUID %></span>.
-					Tätä tunnusta tarvitset määrittäessäsi asetuksia irssiskriptille.
+					<fmt:message key="phoneRegistered">
+						<fmt:param>
+							<span class="emphasis"><%=inUser.UUID %></span>
+						</fmt:param>
+					</fmt:message>
 				</p>
 				<p>
-					Tällä hetkellä toiminnassa ovat seuraavat palvelut:
+					<fmt:message key="currentStatusTitle"/>
 					<ul>
-						<li>Ponnahdusviestit: <%=inUser.sendToastNotifications?"Käytössä":"Pois käytöstä" %></li>
-						<li>Tiilinotifikaatiot: <%=inUser.sendTileNotifications?"Käytössä":"Pois käytöstä" %></li>
+						<li>
+							<fmt:message key="toastStatus">
+								<fmt:param>
+									<% if(inUser.sendToastNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
+								</fmt:param>
+							</fmt:message>
+						</li>
+						<li>
+							<fmt:message key="tileStatus">
+								<fmt:param>
+									<% if(inUser.sendTileNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
+								</fmt:param>
+							</fmt:message>
+						</li>
 					</ul>
 				<%
 			} catch (UserNotFoundException unfe) {
 	%>
-		<p class="error">Et ole vielä rekisteröinyt puhelintasi palvelun
-			käyttäjäksi.</p>
+		<p class="error"><fmt:message key="phoneNotRegistered"/></p>
 		<%
 			}
 		%>
 		<p>
-			<a href="/script/irssinotifierwp7.pl">Lataa irssiskripti</a>
+			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
 		</p>
 		<p>
-			Palvelun käyttöönottoohjeet:
+			<fmt:message key="instructionsTitle"/>
 		</p>
 		<ol>
-			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Asenna IrssiNotifier-sovellus Windows Phone 7 -puhelimeesi.</li>
-			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Käynnistä sovellus. Ensimmäisellä käynnistyskerralla sovellus pyytää rekisteröitymään palveluun</li>
-			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>>Suoritettuasi rekisteröinnin päivitä tämä sivu nähdäksesi skriptin asennus- ja määrittelyohjeet</li>
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>><fmt:message key="instructions1"/></li>
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>><fmt:message key="instructions2"/></li>
+			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>><fmt:message key="instructions3"/></li>
 		 
 		<%	if(inUser != null) {%>
-			<li>Asenna irssiskripti kirjoittamalla seuraavat komennot shelliin (ei siis irssiin vaan päätteelle, josta irssi käynnistetään)
+			<li><fmt:message key="instructions4"/>
 				<code class="emphasis">
 					mkdir -p ~/.irssi/scripts/autorun;
 					wget https://irssinotifierwp.appspot.com/script/irssinotifierwp7.pl -O ~/.irssi/scripts/irssinotifierwp7.pl;
 					ln -s ~/.irssi/scripts/irssinotifierwp7.pl ~/.irssi/scripts/autorun/irssinotifierwp7.pl;
 				</code>
 			 </li>
-			 <li>Lataa skripti irssiin komennolla <span class="emphasis">/script load irssinotifierwp7.pl</span> (Tämä siis irssiin!)</li>
-			 <li>Määritä API key komennolla <span class="emphasis">/set irssinotifierwp_api_token <%=inUser.UUID %></span> (Tämä myös irssiin)</li>
+			 <li>
+			 	<fmt:message key="instructions5">
+			 		<fmt:param>
+			 			<span class="emphasis">/script load irssinotifierwp7.pl</span>
+			 		</fmt:param>
+			 	</fmt:message>
+			 </li>
+			 <li>
+			 	<fmt:message key="instructions6">
+			 		<fmt:param>
+			 			<span class="emphasis">/set irssinotifierwp_api_token <%=inUser.UUID %></span>
+			 		</fmt:param>
+			 	</fmt:message>
+			 </li>
 		<% } %>
 		</ol>
 		
 		<p>
-			Skriptin asetukset:
+			<fmt:message key="settingsTitle"/>
 		</p>
 		<ul>
-			<li>/set irssinotifierwp_away_only [ON/OFF] - Kun päällä, notifikaatio lähetetään puhelimelle vain jos olet /away</li>
-			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - Kun päällä, notifikaatioita ei lähetetä kanavalta, joka irssissä on auki.</li>
-			<li>/set irssinotifierwp_require_idle_seconds [num] - Nollaa suurempi arvo määrittelee, montako sekuntia irssin pitää olla käyttämättömänä, ennen kuin notifikaatioita lähetetään.</li>
+			<li>/set irssinotifierwp_away_only [ON/OFF] - <fmt:message key="awaySettingDescription"/></li>
+			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
+			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
 		</ul>
 	</div>
 	<%
 		}
 	%>
 </body>
+</fmt:bundle>
 </html>
