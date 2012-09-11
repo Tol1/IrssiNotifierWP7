@@ -18,10 +18,17 @@ a:VISITED {
 .root{
 	width: 650px;
 	margin-left: 100px;
+	position: fixed;
 }
 
 .emphasis {
 	background-color: #0000BB;
 	display: inline-block;
 	padding: 3px;
+}
+
+.lang {
+	position: absolute;
+	top: 0;
+	right: 0;
 }

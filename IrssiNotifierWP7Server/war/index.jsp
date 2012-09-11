@@ -1,4 +1,4 @@
-<%@page import="com.tol1.irssinotifier.server.IrssiNotifier"%>
+<%@ page import="com.tol1.irssinotifier.server.IrssiNotifier"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -11,13 +11,43 @@
 	import="com.tol1.irssinotifier.server.exceptions.UserNotFoundException"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+Cookie[] cookies = request.getCookies();
+Cookie languageCookie = null;
+if(cookies != null){
+	for(Cookie cookie : cookies){
+		if(cookie.getName().equals("language")){
+			languageCookie = cookie;
+		}
+	}
+}
+if(request.getParameter("language") != null){
+	if(request.getParameter("language").toString().equalsIgnoreCase("en")){
+		pageContext.setAttribute("lang", "en");
+	}
+	else{
+		pageContext.setAttribute("lang", "fi");
+	}
+	languageCookie = new Cookie("language", pageContext.getAttribute("lang").toString());
+}
+else if(languageCookie != null){
+	if(languageCookie.getValue().equalsIgnoreCase("en")){
+		pageContext.setAttribute("lang", "en");
+	}
+	else{
+		pageContext.setAttribute("lang", "fi");
+	}
+}
+else{
+	pageContext.setAttribute("lang", "fi");
+	languageCookie = new Cookie("language", pageContext.getAttribute("lang").toString());
+}
+languageCookie.setMaxAge(60*60*24*360);
+response.addCookie(languageCookie);
+	%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<c:set var="loc" value="fi_FI"/>
-<c:if test="${!(empty param.locale)}">
-  <c:set var="loc" value="${param.locale}"/>
-</c:if>
-<fmt:setLocale value="${loc}" />
+<fmt:setLocale value="${lang}" />
 <fmt:bundle basename="site">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,13 +55,21 @@
 <link href="/css/default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<div class="root">
+		<span class="lang">
+			<c:set var="anotherLang"><fmt:message key="languageSelection"/></c:set>
+			<fmt:message key="languageTitle">
+				<fmt:param>
+					<a href="?language=${anotherLang}"><fmt:message key="languageSelection"/></a>
+				</fmt:param>
+			</fmt:message>
+		</span>
 	<%
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		ObjectifyDAO dao = new ObjectifyDAO();
 		if (user == null) {
 	%>
-	<div class="root">
 		<h1>Irssi Notifier for Windows Phone</h1>
 
 		<p><fmt:message key="description1"/></p>
@@ -50,11 +88,9 @@
 				</fmt:param>
 			</fmt:message>
 		</p>
-	</div>
 	<%
 		} else {
 	%>
-	<div class="root">
 		<h1><fmt:message key="welcomeText"/></h1>
 		<%
 			IrssiNotifierUser inUser = null;
@@ -137,10 +173,10 @@
 			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
 			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
 		</ul>
-	</div>
 	<%
 		}
 	%>
+	</div>
 </body>
 </fmt:bundle>
 </html>
