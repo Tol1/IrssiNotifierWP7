@@ -116,7 +116,10 @@ namespace IrssiNotifier.Views
 						PushContext.Current.Connect(Dispatcher, c => RegisterChannelUri(c.ChannelUri, () =>
 						                                                                              {
 						                                                                              	IsBusy = false;
-						                                                                              	PushContext.Current.IsPushEnabled = true;
+                                                                                                        PushContext.Current.IsPushEnabled = true;
+                                                                                                        NotifyPropertyChanged("IsPushEnabled");
+                                                                                                        NotifyPropertyChanged("IsSettingsEnabled");
+                                                                                                        NotifyPropertyChanged("IntervalBrush");
 						                                                                              }));
 					}
 					else
@@ -381,6 +384,7 @@ namespace IrssiNotifier.Views
 					                             	{
 					                             		if (success)
 					                             		{
+					                             		    PushContext.Current.IsTileEnabled = true;
 					                             			var newTileData = new StandardTileData
 					                             			                  	{
 					                             			                  		BackgroundImage =
