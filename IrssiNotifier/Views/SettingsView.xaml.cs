@@ -384,7 +384,8 @@ namespace IrssiNotifier.Views
 					                             	{
 					                             		if (success)
 					                             		{
-					                             		    PushContext.Current.IsTileEnabled = true;
+                                                            PushContext.Current.IsTileEnabled = true;
+                                                            NotifyPropertyChanged("IsTileEnabled");
 					                             			var newTileData = new StandardTileData
 					                             			                  	{
 					                             			                  		BackgroundImage =
