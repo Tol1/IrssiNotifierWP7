@@ -18,7 +18,7 @@ a:VISITED {
 .root{
 	width: 650px;
 	margin-left: 100px;
-	position: fixed;
+	position: relative;
 }
 
 .emphasis {
@@ -31,4 +31,13 @@ a:VISITED {
 	position: absolute;
 	top: 0;
 	right: 0;
+}
+
+p.header{
+	font-size: larger;
+	margin-bottom: 10px;
+}
+
+span.addition{
+	font-size: small;
 }

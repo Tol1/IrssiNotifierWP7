@@ -132,9 +132,10 @@ response.addCookie(languageCookie);
 		<p>
 			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
 		</p>
-		<p>
+		<p class="header">
 			<fmt:message key="instructionsTitle"/>
 		</p>
+		<span class="addition"><fmt:message key="upgradeInstructions"/></span>
 		<ol>
 			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>><fmt:message key="instructions1"/></li>
 			<li <%= inUser != null?"style=\"text-decoration: line-through;\"":"" %>><fmt:message key="instructions2"/></li>
@@ -165,7 +166,7 @@ response.addCookie(languageCookie);
 		<% } %>
 		</ol>
 		
-		<p>
+		<p class="header">
 			<fmt:message key="settingsTitle"/>
 		</p>
 		<ul>
