@@ -58,7 +58,7 @@ namespace IrssiNotifier.Views
 							return;
 						}
 					}
-					UpdateSettings("toast", value, success =>
+					UpdateSettings(Settings.Toast, value, success =>
 					                               	{
 					                               		if (success)
 					                               		{
@@ -91,7 +91,7 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsRawEnabled != value)
 				{
-					UpdateSettings("raw", value, success =>
+					UpdateSettings(Settings.Raw, value, success =>
 					                             	{
 					                             		if (success)
 					                             		{
@@ -166,7 +166,7 @@ namespace IrssiNotifier.Views
 			{
 				if (GetOrCreate("Settings.ToastInterval", 15) != value)
 				{
-					UpdateSettings("toastinterval", value, success =>
+					UpdateSettings(Settings.ToastInterval, value, success =>
 					                                                   	{
 					                                                   		if (success)
 					                                                   		{
@@ -318,12 +318,12 @@ namespace IrssiNotifier.Views
 		{
 			if (PushContext.Current.IsConnected && IsPushEnabled && IsTileEnabled)
 			{
-				UpdateSettings("clearcount", true, ClearLocalTileCount);
+				UpdateSettings(Settings.ClearCount, true, ClearLocalTileCount);
 
 			}
 		}
 
-		private void UpdateSettings(string param, object value, Action<bool> callback)
+		private void UpdateSettings(Settings param, object value, Action<bool> callback)
 		{
 			if(SkipUpdateBackend)
 			{
@@ -369,7 +369,7 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/settings"), "POST",
 			                            "apiToken=" + UserId + "&guid=" +
-			                            App.AppGuid + "&" + param + "=" + value + "&version=" + App.Version);
+			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
 		private void PinTile(bool value)
@@ -380,7 +380,7 @@ namespace IrssiNotifier.Views
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					UpdateSettings("tile", true, success =>
+					UpdateSettings(Settings.Tile, true, success =>
 					                             	{
 					                             		if (success)
 					                             		{
@@ -410,7 +410,7 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				UpdateSettings("tile", value, success =>
+				UpdateSettings(Settings.Tile, value, success =>
 				                              	{
 				                              		if (success)
 				                              		{
@@ -542,5 +542,14 @@ namespace IrssiNotifier.Views
 			IsolatedStorageSettings.ApplicationSettings[key] = defaultValue;
 			return defaultValue;
 		}
+	}
+
+	internal enum Settings
+	{
+		Toast,
+		ToastInterval,
+		Tile,
+		ClearCount,
+		Raw
 	}
 }
