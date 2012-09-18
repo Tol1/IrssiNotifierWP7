@@ -162,6 +162,15 @@
   <data name="ErrorLogoutFailed" xml:space="preserve">
     <value>Uloskirjautuminen Googlesta epäonnistui. Tarkista puhelimen datayhteys. Puhelimen uudelleenrekisteröinti toisella käyttäjätunnuksella ei välttämättä onnistu. Haluatko jatkaa kirjautumatta ulos Googlesta?</value>
   </data>
+  <data name="ErrorOldVersionDialogText" xml:space="preserve">
+    <value>Käytössäsi on sovelluksen vanha versio. Päivitä sovellus jatkaaksesi.</value>
+  </data>
+  <data name="ErrorOldVersionText" xml:space="preserve">
+    <value>Käytössäsi on sovelluksen vanha versio. Jatkaaksesi sovelluksen käyttöä tulee sovellus päivittää uusimpaan versioon.</value>
+  </data>
+  <data name="ErrorOldVersionTitle" xml:space="preserve">
+    <value>Vanha versio</value>
+  </data>
   <data name="ErrorPageTitle" xml:space="preserve">
     <value>Tapahtui virhe</value>
   </data>

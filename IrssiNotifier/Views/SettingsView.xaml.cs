@@ -285,9 +285,32 @@ namespace IrssiNotifier.Views
 									currentPage.NavigationService.Navigate(new Uri("/Pages/MainPage.xaml?error="+DateTime.Now.Ticks, UriKind.Relative));
 								});
 					}
+					else if(result["exceptionType"].ToString() == "OldVersionException")
+					{
+						Dispatcher.BeginInvoke(() =>
+						                       	{
+						                       		MessageBox.Show(AppResources.ErrorOldVersionDialogText, AppResources.ErrorOldVersionTitle,
+						                       		                MessageBoxButton.OK);
+						                       		var currentPage = App.GetCurrentPage() as IViewContainerPage;
+						                       		if (currentPage != null)
+						                       		{
+						                       			currentPage.View = new ErrorView(AppResources.ErrorOldVersionTitle,
+						                       			                                 AppResources.ErrorOldVersionText, null);
+						                       		}
+						                       	});
+					}
 					else
 					{
-						Dispatcher.BeginInvoke(() => MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle, MessageBoxButton.OK));
+						Dispatcher.BeginInvoke(() =>
+						                       	{
+						                       		MessageBox.Show(result["errorMessage"].ToString(), AppResources.ErrorTitle,
+						                       		                MessageBoxButton.OK);
+						                       		var currentPage = App.GetCurrentPage() as IViewContainerPage;
+													if(currentPage != null)
+													{
+														currentPage.View = new ErrorView(AppResources.ErrorTitle, result["errorMessage"].ToString(), null);
+													}
+						                       	});
 					}
 					return;
 				}

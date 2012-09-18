@@ -196,6 +196,33 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Käytössäsi on sovelluksen vanha versio. Päivitä sovellus jatkaaksesi..
+        /// </summary>
+        public static string ErrorOldVersionDialogText {
+            get {
+                return ResourceManager.GetString("ErrorOldVersionDialogText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Käytössäsi on sovelluksen vanha versio. Jatkaaksesi sovelluksen käyttöä tulee sovellus päivittää uusimpaan versioon..
+        /// </summary>
+        public static string ErrorOldVersionText {
+            get {
+                return ResourceManager.GetString("ErrorOldVersionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vanha versio.
+        /// </summary>
+        public static string ErrorOldVersionTitle {
+            get {
+                return ResourceManager.GetString("ErrorOldVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tapahtui virhe.
         /// </summary>
         public static string ErrorPageTitle {
