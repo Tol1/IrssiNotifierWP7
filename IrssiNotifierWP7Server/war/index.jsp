@@ -129,9 +129,6 @@ response.addCookie(languageCookie);
 		<%
 			}
 		%>
-		<p>
-			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
-		</p>
 		<p class="header">
 			<fmt:message key="instructionsTitle"/>
 		</p>
@@ -174,6 +171,9 @@ response.addCookie(languageCookie);
 			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
 			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
 		</ul>
+		<p>
+			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
+		</p>
 	<%
 		}
 	%>
