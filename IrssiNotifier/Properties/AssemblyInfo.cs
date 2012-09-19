@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IrssiNotifier")]
+[assembly: AssemblyTitle("Irssi Notifier")]
 [assembly: AssemblyDescription("Sovellus irssin hilight-notifikaatioiden lähettämiseksi puhelimeen")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IrssiNotifier")]
+[assembly: AssemblyProduct("Irssi Notifier")]
 [assembly: AssemblyCopyright("Copyright © 2012 Tomi 'Tol1' Nokkala")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
