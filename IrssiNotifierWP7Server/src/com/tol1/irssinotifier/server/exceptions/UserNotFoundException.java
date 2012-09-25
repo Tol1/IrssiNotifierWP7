@@ -8,6 +8,6 @@ public class UserNotFoundException extends Exception {
 	}
 
 	public UserNotFoundException(String userId) {
-		super("User with token "+userId+" was not found");
+		super("User with token "+userId+" was not found. Check that you have typed your api key exactly as it reads on settings view of phone application.");
 	}
 }
