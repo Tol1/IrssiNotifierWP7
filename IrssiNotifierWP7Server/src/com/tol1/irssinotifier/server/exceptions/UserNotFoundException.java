@@ -4,10 +4,10 @@ package com.tol1.irssinotifier.server.exceptions;
 public class UserNotFoundException extends Exception {
 
 	public UserNotFoundException() {
-		super("Käyttäjää ei löytynyt");
+		super("User was not found");
 	}
 
-	public UserNotFoundException(String message) {
-		super(message);
+	public UserNotFoundException(String userId) {
+		super("User with token "+userId+" was not found");
 	}
 }

@@ -55,7 +55,7 @@ public class IrssiNotifier {
 	public static IrssiNotifierUser getUser(ObjectifyDAO dao, String uuid) throws UserNotFoundException{
 		IrssiNotifierUser user = dao.ofy().query(IrssiNotifierUser.class).filter("UUID =", uuid.trim()).get();
 		if(user == null){
-			throw new UserNotFoundException();
+			throw new UserNotFoundException(uuid.trim());
 		}
 		return user;
 	}

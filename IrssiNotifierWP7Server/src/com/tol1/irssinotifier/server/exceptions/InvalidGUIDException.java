@@ -4,7 +4,7 @@ package com.tol1.irssinotifier.server.exceptions;
 public class InvalidGUIDException extends Exception {
 
 	public InvalidGUIDException() {
-		super("GUID ei täsmää");
+		super("GUID is not matching");
 	}
 
 	public InvalidGUIDException(String message) {
