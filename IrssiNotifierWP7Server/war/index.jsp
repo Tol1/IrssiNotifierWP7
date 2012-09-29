@@ -177,6 +177,12 @@ response.addCookie(languageCookie);
 	<%
 		}
 	%>
+	<p>
+		<a href="http://www.windowsphone.com/s?appid=2fd339ef-7fbf-4467-b343-b9d8818c66f9"><fmt:message key="marketplaceLink"/></a>
+	</p>
+	<p>
+		<a href="https://github.com/Tol1/IrssiNotifierWP7"><fmt:message key="githubLink"/></a>
+	</p>
 	</div>
 </body>
 </fmt:bundle>
