@@ -70,15 +70,14 @@ public class MessageHandler extends HttpServlet {
 					String toastMessage = mess.GenerateToastNotification();
 					HttpURLConnection conn = DoSend(toastMessage,"toast","2",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
-					IrssiNotifier.log.info("Toast notification lähetetty, tulos: "+responseStatus);
 					if(responseStatus == Status.STATUS_OK) {
-						IrssiNotifier.log.info("Toast notification lähetetty onnistuneesti");
+						IrssiNotifier.log.info("Käyttäjän "+id+" toast notification lähetetty onnistuneesti");
 						user.lastToastNotificationSent = System.currentTimeMillis();
 						userModified = true;
 					} else {
-						IrssiNotifier.log.warning("Toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
+						IrssiNotifier.log.warning("Käyttäjän "+id+" toast notificationin lähetyksessä virhe, tulos: "+responseStatus);
 						if(responseStatus == Status.STATUS_CHANNEL_CLOSED || responseStatus == Status.STATUS_HOURLY_QUEUEABLE){
-							IrssiNotifier.log.severe("Notificationit poistettu käytöstä virheestä johtuen");
+							IrssiNotifier.log.severe("Käyttäjän "+id+" notificationit poistettu käytöstä virheestä johtuen");
 							
 						}
 						else{
@@ -87,7 +86,7 @@ public class MessageHandler extends HttpServlet {
 									AddToQueue(req, retries, id, "toastRetry");
 								}
 							} catch (Exception e) {
-								IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+								IrssiNotifier.log.warning("Queue-virhe: "+e.getLocalizedMessage());
 							}
 						}
 					}
@@ -106,16 +105,15 @@ public class MessageHandler extends HttpServlet {
 					String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
 					HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
-					IrssiNotifier.log.info("Tile notification lähetetty, tulos: "+responseStatus);
 					if(responseStatus == Status.STATUS_OK){
-						IrssiNotifier.log.info("Tile notification lähetetty onnistuneesti, päivitetään count");
+						IrssiNotifier.log.info("Käyttäjän "+id+" tile notification lähetetty onnistuneesti, päivitetään count");
 						user.tileCount++;
 						userModified = true;
 					}
 					else{
-						IrssiNotifier.log.warning("Tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
+						IrssiNotifier.log.warning("Käyttäjän "+id+" tile notificationin lähetyksessä virhe, tulos: "+responseStatus);
 						if(responseStatus == Status.STATUS_CHANNEL_CLOSED || responseStatus == Status.STATUS_HOURLY_QUEUEABLE){
-							IrssiNotifier.log.severe("Notificationit poistettu käytöstä virheestä johtuen");
+							IrssiNotifier.log.severe("Käyttäjän "+id+" notificationit poistettu käytöstä virheestä johtuen");
 						}
 						else{
 							try {
@@ -123,7 +121,7 @@ public class MessageHandler extends HttpServlet {
 									AddToQueue(req, retries, id, "tileRetry");
 								}
 							} catch (Exception e) {
-								IrssiNotifier.log.info("Queue-virhe: "+e.getLocalizedMessage());
+								IrssiNotifier.log.warning("Queue-virhe: "+e.getLocalizedMessage());
 							}
 						}
 					}
@@ -233,7 +231,7 @@ public class MessageHandler extends HttpServlet {
 //			user.errorOccurred = true;
 			dao.ofy().put(user);
 			resp.getWriter().print("Push channel error: The device is in an inactive state.");
-			result = Status.STATUS_HOURLY_QUEUEABLE;
+			result = Status.STATUS_INACTIVE;
 			break;
 		case 503:
 			resp.getWriter().print("Push channel error: The Push Notification Service is unable to process the request.");
@@ -248,6 +246,6 @@ public class MessageHandler extends HttpServlet {
 		return result;
 	}
 	private enum Status{
-		STATUS_OK, STATUS_QUEUEABLE, STATUS_HOURLY_QUEUEABLE, STATUS_ERROR, STATUS_CHANNEL_CLOSED
+		STATUS_OK, STATUS_QUEUEABLE, STATUS_HOURLY_QUEUEABLE, STATUS_ERROR, STATUS_CHANNEL_CLOSED, STATUS_INACTIVE
 	}
 }
