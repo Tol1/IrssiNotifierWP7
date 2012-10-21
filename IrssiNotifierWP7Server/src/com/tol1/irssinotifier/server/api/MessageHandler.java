@@ -154,7 +154,7 @@ public class MessageHandler extends HttpServlet {
 		queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
 				.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
 				.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-				.param(typeIdentifier, "true"));
+				.param(typeIdentifier, "true").param("version", VERSION+""));
 	}
 	
 	public static HttpURLConnection DoSend(String payload, String type, String notificationClass, URL url) throws IOException{
