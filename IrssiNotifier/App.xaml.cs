@@ -11,10 +11,14 @@ namespace IrssiNotifier
 {
 	public partial class App : Application
 	{
+#if(DEBUG)
+		public static readonly string Baseaddress = "http://2.irssinotifierwp.appspot.com/";
+#else
 		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
+#endif
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
-		public static readonly int Version = 1;
+		public static readonly int Version = 2;
 
 		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml?NavigatedFrom=Tile";
 
@@ -30,6 +34,13 @@ namespace IrssiNotifier
 		public static PhoneApplicationPage GetCurrentPage()
 		{
 			return ((App)Current).RootFrame.Content as PhoneApplicationPage;
+		}
+
+		private static readonly Version TargetedVersion = new Version(7, 10, 8858);
+
+		public static bool IsTargetedVersion
+		{
+			get { return Environment.OSVersion.Version >= TargetedVersion; }
 		}
 
 		/// <summary>

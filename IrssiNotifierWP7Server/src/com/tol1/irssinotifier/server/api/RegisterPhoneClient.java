@@ -40,11 +40,17 @@ public class RegisterPhoneClient extends HttpServlet {
 				IrssiNotifier.printError(resp.getWriter(), "GUID missing");
 				return;
 			}
+			
+			boolean wp8CompliantPhone = Boolean.parseBoolean(req.getParameter("wp8"));
+			
         	String id = user.getUserId();
         	
         	UUID uuid = UUID.randomUUID();
         	
         	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid, uuid.toString());
+        	if(wp8CompliantPhone) {
+        		iNUser.wp8CompliantPhone = true;
+        	}
         	
         	dao.ofy().put(iNUser);
         	RegisterSuccessMessage message = new RegisterSuccessMessage(uuid.toString());

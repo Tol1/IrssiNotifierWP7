@@ -321,7 +321,7 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
 			                            "apiToken=" + UserId + "&guid=" +
-			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
+			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version+"&wp8=" + App.IsTargetedVersion);
 		}
 
 		private bool SkipUpdateBackend { get; set; }

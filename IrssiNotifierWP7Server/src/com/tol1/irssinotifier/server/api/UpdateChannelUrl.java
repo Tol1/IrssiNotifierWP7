@@ -29,6 +29,7 @@ public class UpdateChannelUrl extends HttpServlet {
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
 		String newUrl = req.getParameter("newUrl");
+		boolean wp8CompliantPhone = Boolean.parseBoolean(req.getParameter("wp8"));
 		
 		if(newUrl == null){
 			IrssiNotifier.printError(resp.getWriter(), "Anna Url");
@@ -62,6 +63,11 @@ public class UpdateChannelUrl extends HttpServlet {
 					user.tileCount = 0;
 					userSettingsChanged = true;
 					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
+				}
+				if(user.wp8CompliantPhone != wp8CompliantPhone) {
+					user.wp8CompliantPhone = wp8CompliantPhone;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin "+(wp8CompliantPhone?"on":"ei ole")+" yhteensopiva wp8-tiilien kanssa");
 				}
 				if(userSettingsChanged){
 					dao.ofy().put(user);

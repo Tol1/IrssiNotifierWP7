@@ -15,6 +15,7 @@ public class IrssiNotifierUser {
 	@Unindexed public int tileCount;
 	@Unindexed public int toastNotificationInterval;
 	@Unindexed public long lastToastNotificationSent;
+	@Unindexed public boolean wp8CompliantPhone;
 	
 	public IrssiNotifierUser(){}
 	
