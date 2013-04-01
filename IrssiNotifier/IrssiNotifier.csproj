@@ -90,15 +90,15 @@
     <Compile Include="PushNotificationContext\PushContext.cs" />
     <Compile Include="PushNotificationContext\PushContextErrorEventArgs.cs" />
     <Compile Include="PushNotificationContext\PushContextEventArgs.cs" />
+    <Compile Include="Resources\AppResources.fi-FI.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.fi-FI.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\AppResources.en-US.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\LocalizedStrings.cs" />
     <Compile Include="Utils\BooleanInverter.cs" />
@@ -226,14 +226,14 @@
     <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\AppResources.en-US.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.en-US.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.fi-FI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.fi-FI.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
