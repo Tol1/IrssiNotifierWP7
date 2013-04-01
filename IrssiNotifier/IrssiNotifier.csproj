@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Resources\LocalizedStrings.cs" />
     <Compile Include="Utils\BooleanInverter.cs" />
+    <Compile Include="Utils\ReflectionHelper.cs" />
     <Compile Include="Views\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
     </Compile>
