@@ -36,7 +36,7 @@ namespace IrssiNotifier
 			return ((App)Current).RootFrame.Content as PhoneApplicationPage;
 		}
 
-		private static readonly Version TargetedVersion = new Version(7, 10, 8858);
+		private static readonly Version TargetedVersion = new Version(7, 10, 8858);		//WP7.8 -> tuki erikokoisille livetiilille
 
 		public static bool IsTargetedVersion
 		{

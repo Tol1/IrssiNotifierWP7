@@ -60,7 +60,7 @@ namespace IrssiNotifier.Views
 				webclient.Headers["Cookie"] = cookieHeader;
 			}
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
-			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid + "&version=" + App.Version);
+			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/register"), "guid=" + App.AppGuid + "&version=" + App.Version + "&wp8=" + App.IsTargetedVersion);
 		}
 
 		private string _userId;
