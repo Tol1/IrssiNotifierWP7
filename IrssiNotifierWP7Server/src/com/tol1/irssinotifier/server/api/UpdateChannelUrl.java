@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.*;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -64,10 +65,15 @@ public class UpdateChannelUrl extends HttpServlet {
 					userSettingsChanged = true;
 					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
 				}
-				if(user.wp8CompliantPhone != wp8CompliantPhone) {
-					user.wp8CompliantPhone = wp8CompliantPhone;
+				if(wp8CompliantPhone && (user.tileTemplate != TileType.WP8_FLIP || user.tileTemplate != TileType.WP8_ICONIC)) {
+					user.tileTemplate = TileType.WP8_FLIP;
 					userSettingsChanged = true;
-					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin "+(wp8CompliantPhone?"on":"ei ole")+" yhteensopiva wp8-tiilien kanssa");
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin on nyt yhteensopiva wp8-tiilien kanssa, siirrytään käyttämään fliptile-templatea");
+				}
+				else if(!wp8CompliantPhone && user.tileTemplate != TileType.WP7){
+					user.tileTemplate = TileType.WP7;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin ei ole (enää) yhteensopiva wp8-tiilien kanssa, käytetään wp7-templatea");
 				}
 				if(userSettingsChanged){
 					dao.ofy().put(user);

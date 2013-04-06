@@ -3,6 +3,7 @@ package com.tol1.irssinotifier.server.datamodels;
 import javax.persistence.*;
 
 import com.googlecode.objectify.annotation.Unindexed;
+import com.tol1.irssinotifier.server.enums.TileType;
 
 public class IrssiNotifierUser {
 	@Id public String UserID;
@@ -15,7 +16,7 @@ public class IrssiNotifierUser {
 	@Unindexed public int tileCount;
 	@Unindexed public int toastNotificationInterval;
 	@Unindexed public long lastToastNotificationSent;
-	@Unindexed public boolean wp8CompliantPhone;
+	@Unindexed public TileType tileTemplate;
 	
 	public IrssiNotifierUser(){}
 	

@@ -14,6 +14,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.RegisterSuccessMessage;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -49,7 +50,10 @@ public class RegisterPhoneClient extends HttpServlet {
         	
         	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid, uuid.toString());
         	if(wp8CompliantPhone) {
-        		iNUser.wp8CompliantPhone = true;
+        		iNUser.tileTemplate = TileType.WP8_FLIP;
+        	}
+        	else{
+        		iNUser.tileTemplate = TileType.WP7;
         	}
         	
         	dao.ofy().put(iNUser);
