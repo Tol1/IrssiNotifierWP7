@@ -1,5 +1,7 @@
 package com.tol1.irssinotifier.server.datamodels;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -29,6 +32,12 @@ public class Message {
 	@Unindexed public String channel;
 	@Unindexed public String message;
 	@Parent Key<IrssiNotifierUser> owner;
+	
+	private final String WP7_TEMPLATE = "<wp:Notification xmlns:wp=\"WPNotification\">" +
+			"<wp:Tile>" +
+			"<wp:Count/>" +
+			"</wp:Tile>" +
+			"</wp:Notification>";
 	
 	public Message(){
 		this.timestamp = System.currentTimeMillis();
@@ -89,26 +98,11 @@ public class Message {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
+			Document doc = docBuilder.parse(
+					new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));
 			doc.setXmlStandalone(true);
-			Element root = doc.createElement("wp:Notification");
-			root.setAttribute("xmlns:wp", "WPNotification");
-			doc.appendChild(root);
-			Element tile = doc.createElement("wp:Tile");
-			root.appendChild(tile);
-			if(tileUrl != null){
-				tile.setAttribute("Id", tileUrl);
-			}
-			Element bgImage = doc.createElement("wp:BackgroundImage");
-			tile.appendChild(bgImage);
-			Element count = doc.createElement("wp:Count");
-			tile.appendChild(count);
-			if(countValue == 0){
-				count.setAttribute("Action", "Clear");
-			}
-			count.appendChild(doc.createTextNode(countValue+""));
-			Element title = doc.createElement("wp:Title");
-			tile.appendChild(title);
+			((Element)doc.getElementsByTagName("wp:Tile").item(0)).setAttribute("Id", tileUrl);
+			doc.getElementsByTagName("wp:Count").item(0).appendChild(doc.createTextNode(countValue+""));
 			
 			StringWriter output = new StringWriter();
 
@@ -124,6 +118,10 @@ public class Message {
 		} catch (TransformerFactoryConfigurationError e) {
 			throw new XmlGeneratorException(e);
 		} catch (TransformerException e) {
+			throw new XmlGeneratorException(e);
+		} catch (SAXException e) {
+			throw new XmlGeneratorException(e);
+		} catch (IOException e) {
 			throw new XmlGeneratorException(e);
 		}
 	}
