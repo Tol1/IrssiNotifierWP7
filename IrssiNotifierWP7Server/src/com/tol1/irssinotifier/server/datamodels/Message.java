@@ -23,6 +23,7 @@ import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.tol1.irssinotifier.server.IrssiNotifier;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.XmlGeneratorException;
 
 public class Message {
@@ -36,6 +37,14 @@ public class Message {
 	private final String WP7_TEMPLATE = "<wp:Notification xmlns:wp=\"WPNotification\">" +
 			"<wp:Tile>" +
 			"<wp:Count/>" +
+			"</wp:Tile>" +
+			"</wp:Notification>";
+	
+	private final String WP8_FLIP_TEMPLATE = "<wp:Notification xmlns:wp=\"WPNotification\" Version=\"2.0\">" +
+			"<wp:Tile Template=\"FlipTile\">" +
+			"<wp:WideBackContent/>" +
+			"<wp:Count/>" +
+			"<wp:BackContent/>" +
 			"</wp:Tile>" +
 			"</wp:Notification>";
 	
@@ -93,13 +102,25 @@ public class Message {
 		}
 	}
 	
-	public String GenerateTileNotification(int countValue, String tileUrl) throws XmlGeneratorException{
+	public String GenerateTileNotification(int countValue, String tileUrl, TileType template) throws XmlGeneratorException{
 		
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			Document doc = docBuilder.parse(
-					new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));
+			Document doc;
+			switch(template) {
+			case WP7:
+				doc = docBuilder.parse(new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));
+				break;
+			case WP8_FLIP:
+				doc = docBuilder.parse(new ByteArrayInputStream(WP8_FLIP_TEMPLATE.getBytes("UTF-8")));
+				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
+				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
+				break;
+			default:
+				doc = docBuilder.parse(new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));
+				break;
+			}
 			doc.setXmlStandalone(true);
 			((Element)doc.getElementsByTagName("wp:Tile").item(0)).setAttribute("Id", tileUrl);
 			doc.getElementsByTagName("wp:Count").item(0).appendChild(doc.createTextNode(countValue+""));

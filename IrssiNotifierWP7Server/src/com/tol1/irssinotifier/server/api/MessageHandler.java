@@ -102,7 +102,7 @@ public class MessageHandler extends HttpServlet {
 			
 			if(user.sendTileNotifications && (retries == 0 || tileRetry != null)){
 				try {
-					String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile");
+					String tileMessage = mess.GenerateTileNotification(user.tileCount+1, IrssiNotifier.HILITEPAGEURL+"?NavigatedFrom=Tile", user.tileTemplate);
 					HttpURLConnection conn = DoSend(tileMessage,"token","1",url);
 					Status responseStatus = HandleResponse(conn, resp, user, dao);
 					if(responseStatus == Status.STATUS_OK){

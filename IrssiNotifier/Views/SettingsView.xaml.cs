@@ -9,6 +9,7 @@ using System.Windows.Media;
 using IrssiNotifier.Interfaces;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
+using IrssiNotifier.Utils;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
@@ -409,14 +410,25 @@ namespace IrssiNotifier.Views
 					                             		{
                                                             PushContext.Current.IsTileEnabled = true;
                                                             NotifyPropertyChanged("IsTileEnabled");
-					                             			var newTileData = new StandardTileData
-					                             			                  	{
-					                             			                  		BackgroundImage =
-					                             			                  			new Uri("/Images/Tile.png", UriKind.Relative),
-					                             			                  		Count = 0
-					                             			                  	};
-					                             			ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
-					                             			                 newTileData);
+															if (App.IsTargetedVersion)
+															{
+																var tile = new Uri("/Images/Tile.png", UriKind.Relative);
+																var tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
+																                                                   tile, tile, null, 0, null, tile,
+																                                                   null);
+																ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
+															}
+															else
+															{
+																var newTileData = new StandardTileData
+																                  	{
+																                  		BackgroundImage =
+																                  			new Uri("/Images/Tile.png", UriKind.Relative),
+																                  		Count = 0
+																                  	};
+																ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
+																                 newTileData);
+															}
 					                             		}
 					                             		else
 					                             		{
