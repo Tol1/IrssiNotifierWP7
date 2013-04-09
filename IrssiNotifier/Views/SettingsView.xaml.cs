@@ -413,8 +413,9 @@ namespace IrssiNotifier.Views
 															if (App.IsTargetedVersion)
 															{
 																var tile = new Uri("/Images/Tile.png", UriKind.Relative);
+																var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
 																var tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
-																                                                   tile, tile, null, 0, null, tile,
+																                                                   tile, tile, null, 0, null, wideTile,
 																                                                   null);
 																ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
 															}
