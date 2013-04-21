@@ -48,6 +48,15 @@ public class Message {
 			"</wp:Tile>" +
 			"</wp:Notification>";
 	
+	private final String WP8_ICONIC_TEMPLATE = "<wp:Notification xmlns:wp=\"WPNotification\" Version=\"2.0\">" +
+			"<wp:Tile Template=\"IconicTile\">" +
+			"<wp:WideContent1/>" +
+			"<wp:WideContent2/>" +
+			"<wp:WideContent3 Action=\"Clear\"/>" +
+			"<wp:Count/>" +
+			"</wp:Tile>" +
+			"</wp:Notification>";
+	
 	public Message(){
 		this.timestamp = System.currentTimeMillis();
 		this.id = this.timestamp;
@@ -116,6 +125,11 @@ public class Message {
 				doc = docBuilder.parse(new ByteArrayInputStream(WP8_FLIP_TEMPLATE.getBytes("UTF-8")));
 				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
 				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
+				break;
+			case WP8_ICONIC:
+				doc = docBuilder.parse(new ByteArrayInputStream(WP8_ICONIC_TEMPLATE.getBytes("UTF-8")));
+				doc.getElementsByTagName("wp:WideContent1").item(0).appendChild(doc.createTextNode(nick+"@"+channel));
+				doc.getElementsByTagName("wp:WideContent2").item(0).appendChild(doc.createTextNode(message));
 				break;
 			default:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));

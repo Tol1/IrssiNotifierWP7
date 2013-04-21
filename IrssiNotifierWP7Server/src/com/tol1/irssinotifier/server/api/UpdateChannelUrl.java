@@ -65,7 +65,7 @@ public class UpdateChannelUrl extends HttpServlet {
 					userSettingsChanged = true;
 					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
 				}
-				if(wp8CompliantPhone && (user.tileTemplate != TileType.WP8_FLIP || user.tileTemplate != TileType.WP8_ICONIC)) {
+				if(wp8CompliantPhone && (user.tileTemplate != TileType.WP8_FLIP && user.tileTemplate != TileType.WP8_ICONIC)) {
 					user.tileTemplate = TileType.WP8_FLIP;
 					userSettingsChanged = true;
 					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin on nyt yhteensopiva wp8-tiilien kanssa, siirrytään käyttämään fliptile-templatea");

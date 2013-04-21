@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.StatusMessage;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.*;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -44,8 +45,20 @@ public class UpdateSettings extends HttpServlet {
 					IrssiNotifier.log.info("Käyttäjän "+id+" toast notificationien lähetys asetettu arvoon "+Boolean.parseBoolean(param));
 				}
 				if((param = req.getParameter("tile")) != null){
-					user.sendTileNotifications = Boolean.parseBoolean(param);
-					IrssiNotifier.log.info("Käyttäjän "+id+" tile notificationien lähetys asetettu arvoon "+Boolean.parseBoolean(param));
+					switch(param) {
+						case "flip":
+							user.sendTileNotifications = true;
+							user.tileTemplate = TileType.WP8_FLIP;
+							break;
+						case "iconic":
+							user.sendTileNotifications = true;
+							user.tileTemplate = TileType.WP8_ICONIC;
+							break;
+						default:
+							user.sendTileNotifications = Boolean.parseBoolean(param);
+							break;
+					}
+					IrssiNotifier.log.info("Käyttäjän "+id+" tile notificationien lähetys asetettu arvoon "+user.sendTileNotifications);
 				}
 				if((param = req.getParameter("clearcount")) != null){
 					user.tileCount = 0;
