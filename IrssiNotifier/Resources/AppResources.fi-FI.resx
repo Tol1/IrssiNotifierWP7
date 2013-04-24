@@ -294,4 +294,7 @@
   <data name="WelcomeTextTitle" xml:space="preserve">
     <value>Tervetuloa</value>
   </data>
+  <data name="Wp8TileSelectionText" xml:space="preserve">
+    <value>Valitse mitä livetiilityyppiä haluat käyttää</value>
+  </data>
 </root>

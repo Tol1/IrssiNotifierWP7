@@ -590,5 +590,14 @@ namespace IrssiNotifier.Resources {
                 return ResourceManager.GetString("WelcomeTextTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose which tile template you wish to use.
+        /// </summary>
+        public static string Wp8TileSelectionText {
+            get {
+                return ResourceManager.GetString("Wp8TileSelectionText", resourceCulture);
+            }
+        }
     }
 }

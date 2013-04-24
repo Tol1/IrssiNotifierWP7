@@ -294,4 +294,7 @@
   <data name="WelcomeTextTitle" xml:space="preserve">
     <value>Welcome</value>
   </data>
+  <data name="Wp8TileSelectionText" xml:space="preserve">
+    <value>Choose which tile template you wish to use</value>
+  </data>
 </root>

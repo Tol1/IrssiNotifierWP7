@@ -45,7 +45,7 @@ public class UpdateSettings extends HttpServlet {
 					IrssiNotifier.log.info("Käyttäjän "+id+" toast notificationien lähetys asetettu arvoon "+Boolean.parseBoolean(param));
 				}
 				if((param = req.getParameter("tile")) != null){
-					switch(param) {
+					switch(param.toLowerCase()) {
 						case "flip":
 							user.sendTileNotifications = true;
 							user.tileTemplate = TileType.WP8_FLIP;

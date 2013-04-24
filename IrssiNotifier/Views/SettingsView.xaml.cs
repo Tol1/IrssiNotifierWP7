@@ -80,7 +80,19 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsTileEnabled != value)
 				{
-					PinTile(value);
+					if(value && App.IsTargetedVersion)
+					{
+						NotifyPropertyChanged("IsTileEnabled");
+						var settingsPage = App.GetCurrentPage() as IViewContainerPage;
+						if (settingsPage != null)
+						{
+							settingsPage.View = new Wp8TileSelectionView();
+						}
+					}
+					else
+					{
+						PinTile(value);
+					}
 				}
 			}
 		}
@@ -134,6 +146,12 @@ namespace IrssiNotifier.Views
 					NotifyPropertyChanged("IntervalBrush");
 				}
 			}
+		}
+
+		public TileType TileType
+		{
+			get { return GetOrCreate("Settings.TileType", TileType.Flip); }
+			set { SetOrCreate("Settings.TileType", value); }
 		}
 
 		private bool _isBusy;
@@ -396,7 +414,7 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
-		private void PinTile(bool value)
+		internal void PinTile(bool value)
 		{
 			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 			if (value && hiliteTile == null)
@@ -404,7 +422,12 @@ namespace IrssiNotifier.Views
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					UpdateSettings(Settings.Tile, true, success =>
+					var settingValue = "true";
+					if(App.IsTargetedVersion)
+					{
+						settingValue = TileType.ToString();
+					}
+					UpdateSettings(Settings.Tile, settingValue, success =>
 					                             	{
 					                             		if (success)
 					                             		{
@@ -412,11 +435,23 @@ namespace IrssiNotifier.Views
                                                             NotifyPropertyChanged("IsTileEnabled");
 															if (App.IsTargetedVersion)
 															{
-																var tile = new Uri("/Images/Tile.png", UriKind.Relative);
-																var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
-																var tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
-																                                                   tile, tile, null, 0, null, wideTile,
+																ShellTileData tileData;
+																if(TileType == TileType.Iconic)
+																{
+																	var smallIcon = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
+																	var mediumIcon = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
+																	tileData = ReflectionHelper.CreateIconicTileData("Irssi Notifier", mediumIcon, smallIcon,
+																														 "Iso teksti", "Keskiteksti",
+																														 "Alin teksti", 9);
+																}
+																else
+																{
+																	var tile = new Uri("/Images/Tile.png", UriKind.Relative);
+																	var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
+																	tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
+																                                                   tile, tile, null, 9, null, wideTile,
 																                                                   null);
+																}
 																ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
 															}
 															else
@@ -446,6 +481,7 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
+				//TODO WP8-tiilet
 				UpdateSettings(Settings.Tile, value, success =>
 				                              	{
 				                              		if (success)
@@ -587,5 +623,12 @@ namespace IrssiNotifier.Views
 		Tile,
 		ClearCount,
 		Raw
+	}
+
+	public enum TileType
+	{
+		Wp7,
+		Iconic,
+		Flip
 	}
 }

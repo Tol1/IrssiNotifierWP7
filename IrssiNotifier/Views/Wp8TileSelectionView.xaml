@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="IrssiNotifier.Views.Wp8TileSelectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    
+    <Grid x:Name="LayoutRoot">
+        <ScrollViewer>
+            <StackPanel>
+                <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.Wp8TileSelectionText, Source={StaticResource Strings}}"/>
+                <StackPanel Orientation="Horizontal" >
+                    <Button Click="IconicButtonClick" Width="150" Content="Iconic"/>
+                    <Button Click="FlipButtonClick" Width="150" Content="Flip"/>
+                    <Button Click="CancelButtonClick" Width="150" Content="{Binding Path=Strings.CancelButtonText, Source={StaticResource Strings}}"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

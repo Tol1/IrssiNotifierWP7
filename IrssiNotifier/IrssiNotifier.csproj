@@ -127,6 +127,9 @@
     <Compile Include="Views\ToastIntervalView.xaml.cs">
       <DependentUpon>ToastIntervalView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wp8TileSelectionView.xaml.cs">
+      <DependentUpon>Wp8TileSelectionView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -182,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ToastIntervalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wp8TileSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
