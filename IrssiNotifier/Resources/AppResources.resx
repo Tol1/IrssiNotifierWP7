@@ -240,6 +240,12 @@
   <data name="RegisterButtonText" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="RePinLiveTileText" xml:space="preserve">
+    <value>You've been chosen different tile template than before. By selecting OK the old tile is removed and new tile is created automatically.</value>
+  </data>
+  <data name="RePinLiveTileTitle" xml:space="preserve">
+    <value>Confirm change of tile template</value>
+  </data>
   <data name="RetryButtonText" xml:space="preserve">
     <value>Retry</value>
   </data>

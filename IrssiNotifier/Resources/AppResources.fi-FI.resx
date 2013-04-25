@@ -240,6 +240,12 @@
   <data name="RegisterButtonText" xml:space="preserve">
     <value>Rekisteröidy</value>
   </data>
+  <data name="RePinLiveTileText" xml:space="preserve">
+    <value>Olet valinnut eri tiilityypin kuin aikaisemmin. Valitsemalla OK vanha tiili poistetaan ja uusi luodaan automaattisesti.</value>
+  </data>
+  <data name="RePinLiveTileTitle" xml:space="preserve">
+    <value>Vahvista tiilen muutos</value>
+  </data>
   <data name="RetryButtonText" xml:space="preserve">
     <value>Yritä uudelleen</value>
   </data>

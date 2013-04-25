@@ -347,6 +347,7 @@ namespace IrssiNotifier.Views
 
 		private static void ClearLocalTileCount(bool success = true)
 		{
+			//TODO iconic tiles are not cleared
 			if (success)
 			{
 				foreach (var tile in ShellTile.ActiveTiles)
@@ -414,7 +415,7 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
-		internal void PinTile(bool value)
+		internal void PinTile(bool value, TileType previousType = TileType.Wp7)
 		{
 			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 			if (value && hiliteTile == null)
@@ -435,24 +436,7 @@ namespace IrssiNotifier.Views
                                                             NotifyPropertyChanged("IsTileEnabled");
 															if (App.IsTargetedVersion)
 															{
-																ShellTileData tileData;
-																if(TileType == TileType.Iconic)
-																{
-																	var smallIcon = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
-																	var mediumIcon = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
-																	tileData = ReflectionHelper.CreateIconicTileData("Irssi Notifier", mediumIcon, smallIcon,
-																														 "Iso teksti", "Keskiteksti",
-																														 "Alin teksti", 9);
-																}
-																else
-																{
-																	var tile = new Uri("/Images/Tile.png", UriKind.Relative);
-																	var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
-																	tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
-																                                                   tile, tile, null, 9, null, wideTile,
-																                                                   null);
-																}
-																ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
+																CreateWp8Tile();
 															}
 															else
 															{
@@ -481,16 +465,26 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				//TODO WP8-tiilet
-				UpdateSettings(Settings.Tile, value, success =>
+				var settingValue = "true";
+				if (App.IsTargetedVersion)
+				{
+					settingValue = TileType.ToString();
+				}
+				UpdateSettings(Settings.Tile, settingValue, success =>
 				                              	{
 				                              		if (success)
 				                              		{
+														if(value && App.IsTargetedVersion && previousType != TileType && hiliteTile != null)
+														{
+															hiliteTile.Delete();
+															CreateWp8Tile();
+														}
 				                              			PushContext.Current.IsTileEnabled = value;
 				                              		}
 				                              		else
 				                              		{
 				                              			PushContext.Current.IsTileEnabled = !value;
+				                              			TileType = previousType;
 				                              		}
 				                              		NotifyPropertyChanged("IsTileEnabled");
 				                              	});
@@ -504,6 +498,28 @@ namespace IrssiNotifier.Views
 					hiliteTile.Delete();
 				}
 			}*/
+		}
+
+		private void CreateWp8Tile()
+		{
+			ShellTileData tileData;
+			if (TileType == TileType.Iconic)
+			{
+				var smallIcon = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
+				var mediumIcon = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
+				tileData = ReflectionHelper.CreateIconicTileData("Irssi Notifier", mediumIcon, smallIcon,
+																	 "Iso teksti", "Keskiteksti",
+																	 "Alin teksti", 9);
+			}
+			else
+			{
+				var tile = new Uri("/Images/Tile.png", UriKind.Relative);
+				var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
+				tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
+															   tile, tile, null, 9, null, wideTile,
+															   null);
+			}
+			ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
 		}
 
 		private void LogoutClick(object sender, RoutedEventArgs e)

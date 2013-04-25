@@ -430,6 +430,24 @@ namespace IrssiNotifier.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve been chosen different tile template than before. By selecting OK the old tile is removed and new tile is created automatically..
+        /// </summary>
+        public static string RePinLiveTileText {
+            get {
+                return ResourceManager.GetString("RePinLiveTileText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm change of tile template.
+        /// </summary>
+        public static string RePinLiveTileTitle {
+            get {
+                return ResourceManager.GetString("RePinLiveTileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Retry.
         /// </summary>
         public static string RetryButtonText {
