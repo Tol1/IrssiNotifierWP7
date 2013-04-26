@@ -22,6 +22,16 @@ namespace IrssiNotifier.Utils
 			setMethod.Invoke(instance, new[] {value});
 		}
 
+		//TODO tän vois ehkä refucktoroida fiksummaks...
+
+		public static ShellTileData ClearIconicTileCount()
+		{
+			var tileDataType = Type.GetType("Microsoft.Phone.Shell.IconicTileData, Microsoft.Phone");
+			var iconicTileData = (ShellTileData)tileDataType.GetConstructor(new Type[] { }).Invoke(null);
+			SetProperty(iconicTileData, "Count", 0);
+			return iconicTileData;
+		}
+
 		public static ShellTileData CreateIconicTileData(string title, Uri iconImageUri, Uri smallIconImageUri, 
 			string text1, string text2, string text3, int? count = null, Color? backGroundColor = null)
 		{

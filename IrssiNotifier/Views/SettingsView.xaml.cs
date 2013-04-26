@@ -345,12 +345,16 @@ namespace IrssiNotifier.Views
 
 		private bool SkipUpdateBackend { get; set; }
 
-		private static void ClearLocalTileCount(bool success = true)
+		private void ClearLocalTileCount(bool success = true)
 		{
-			//TODO iconic tiles are not cleared
 			if (success)
 			{
-				foreach (var tile in ShellTile.ActiveTiles)
+				var tile = GetLiveTile();
+				if(TileType == TileType.Iconic && App.IsTargetedVersion)
+				{
+					tile.Update(ReflectionHelper.ClearIconicTileCount());
+				}
+				else
 				{
 					tile.Update(new StandardTileData {Count = 0});
 				}
@@ -415,9 +419,14 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
+		private static ShellTile GetLiveTile()
+		{
+			return ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+		}
+
 		internal void PinTile(bool value, TileType previousType = TileType.Wp7)
 		{
-			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+			var hiliteTile = GetLiveTile();
 			if (value && hiliteTile == null)
 			{
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
