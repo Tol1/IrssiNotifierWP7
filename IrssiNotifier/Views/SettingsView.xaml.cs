@@ -353,7 +353,7 @@ namespace IrssiNotifier.Views
 				if (tile == null) return;
 				if(TileType == TileType.Iconic && App.IsTargetedVersion)
 				{
-					tile.Update(ReflectionHelper.ClearIconicTileCount());
+					tile.Update(IconicTileDataReflectionHelper.ClearIconicTileCount());
 				}
 				else
 				{
@@ -512,24 +512,37 @@ namespace IrssiNotifier.Views
 
 		private void CreateWp8Tile()
 		{
-			ShellTileData tileData;
+			TileReflectionHelper tileData;
 			if (TileType == TileType.Iconic)
 			{
 				var smallIcon = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
 				var mediumIcon = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
-				tileData = ReflectionHelper.CreateIconicTileData("Irssi Notifier", mediumIcon, smallIcon,
-																	 "Iso teksti", "Keskiteksti",
-																	 "Alin teksti", 9);
+				tileData =
+					new IconicTileDataReflectionHelper
+						{
+							Title = "Irssi Notifier",
+							Count = 9,
+							IconImageUri = mediumIcon,
+							SmallIconImageUri = smallIcon,
+							WideContent1 = "Iso teksti",
+							WideContent2 = "Keskiteksti",
+							WideContent3 = "Alin teksti"
+						};
 			}
 			else
 			{
 				var tile = new Uri("/Images/Tile.png", UriKind.Relative);
 				var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
-				tileData = ReflectionHelper.CreateFlipTileData(null, "Irssi Notifier", null,
-															   tile, tile, null, 9, null, wideTile,
-															   null);
+				tileData = new FlipTileDataReflectionHelper
+				           	{
+				           		BackTitle = "Irssi Notifier",
+				           		SmallBackgroundImageUri = tile,
+				           		BackgroundImageUri = tile,
+				           		WideBackgroundImageUri = wideTile,
+				           		Count = 9
+				           	};
 			}
-			ReflectionHelper.Create(new Uri(App.Hilitepageurl, UriKind.Relative), tileData, true);
+			tileData.Create(new Uri(App.Hilitepageurl, UriKind.Relative), true);
 		}
 
 		private void LogoutClick(object sender, RoutedEventArgs e)
