@@ -350,6 +350,7 @@ namespace IrssiNotifier.Views
 			if (success)
 			{
 				var tile = GetLiveTile();
+				if (tile == null) return;
 				if(TileType == TileType.Iconic && App.IsTargetedVersion)
 				{
 					tile.Update(ReflectionHelper.ClearIconicTileCount());
@@ -419,7 +420,7 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
-		private static ShellTile GetLiveTile()
+		internal static ShellTile GetLiveTile()
 		{
 			return ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
 		}
