@@ -25,7 +25,7 @@ namespace IrssiNotifier.Views
 
 		private void DoTilePin(TileType type)
 		{
-			if (type == _previousType || MessageBox.Show(AppResources.RePinLiveTileText, AppResources.RePinLiveTileTitle, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+			if (SettingsView.GetLiveTile() == null || type == _previousType || MessageBox.Show(AppResources.RePinLiveTileText, AppResources.RePinLiveTileTitle, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
 			{
 				SettingsView.GetInstance().TileType = type;
 				SettingsView.GetInstance().PinTile(true, _previousType);
