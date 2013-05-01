@@ -14,10 +14,10 @@
             <StackPanel>
                 <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.Wp8TileSelectionText, Source={StaticResource Strings}}"/>
                 <StackPanel Orientation="Horizontal" >
-                    <Button Click="IconicButtonClick" Width="150" Content="Iconic"/>
-                    <Button Click="FlipButtonClick" Width="150" Content="Flip"/>
-                    <Button Click="CancelButtonClick" Width="150" Content="{Binding Path=Strings.CancelButtonText, Source={StaticResource Strings}}"/>
+                    <Button x:Name="iconicButton" Click="IconicButtonClick" Width="150" Content="Iconic"/>
+                    <Button x:Name="flipButton" Click="FlipButtonClick" Width="150" Content="Flip"/>
                 </StackPanel>
+                <Button Click="CancelButtonClick" Width="150" Content="{Binding Path=Strings.CancelButtonText, Source={StaticResource Strings}}" HorizontalAlignment="Left" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

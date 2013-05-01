@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 using IrssiNotifier.Interfaces;
 using IrssiNotifier.Resources;
 
@@ -11,6 +12,14 @@ namespace IrssiNotifier.Views
 		{
 			InitializeComponent();
 			_previousType = SettingsView.GetInstance().TileType;
+			Loaded += (sender, args) =>
+			          	{
+			          		if (SettingsView.GetLiveTile() != null)
+			          		{
+			          			var button = SettingsView.GetInstance().TileType == TileType.Iconic ? iconicButton : flipButton;
+			          			button.BorderBrush = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+			          		}
+			          	};
 		}
 
 		private void IconicButtonClick(object sender, RoutedEventArgs e)
