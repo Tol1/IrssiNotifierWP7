@@ -353,7 +353,11 @@ namespace IrssiNotifier.Views
 				if (tile == null) return;
 				if(TileType == TileType.Iconic && App.IsTargetedVersion)
 				{
-					tile.Update(IconicTileDataReflectionHelper.ClearIconicTileCount());
+					tile.Update(IconicTileDataReflectionHelper.ClearTile());
+				}
+				else if(TileType == TileType.Flip && App.IsTargetedVersion)
+				{
+					tile.Update(FlipTileDataReflectionHelper.ClearTile());
 				}
 				else
 				{

@@ -63,6 +63,11 @@ namespace IrssiNotifier.Utils
 			}
 			return null;
 		}
+
+		public static ShellTileData ClearTile()
+		{
+			return new FlipTileDataReflectionHelper {Count = 0, BackTitle = "", WideBackContent = "", BackContent = ""}.CreateTileData();
+		}
 	}
 	internal class IconicTileDataReflectionHelper : TileReflectionHelper
 	{
@@ -103,9 +108,9 @@ namespace IrssiNotifier.Utils
 			return null;
 		}
 
-		public static ShellTileData ClearIconicTileCount()
+		public static ShellTileData ClearTile()
 		{
-			return new IconicTileDataReflectionHelper {Count = 0}.CreateTileData();
+			return new IconicTileDataReflectionHelper {Count = 0, WideContent1 = "", WideContent2 = "", WideContent3 = ""}.CreateTileData();
 		}
 	}
 }
