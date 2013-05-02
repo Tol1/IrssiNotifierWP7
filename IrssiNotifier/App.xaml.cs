@@ -100,14 +100,7 @@ namespace IrssiNotifier
 		// This code will not execute when the application is reactivated
 		private void ApplicationLaunching(object sender, LaunchingEventArgs e)
 		{
-			try
-			{
-				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
-			}
-			catch (InvalidOperationException)
-			{
-				_pushContext = PushContext.Current;
-			}
+			_pushContext = PushContext.Current ?? new PushContext(Channelname, Servicename, AllowedDomains);
 			_pushContext.Error += OnPushContextError;
 		}
 
@@ -115,14 +108,7 @@ namespace IrssiNotifier
 		// This code will not execute when the application is first launched
 		private void ApplicationActivated(object sender, ActivatedEventArgs e)
 		{
-			try
-			{
-				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
-			}
-			catch (InvalidOperationException)
-			{
-				_pushContext = PushContext.Current;
-			}
+			_pushContext = PushContext.Current ?? new PushContext(Channelname, Servicename, AllowedDomains);
 			_pushContext.Error += OnPushContextError;
 		}
 
