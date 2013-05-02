@@ -14,8 +14,12 @@
             <StackPanel>
                 <TextBlock Margin="11,0,0,0" Foreground="{StaticResource PhoneSubtleBrush}" Text="{Binding Path=Strings.Wp8TileSelectionText, Source={StaticResource Strings}}"/>
                 <StackPanel Orientation="Horizontal" >
-                    <Button x:Name="iconicButton" Click="IconicButtonClick" Width="150" Content="Iconic"/>
-                    <Button x:Name="flipButton" Click="FlipButtonClick" Width="150" Content="Flip"/>
+                    <Button x:Name="iconicButton" Click="IconicButtonClick" Width="150">
+                        <Image Source="/Images/IconicTileButton.png"/>
+                    </Button>
+                    <Button x:Name="flipButton" Click="FlipButtonClick" Width="150">
+                        <Image Source="/Images/FlipTileButton.png"/>
+                    </Button>
                 </StackPanel>
                 <Button Click="CancelButtonClick" Width="150" Content="{Binding Path=Strings.CancelButtonText, Source={StaticResource Strings}}" HorizontalAlignment="Left" />
             </StackPanel>
