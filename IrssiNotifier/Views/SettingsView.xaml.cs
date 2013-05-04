@@ -519,15 +519,13 @@ namespace IrssiNotifier.Views
 			TileReflectionHelper tileData;
 			if (TileType == TileType.Iconic)
 			{
-				var smallIcon = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
-				var mediumIcon = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
 				tileData =
 					new IconicTileDataReflectionHelper
 						{
 							Title = "Irssi Notifier",
 							Count = 9,
-							IconImageUri = mediumIcon,
-							SmallIconImageUri = smallIcon,
+							IconImageUri = App.TileIconicMediumUri,
+							SmallIconImageUri = App.TileIconicSmallUri,
 							WideContent1 = "Iso teksti",
 							WideContent2 = "Keskiteksti",
 							WideContent3 = "Alin teksti"
@@ -535,14 +533,12 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				var tile = new Uri("/Images/Tile.png", UriKind.Relative);
-				var wideTile = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
 				tileData = new FlipTileDataReflectionHelper
 				           	{
 				           		BackTitle = "Irssi Notifier",
-				           		SmallBackgroundImageUri = tile,
-				           		BackgroundImageUri = tile,
-				           		WideBackgroundImageUri = wideTile,
+				           		SmallBackgroundImageUri = App.TileFlipNormalUri,
+				           		BackgroundImageUri = App.TileFlipNormalUri,
+				           		WideBackgroundImageUri = App.TileFlipWideUri,
 				           		Count = 9
 				           	};
 			}

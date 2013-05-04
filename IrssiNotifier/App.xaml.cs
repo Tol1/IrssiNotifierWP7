@@ -36,6 +36,11 @@ namespace IrssiNotifier
 			return ((App)Current).RootFrame.Content as PhoneApplicationPage;
 		}
 
+		public static readonly Uri TileFlipWideUri = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
+		public static readonly Uri TileFlipNormalUri = new Uri("/Images/Tile.png", UriKind.Relative);
+		public static readonly Uri TileIconicSmallUri = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
+		public static readonly Uri TileIconicMediumUri = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
+
 		private static readonly Version TargetedVersion = new Version(7, 10, 8858);		//WP7.8 -> tuki erikokoisille livetiilille
 
 		public static bool IsTargetedVersion

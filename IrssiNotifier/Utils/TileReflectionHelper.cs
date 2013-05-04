@@ -43,7 +43,7 @@ namespace IrssiNotifier.Utils
 				var constructorInfo = flipTileDataType.GetConstructor(new Type[] {});
 				if (constructorInfo != null)
 				{
-					var flipTileData = (ShellTileData)constructorInfo.Invoke(null);
+					var flipTileData = (ShellTileData) constructorInfo.Invoke(null);
 
 					SetProperty(flipTileData, "Title", Title);
 					if (Count.HasValue)
@@ -66,7 +66,17 @@ namespace IrssiNotifier.Utils
 
 		public static ShellTileData ClearTile()
 		{
-			return new FlipTileDataReflectionHelper {Count = 0, BackTitle = "", WideBackContent = "", BackContent = ""}.CreateTileData();
+			return
+				new FlipTileDataReflectionHelper
+					{
+						Count = 0,
+						BackTitle = "",
+						WideBackContent = "",
+						BackContent = "",
+						WideBackgroundImageUri = App.TileFlipWideUri,
+						SmallBackgroundImageUri = App.TileFlipNormalUri,
+						BackgroundImageUri = App.TileFlipNormalUri
+					}.CreateTileData();
 		}
 	}
 	internal class IconicTileDataReflectionHelper : TileReflectionHelper
@@ -110,7 +120,16 @@ namespace IrssiNotifier.Utils
 
 		public static ShellTileData ClearTile()
 		{
-			return new IconicTileDataReflectionHelper {Count = 0, WideContent1 = "", WideContent2 = "", WideContent3 = ""}.CreateTileData();
+			return new IconicTileDataReflectionHelper
+			       	{
+			       		Count = 0,
+			       		WideContent1 = "",
+			       		WideContent2 = "",
+			       		WideContent3 = "",
+			       		IconImageUri = App.TileIconicMediumUri,
+			       		SmallIconImageUri = App.TileIconicSmallUri
+			       	}.
+				CreateTileData();
 		}
 	}
 }
