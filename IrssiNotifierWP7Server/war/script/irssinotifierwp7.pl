@@ -80,6 +80,16 @@ sub hilite {
 		Irssi::print("Irssi Notifier: You'll need to install Wget to use Irssi Notifier");
 		return;
 	}
+	my $encoding;
+	eval {
+		require I18N::Langinfo;
+		$encoding = lc(I18N::Langinfo::langinfo(I18N::Langinfo::CODESET()));
+	};
+	if ($encoding && $encoding !~ /^utf-?8$/i) {
+		$lastMsg    = Encode::encode_utf8($lastMsg);
+		$lastNick   = Encode::encode_utf8($lastNick);
+		$lastTarget = Encode::encode_utf8($lastTarget);
+	}
 	
 	$lastMsg = CGI::Util::escape($lastMsg);
 	$lastNick = CGI::Util::escape($lastNick);
