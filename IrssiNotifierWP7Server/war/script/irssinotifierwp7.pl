@@ -49,14 +49,28 @@ sub print_text {
 	my ($dest, $text, $stripped) = @_;
 
 	my $opt = MSGLEVEL_HILIGHT|MSGLEVEL_MSGS;
-	if (
-		($dest->{level} & ($opt)) && (($dest->{level} & MSGLEVEL_NOHILIGHT) == 0) &&
-		(!Irssi::settings_get_bool("irssinotifierwp_away_only") || $lastServer->{usermode_away}) &&
-		(!Irssi::settings_get_bool("irssinotifierwp_ignore_active_window") || ($dest->{window}->{refnum} != (Irssi::active_win()->{refnum}))) &&
-		activity_allows_hilight()
-	) {
+	if (should_hilite($dest)) {
 		hilite();
 	}
+}
+
+sub should_hilite {
+	my $target = @_ ? shift : $_;
+
+    my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
+    if (!($target->{level} & $opt) || ($target->{level} & MSGLEVEL_NOHILIGHT)) {
+        return 0;
+    }
+	if(Irssi::settings_get_bool("irssinotifierwp_away_only") && !$lastServer->{usermode_away}) {
+		return 0;
+	}
+	if(Irssi::settings_get_bool("irssinotifierwp_ignore_active_window") && ($target->{window}->{refnum} == (Irssi::active_win()->{refnum}))) {
+		return 0;
+	}
+	if(!activity_allows_hilight()) {
+		return 0;
+	}
+	return 1;
 }
 
 sub activity_allows_hilight {
