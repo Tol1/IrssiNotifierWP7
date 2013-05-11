@@ -6,7 +6,7 @@ use POSIX;
 require CGI::Util;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "1";
+$VERSION = "2";
 %IRSSI = (
 	authors		=> "Tomi \'Tol1\' Nokkala, Lauri \'murgo\' Härsilä",
 	contact		=> "tol1\@iki.fi",
@@ -14,7 +14,7 @@ $VERSION = "1";
 	description	=> "Send notifications about Irssi highlights to server",
 	license		=> "Apache License, version 2.0",
 	url			=> "http://irssinotifierwp.appspot.com",
-	changed		=> "2013-05-09"
+	changed		=> "2013-05-11"
 );
 
 my $lastMsg;
@@ -74,7 +74,6 @@ sub should_hilite {
 	my $channel;
 
 	foreach $channel (@ignored_channels) {
-		Irssi::print("$channel $lastWindow");
 		if (lc($lastTarget) eq lc($channel)) {
 			return 0;
 		}
