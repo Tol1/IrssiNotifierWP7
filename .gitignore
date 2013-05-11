@@ -35,3 +35,4 @@ appengine-generated
 testi/*
 IrssiNotifier/SubmissionInfo/ManualTestResults.xml
 /*.txt
+Ignored/
