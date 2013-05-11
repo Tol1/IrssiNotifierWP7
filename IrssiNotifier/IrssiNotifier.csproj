@@ -203,8 +203,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\About\Data.en-US.xml" />
-    <Content Include="Content\About\Data.xml">
+    <Content Include="Content\About\Data.xml" />
+    <Content Include="Content\About\Data.fi-FI.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Images\appbar.questionmark.rest.png">
