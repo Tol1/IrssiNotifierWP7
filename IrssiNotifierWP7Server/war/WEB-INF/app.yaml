@@ -6,39 +6,39 @@ threadsafe: true
 handlers:
 - url: /client/login
   servlet: com.tol1.irssinotifier.server.login.LoginUser
-  #secure: always
+  secure: always
   
 - url: /client/logout
   servlet: com.tol1.irssinotifier.server.login.LogoutUser
-  #secure: always
+  secure: always
   
 - url: /client/login/loginsuccess
   servlet: com.tol1.irssinotifier.server.login.LoginSuccess
-  #secure: always
+  secure: always
   
 - url: /client/logout/logoutsuccess
   servlet: com.tol1.irssinotifier.server.login.LogoutSuccess
-  #secure: always
+  secure: always
   
 - url: /client/register
   servlet: com.tol1.irssinotifier.server.api.RegisterPhoneClient
-  #secure: always
+  secure: always
   
 - url: /irssi/message
   servlet: com.tol1.irssinotifier.server.api.MessageHandler
-  #secure: always
+  secure: always
   
 - url: /client/update
   servlet: com.tol1.irssinotifier.server.api.UpdateChannelUrl
-  #secure: always
+  secure: always
   
 - url: /client/settings
   servlet: com.tol1.irssinotifier.server.api.UpdateSettings
-  #secure: always
+  secure: always
   
 - url: /client/messages
   servlet: com.tol1.irssinotifier.server.api.MessageList
-  #secure: always
+  secure: always
   
 - url: /cron/clear
   servlet: com.tol1.irssinotifier.server.cron.Clear

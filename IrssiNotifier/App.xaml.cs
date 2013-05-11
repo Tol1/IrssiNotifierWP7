@@ -11,14 +11,10 @@ namespace IrssiNotifier
 {
 	public partial class App : Application
 	{
-#if(DEBUG)
-		public static readonly string Baseaddress = "http://2.irssinotifierwp.appspot.com/";
-#else
-		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
-#endif
+		public static readonly int Version = 2;
+		public static readonly string Baseaddress = "https://"+Version+"-dot-irssinotifierwp.appspot.com/";
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
-		public static readonly int Version = 2;
 
 		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml?NavigatedFrom=Tile";
 
