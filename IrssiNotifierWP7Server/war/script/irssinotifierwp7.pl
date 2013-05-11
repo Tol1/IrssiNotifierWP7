@@ -14,7 +14,7 @@ $VERSION = "1";
 	description	=> "Send notifications about Irssi highlights to server",
 	license		=> "Apache License, version 2.0",
 	url			=> "http://irssinotifierwp.appspot.com",
-	changed		=> "2012-08-21"
+	changed		=> "2013-05-09"
 );
 
 my $lastMsg;
@@ -57,10 +57,10 @@ sub print_text {
 sub should_hilite {
 	my $target = @_ ? shift : $_;
 
-    my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
-    if (!($target->{level} & $opt) || ($target->{level} & MSGLEVEL_NOHILIGHT)) {
-        return 0;
-    }
+	my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
+	if (!($target->{level} & $opt) || ($target->{level} & MSGLEVEL_NOHILIGHT)) {
+		return 0;
+	}
 	if(Irssi::settings_get_bool("irssinotifierwp_away_only") && !$lastServer->{usermode_away}) {
 		return 0;
 	}
@@ -69,6 +69,15 @@ sub should_hilite {
 	}
 	if(!activity_allows_hilight()) {
 		return 0;
+	}
+	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
+	my $channel;
+
+	foreach $channel (@ignored_channels) {
+		Irssi::print("$channel $lastWindow");
+		if (lc($lastTarget) eq lc($channel)) {
+			return 0;
+		}
 	}
 	return 1;
 }
@@ -203,6 +212,7 @@ Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_away_only', false);
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_ignore_active_window', false);
 Irssi::settings_add_int('IrssiNotifierWP', 'irssinotifierwp_require_idle_seconds', 0);
+Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_ignore_channels', '');
 
 Irssi::signal_add('message irc action', 'public');
 Irssi::signal_add('message public', 'public');
