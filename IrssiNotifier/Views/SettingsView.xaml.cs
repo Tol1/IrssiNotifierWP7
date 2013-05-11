@@ -523,23 +523,19 @@ namespace IrssiNotifier.Views
 					new IconicTileDataReflectionHelper
 						{
 							Title = "Irssi Notifier",
-							Count = 9,
+							Count = 0,
 							IconImageUri = App.TileIconicMediumUri,
-							SmallIconImageUri = App.TileIconicSmallUri,
-							WideContent1 = "Iso teksti",
-							WideContent2 = "Keskiteksti",
-							WideContent3 = "Alin teksti"
+							SmallIconImageUri = App.TileIconicSmallUri
 						};
 			}
 			else
 			{
 				tileData = new FlipTileDataReflectionHelper
 				           	{
-				           		BackTitle = "Irssi Notifier",
 				           		SmallBackgroundImageUri = App.TileFlipNormalUri,
 				           		BackgroundImageUri = App.TileFlipNormalUri,
 				           		WideBackgroundImageUri = App.TileFlipWideUri,
-				           		Count = 9
+				           		Count = 0
 				           	};
 			}
 			tileData.Create(new Uri(App.Hilitepageurl, UriKind.Relative), true);
