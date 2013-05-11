@@ -112,7 +112,9 @@ public class Message {
 	}
 	
 	public String GenerateTileNotification(int countValue, String tileUrl, TileType template) throws XmlGeneratorException{
-		
+		if(template == null) {
+			template = TileType.WP7;
+		}
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
