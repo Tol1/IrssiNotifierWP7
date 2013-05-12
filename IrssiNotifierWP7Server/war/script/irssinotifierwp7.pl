@@ -207,6 +207,40 @@ sub event_key_pressed {
 	$lastKeyboardActivity = time;
 }
 
+sub cmd_add_ignore_channel {
+	my ($channel) = @_;
+	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
+	push(@ignored_channels, trim(lc($channel)));
+	Irssi::settings_set_str("irssinotifierwp_ignore_channels", join(" ", @ignored_channels));
+	Irssi::print("Irssi Notifier: Added ingored channel: $channel");
+}
+
+sub cmd_delete_ignore_channel {
+	my ($removedchannel) = @_;
+	$removedchannel = trim(lc($removedchannel));	#Trim. To be sure. Stupid perl.
+	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
+	@ignored_channels = grep {$_ ne $removedchannel} @ignored_channels;
+	Irssi::settings_set_str("irssinotifierwp_ignore_channels", join(" ", @ignored_channels));
+	Irssi::print("Irssi Notifier: Removed ingored channel: $removedchannel");
+}
+
+sub sig_complete_channel {
+	my ($strings, $window, $word, $linestart, $want_space) = @_;
+	return unless ($linestart eq '/irssinotifierwp_delete_ignore_channel');
+	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
+	$search = quotemeta "$word";
+	@$strings = grep(/^$search/, @ignored_channels);
+	$$want_space = 0;
+	Irssi::signal_stop();
+}
+
+sub trim {
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
+}
+
 Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_away_only', false);
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_ignore_active_window', false);
@@ -218,5 +252,10 @@ Irssi::signal_add('message public', 'public');
 Irssi::signal_add('message private', 'private');
 Irssi::signal_add('print text', 'print_text');
 Irssi::signal_add('setup changed', 'setup_keypress_handler');
+
+Irssi::command_bind('irssinotifierwp_add_ignore_channel', 'cmd_add_ignore_channel');
+Irssi::command_bind('irssinotifierwp_delete_ignore_channel', 'cmd_delete_ignore_channel');
+
+Irssi::signal_add_first('complete word', 'sig_complete_channel');
 
 setup_keypress_handler();
