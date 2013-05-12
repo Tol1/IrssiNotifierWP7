@@ -67,7 +67,7 @@ public class Message {
 		this.id = this.timestamp;
 		this.nick = nick;
 		this.channel = channel;
-		this.message = message;
+		this.message = message.replaceAll("[\u0000-\u001f]", "");
 		this.owner = new Key<IrssiNotifierUser>(user.getClass(), user.UserID);
 	}
 	
