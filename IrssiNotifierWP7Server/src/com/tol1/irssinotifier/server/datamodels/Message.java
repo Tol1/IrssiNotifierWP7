@@ -71,6 +71,10 @@ public class Message {
 		this.owner = new Key<IrssiNotifierUser>(user.getClass(), user.UserID);
 	}
 	
+	private String getFromString() {
+		return channel.equals("PRIVATE") ? nick : nick + " @ " + channel;
+	}
+	
 	public String GenerateToastNotification() throws XmlGeneratorException{
 		
 		try {
@@ -85,7 +89,7 @@ public class Message {
 			root.appendChild(toast);
 			Element text1 = doc.createElement("wp:Text1");
 			toast.appendChild(text1);
-			text1.appendChild(doc.createTextNode(this.nick + " @ " + this.channel));
+			text1.appendChild(doc.createTextNode(getFromString()));
 			Element text2 = doc.createElement("wp:Text2");
 			toast.appendChild(text2);
 			text2.appendChild(doc.createTextNode(this.message));
@@ -125,12 +129,12 @@ public class Message {
 				break;
 			case WP8_FLIP:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP8_FLIP_TEMPLATE.getBytes("UTF-8")));
-				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
-				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(nick+"@"+channel+"\n"+message));
+				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+message));
+				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+message));
 				break;
 			case WP8_ICONIC:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP8_ICONIC_TEMPLATE.getBytes("UTF-8")));
-				doc.getElementsByTagName("wp:WideContent1").item(0).appendChild(doc.createTextNode(nick+"@"+channel));
+				doc.getElementsByTagName("wp:WideContent1").item(0).appendChild(doc.createTextNode(getFromString()));
 				doc.getElementsByTagName("wp:WideContent2").item(0).appendChild(doc.createTextNode(message));
 				break;
 			default:
