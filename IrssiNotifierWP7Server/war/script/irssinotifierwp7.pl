@@ -15,8 +15,12 @@ $VERSION = "2";
 	description	=> "Send notifications about Irssi highlights to server",
 	license		=> "Apache License, version 2.0",
 	url			=> "http://irssinotifierwp.appspot.com",
-	changed		=> "2013-05-11"
+	changed		=> "2013-05-18"
 );
+
+my $settingsfile = Irssi::get_irssi_dir."/irssinotifierwp.conf";
+
+my @ignorePatterns = ();
 
 my $lastMsg;
 my $lastServer;
@@ -78,6 +82,9 @@ sub should_hilite {
 		if (lc($lastTarget) eq lc($channel)) {
 			return 0;
 		}
+	}
+	if (grep { $lastMsg =~ /$_/i } @ignorePatterns) {
+		return 0;
 	}
 	return 1;
 }
@@ -235,6 +242,30 @@ sub sig_complete_channel {
 	Irssi::signal_stop();
 }
 
+sub cmd_add_ignore_pattern {
+	my ($pattern) = @_;
+	push(@ignorePatterns, $pattern);
+	save_to_settings_file();
+}
+
+sub cmd_list_ignore_patterns {
+	for my $i (0 .. $#ignorePatterns) {
+		print_info("[".($i + 1)."]: $ignorePatterns[$i]");
+	}
+}
+
+sub cmd_delete_ignore_pattern {
+	my ($index) = @_;
+	if ($index =~ /^[0-9]*$/ and defined($ignorePatterns[$index-1])) {
+		splice(@ignorePatterns, ($index-1), 1);
+		save_to_settings_file();
+	}
+	else {
+		print_info("Bad index");
+		return 0;
+	}
+}
+
 sub trim {
 	my $string = shift;
 	$string =~ s/^\s+//;
@@ -244,6 +275,47 @@ sub trim {
 
 sub print_info {
 	Irssi::printformat(MSGLEVEL_CLIENTCRAP, 'irssinotifier', join(" ", @_));
+}
+
+sub load_from_settings_file {
+	my $ret = open(SETTINGSFILE, $settingsfile);
+
+	if (!$ret) {
+		if (-e $settingsfile) {
+			print_info("Couldn't open the settings file \"$settingsfile\" for reading.");
+		}
+		return;
+	}
+	
+	local $/ = "\n";
+	my $line;
+	
+	while($line = <SETTINGSFILE>) {
+		chomp $line;
+		my @linedata = split(/\t/, $line, 2);
+		
+		if($linedata[0] eq 'ignore_pattern') {
+			push(@ignorePatterns, $linedata[1]);
+		}
+	}
+	
+	close(SETTINGSFILE);
+}
+
+sub save_to_settings_file {
+	my $ret = open (SETTINGSFILE, '>'.$settingsfile);
+	
+	if (!$ret) {
+		print_info("Couldn't open the settings file \"$settingsfile\" for writing.");
+		return;
+	}
+	
+	foreach my $pattern (@ignorePatterns) {
+		print SETTINGSFILE "ignore_pattern\t$pattern\n";
+	}
+	
+	close(SETTINGSFILE);
+	print_info("Settings saved successfully.") if (!$quiet);
 }
 
 Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
@@ -261,6 +333,10 @@ Irssi::signal_add('setup changed', 'setup_keypress_handler');
 Irssi::command_bind('irssinotifierwp_add_ignore_channel', 'cmd_add_ignore_channel');
 Irssi::command_bind('irssinotifierwp_delete_ignore_channel', 'cmd_delete_ignore_channel');
 
+Irssi::command_bind('irssinotifierwp_add_ignore_pattern', 'cmd_add_ignore_pattern');
+Irssi::command_bind('irssinotifierwp_list_ignore_patterns', 'cmd_list_ignore_patterns');
+Irssi::command_bind('irssinotifierwp_delete_ignore_pattern', 'cmd_delete_ignore_pattern');
+
 Irssi::signal_add_first('complete word', 'sig_complete_channel');
 
 Irssi::theme_register([
@@ -269,3 +345,4 @@ Irssi::theme_register([
 ]);
 
 setup_keypress_handler();
+load_from_settings_file();
