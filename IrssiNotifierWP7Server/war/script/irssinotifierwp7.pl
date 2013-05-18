@@ -3,6 +3,7 @@
 
 use Irssi;
 use POSIX;
+use Encode;
 require CGI::Util;
 use vars qw($VERSION %IRSSI);
 
@@ -93,13 +94,13 @@ sub dangerous_string {
 
 sub hilite {
 	if (!Irssi::settings_get_str('irssinotifierwp_api_token')) {
-		Irssi::print("Irssi Notifier: Set API token to send notifications: /set irssinotifierwp_api_token [token]");
+		print_info("Set API token to send notifications: /set irssinotifierwp_api_token [token]");
 		return;
 	}
 
 	`/usr/bin/env wget --version`;
 	if ($? != 0) {
-		Irssi::print("Irssi Notifier: You'll need to install Wget to use Irssi Notifier");
+		print_info("You'll need to install Wget to use Irssi Notifier");
 		return;
 	}
 	my $encoding;
@@ -132,7 +133,7 @@ sub pipe_and_fork {
 	
 	my $api_token = Irssi::settings_get_str('irssinotifierwp_api_token');
 	if (dangerous_string $api_token) {
-		Irssi::print("Irssi Notifier: Api token cannot contain backticks, double quotes or backslashes");
+		print_info("Api token cannot contain backticks, double quotes or backslashes");
 		return;
 	}
 	
@@ -140,7 +141,7 @@ sub pipe_and_fork {
 	
 	my $pid = fork();
 	if (!defined($pid)) {
-		Irssi::print("Can't fork() - aborting");
+		print_info("Can't fork() - aborting");
 		close($read_handle);
 		close($write_handle);
 		return;
@@ -187,7 +188,7 @@ sub pipe_input {
 	close($read_handle);
 	Irssi::input_remove($$pipetag);
 	if(length($line) > 0){
-		Irssi::print("Irssi Notifier: $line");
+		print_info("$line");
 	}
 	$in_progress = 0;
 	if(@messageQueue > 0){
@@ -212,7 +213,7 @@ sub cmd_add_ignore_channel {
 	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
 	push(@ignored_channels, trim(lc($channel)));
 	Irssi::settings_set_str("irssinotifierwp_ignore_channels", join(" ", @ignored_channels));
-	Irssi::print("Irssi Notifier: Added ingored channel: $channel");
+	print_info("Added ingored channel: $channel");
 }
 
 sub cmd_delete_ignore_channel {
@@ -221,7 +222,7 @@ sub cmd_delete_ignore_channel {
 	my @ignored_channels = split(/ /, Irssi::settings_get_str("irssinotifierwp_ignore_channels"));
 	@ignored_channels = grep {$_ ne $removedchannel} @ignored_channels;
 	Irssi::settings_set_str("irssinotifierwp_ignore_channels", join(" ", @ignored_channels));
-	Irssi::print("Irssi Notifier: Removed ingored channel: $removedchannel");
+	print_info("Removed ingored channel: $removedchannel");
 }
 
 sub sig_complete_channel {
@@ -241,6 +242,10 @@ sub trim {
 	return $string;
 }
 
+sub print_info {
+	Irssi::printformat(MSGLEVEL_CLIENTCRAP, 'irssinotifier', join(" ", @_));
+}
+
 Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_away_only', false);
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_ignore_active_window', false);
@@ -257,5 +262,10 @@ Irssi::command_bind('irssinotifierwp_add_ignore_channel', 'cmd_add_ignore_channe
 Irssi::command_bind('irssinotifierwp_delete_ignore_channel', 'cmd_delete_ignore_channel');
 
 Irssi::signal_add_first('complete word', 'sig_complete_channel');
+
+Irssi::theme_register([
+	'irssinotifier',
+	'{line_start}{hilight Irssi Notifier:} $0',
+]);
 
 setup_keypress_handler();
