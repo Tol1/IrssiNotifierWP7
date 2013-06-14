@@ -170,6 +170,7 @@ response.addCookie(languageCookie);
 			<li>/set irssinotifierwp_away_only [ON/OFF] - <fmt:message key="awaySettingDescription"/></li>
 			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
 			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
+			<li>/set irssinotifierwp_screen_detached_only [ON/OFF] - <fmt:message key="screenDetachedOnlySettingDescription"/></li>
 		</ul>
 		<p>
 			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
