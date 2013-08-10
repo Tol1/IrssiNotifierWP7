@@ -17,6 +17,7 @@ public class IrssiNotifierUser {
 	@Unindexed public int toastNotificationInterval;
 	@Unindexed public long lastToastNotificationSent;
 	@Unindexed public TileType tileTemplate;
+	@Unindexed public String timeZoneOffset;
 	
 	public IrssiNotifierUser(){}
 	

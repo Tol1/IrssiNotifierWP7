@@ -3,6 +3,12 @@ package com.tol1.irssinotifier.server.datamodels;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.persistence.Id;
 import javax.xml.parsers.*;
@@ -52,7 +58,7 @@ public class Message {
 			"<wp:Tile Template=\"IconicTile\">" +
 			"<wp:WideContent1/>" +
 			"<wp:WideContent2/>" +
-			"<wp:WideContent3 Action=\"Clear\"/>" +
+			"<wp:WideContent3/>" +
 			"<wp:Count/>" +
 			"</wp:Tile>" +
 			"</wp:Notification>";
@@ -73,6 +79,11 @@ public class Message {
 	
 	private String getFromString() {
 		return channel.equals("PRIVATE") ? nick : nick + " @ " + channel;
+	}
+	
+	private String getTimeAtTimezone(String timeZoneOffset) {
+		DateFormat format = new SimpleDateFormat("HH:mm:ss");
+		return format.format(this.getDateInTimeZone("GMT"+timeZoneOffset));
 	}
 	
 	public String GenerateToastNotification() throws XmlGeneratorException{
@@ -115,9 +126,12 @@ public class Message {
 		}
 	}
 	
-	public String GenerateTileNotification(int countValue, String tileUrl, TileType template) throws XmlGeneratorException{
+	public String GenerateTileNotification(int countValue, String tileUrl, TileType template, String timeZoneOffset) throws XmlGeneratorException{
 		if(template == null) {
 			template = TileType.WP7;
+		}
+		if(timeZoneOffset == null) {
+			timeZoneOffset = "";
 		}
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -129,13 +143,14 @@ public class Message {
 				break;
 			case WP8_FLIP:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP8_FLIP_TEMPLATE.getBytes("UTF-8")));
-				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+message));
-				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+message));
+				doc.getElementsByTagName("wp:WideBackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+getTimeAtTimezone(timeZoneOffset)+"\n"+message));
+				doc.getElementsByTagName("wp:BackContent").item(0).appendChild(doc.createTextNode(getFromString()+"\n"+getTimeAtTimezone(timeZoneOffset)+"\n"+message));
 				break;
 			case WP8_ICONIC:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP8_ICONIC_TEMPLATE.getBytes("UTF-8")));
 				doc.getElementsByTagName("wp:WideContent1").item(0).appendChild(doc.createTextNode(getFromString()));
-				doc.getElementsByTagName("wp:WideContent2").item(0).appendChild(doc.createTextNode(message));
+				doc.getElementsByTagName("wp:WideContent2").item(0).appendChild(doc.createTextNode(getTimeAtTimezone(timeZoneOffset)));
+				doc.getElementsByTagName("wp:WideContent3").item(0).appendChild(doc.createTextNode(message));
 				break;
 			default:
 				doc = docBuilder.parse(new ByteArrayInputStream(WP7_TEMPLATE.getBytes("UTF-8")));
@@ -165,5 +180,20 @@ public class Message {
 		} catch (IOException e) {
 			throw new XmlGeneratorException(e);
 		}
+	}
+	
+	public Date getDateInTimeZone(String timeZoneId) {
+		Calendar temp = new GregorianCalendar(TimeZone.getTimeZone(timeZoneId));
+		temp.setTimeInMillis(this.timestamp);
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, temp.get(Calendar.YEAR));
+		cal.set(Calendar.MONTH, temp.get(Calendar.MONTH));
+		cal.set(Calendar.DAY_OF_MONTH, temp.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, temp.get(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.MINUTE, temp.get(Calendar.MINUTE));
+		cal.set(Calendar.SECOND, temp.get(Calendar.SECOND));
+		cal.set(Calendar.MILLISECOND, temp.get(Calendar.MILLISECOND));
+	
+		return cal.getTime();
 	}
 }

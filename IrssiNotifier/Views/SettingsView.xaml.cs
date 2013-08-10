@@ -340,7 +340,15 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
 			                            "apiToken=" + UserId + "&guid=" +
-			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version+"&wp8=" + App.IsTargetedVersion);
+			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version + "&wp8=" +
+										App.IsTargetedVersion + "&timezone=" + HttpUtility.UrlEncode(GenerateTimestampOffsetString()));
+		}
+
+		private static string GenerateTimestampOffsetString()
+		{
+			var hours = string.Format("{0:+00;-00;00}", DateTimeOffset.Now.Offset.Hours);
+			var minutes = DateTimeOffset.Now.Offset.Minutes.ToString("D2");
+			return hours + minutes;
 		}
 
 		private bool SkipUpdateBackend { get; set; }
