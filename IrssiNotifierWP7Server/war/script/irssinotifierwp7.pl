@@ -27,6 +27,8 @@ my $lastKeyboardActivity = time;
 my $in_progress = 0;
 my @messageQueue;
 
+my $screen_socket_path;
+
 sub private {
 	my ($server, $msg, $nick, $address) = @_;
 	$lastMsg = $msg;
@@ -45,6 +47,17 @@ sub public {
 	$lastTarget = $target;
 }
 
+sub screen_attached {
+    if (!$screen_socket_path || !defined($ENV{STY})) {
+        return 1;
+    }
+    my $socket = $screen_socket_path . "/" . $ENV{'STY'};
+    if (-e $socket && ((stat($socket))[2] & 00100) != 0) {
+        return 1;
+    }
+    return 0;
+}
+
 sub print_text {
 	my ($dest, $text, $stripped) = @_;
 
@@ -52,6 +65,7 @@ sub print_text {
 	if (
 		($dest->{level} & ($opt)) && (($dest->{level} & MSGLEVEL_NOHILIGHT) == 0) &&
 		(!Irssi::settings_get_bool("irssinotifierwp_away_only") || $lastServer->{usermode_away}) &&
+		(!Irssi::settings_get_bool("irssinotifierwp_screen_detached_only") || !screen_attached()) &&
 		(!Irssi::settings_get_bool("irssinotifierwp_ignore_active_window") || ($dest->{window}->{refnum} != (Irssi::active_win()->{refnum}))) &&
 		activity_allows_hilight()
 	) {
@@ -175,10 +189,20 @@ sub event_key_pressed {
 	$lastKeyboardActivity = time;
 }
 
+my $screen_ls = `LC_ALL="C" screen -ls`;
+if ($screen_ls !~ /^No Sockets found/s) {
+    $screen_ls =~ /^.+\d+ Sockets? in ([^\n]+)\.\n.+$/s;
+    $screen_socket_path = $1;
+} else {
+    $screen_ls =~ /^No Sockets found in ([^\n]+)\.\n.+$/s;
+    $screen_socket_path = $1;
+}
+
 Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_away_only', false);
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_ignore_active_window', false);
 Irssi::settings_add_int('IrssiNotifierWP', 'irssinotifierwp_require_idle_seconds', 0);
+Irssi::settings_add_bool('IrssinotifierWP', 'irssinotifierwp_screen_detached_only', 1);
 
 Irssi::signal_add('message irc action', 'public');
 Irssi::signal_add('message public', 'public');
