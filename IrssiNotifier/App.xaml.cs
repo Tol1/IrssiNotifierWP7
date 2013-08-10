@@ -11,10 +11,10 @@ namespace IrssiNotifier
 {
 	public partial class App : Application
 	{
-		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
+		public static readonly int Version = 2;
+		public static readonly string Baseaddress = "https://"+Version+"-dot-irssinotifierwp.appspot.com/";
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
-		public static readonly int Version = 1;
 
 		public static readonly string Hilitepageurl = "/Pages/HilitePage.xaml?NavigatedFrom=Tile";
 
@@ -30,6 +30,18 @@ namespace IrssiNotifier
 		public static PhoneApplicationPage GetCurrentPage()
 		{
 			return ((App)Current).RootFrame.Content as PhoneApplicationPage;
+		}
+
+		public static readonly Uri TileFlipWideUri = new Uri("/Images/Tile_Flip_Wide.png", UriKind.Relative);
+		public static readonly Uri TileFlipNormalUri = new Uri("/Images/Tile.png", UriKind.Relative);
+		public static readonly Uri TileIconicSmallUri = new Uri("/Images/Iconic_Small.png", UriKind.Relative);
+		public static readonly Uri TileIconicMediumUri = new Uri("/Images/Iconic_Medium.png", UriKind.Relative);
+
+		private static readonly Version TargetedVersion = new Version(7, 10, 8858);		//WP7.8 -> tuki erikokoisille livetiilille
+
+		public static bool IsTargetedVersion
+		{
+			get { return Environment.OSVersion.Version >= TargetedVersion; }
 		}
 
 		/// <summary>
@@ -89,14 +101,7 @@ namespace IrssiNotifier
 		// This code will not execute when the application is reactivated
 		private void ApplicationLaunching(object sender, LaunchingEventArgs e)
 		{
-			try
-			{
-				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
-			}
-			catch (InvalidOperationException)
-			{
-				_pushContext = PushContext.Current;
-			}
+			_pushContext = PushContext.Current ?? new PushContext(Channelname, Servicename, AllowedDomains);
 			_pushContext.Error += OnPushContextError;
 		}
 
@@ -104,14 +109,7 @@ namespace IrssiNotifier
 		// This code will not execute when the application is first launched
 		private void ApplicationActivated(object sender, ActivatedEventArgs e)
 		{
-			try
-			{
-				_pushContext = new PushContext(Channelname, Servicename, AllowedDomains);
-			}
-			catch (InvalidOperationException)
-			{
-				_pushContext = PushContext.Current;
-			}
+			_pushContext = PushContext.Current ?? new PushContext(Channelname, Servicename, AllowedDomains);
 			_pushContext.Error += OnPushContextError;
 		}
 

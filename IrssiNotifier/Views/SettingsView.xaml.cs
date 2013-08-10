@@ -9,6 +9,7 @@ using System.Windows.Media;
 using IrssiNotifier.Interfaces;
 using IrssiNotifier.PushNotificationContext;
 using IrssiNotifier.Resources;
+using IrssiNotifier.Utils;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json.Linq;
@@ -79,7 +80,19 @@ namespace IrssiNotifier.Views
 			{
 				if (PushContext.Current.IsTileEnabled != value)
 				{
-					PinTile(value);
+					if(value && App.IsTargetedVersion)
+					{
+						NotifyPropertyChanged("IsTileEnabled");
+						var settingsPage = App.GetCurrentPage() as IViewContainerPage;
+						if (settingsPage != null)
+						{
+							settingsPage.View = new Wp8TileSelectionView();
+						}
+					}
+					else
+					{
+						PinTile(value);
+					}
 				}
 			}
 		}
@@ -133,6 +146,12 @@ namespace IrssiNotifier.Views
 					NotifyPropertyChanged("IntervalBrush");
 				}
 			}
+		}
+
+		public TileType TileType
+		{
+			get { return GetOrCreate("Settings.TileType", TileType.Flip); }
+			set { SetOrCreate("Settings.TileType", value); }
 		}
 
 		private bool _isBusy;
@@ -321,16 +340,34 @@ namespace IrssiNotifier.Views
 			webclient.Headers["Content-type"] = "application/x-www-form-urlencoded";
 			webclient.UploadStringAsync(new Uri(App.Baseaddress + "client/update"), "POST",
 			                            "apiToken=" + UserId + "&guid=" +
-			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version);
+			                            App.AppGuid + "&newUrl=" + channelUri + "&version=" + App.Version + "&wp8=" +
+										App.IsTargetedVersion + "&timezone=" + HttpUtility.UrlEncode(GenerateTimestampOffsetString()));
+		}
+
+		private static string GenerateTimestampOffsetString()
+		{
+			var hours = string.Format("{0:+00;-00;00}", DateTimeOffset.Now.Offset.Hours);
+			var minutes = DateTimeOffset.Now.Offset.Minutes.ToString("D2");
+			return hours + minutes;
 		}
 
 		private bool SkipUpdateBackend { get; set; }
 
-		private static void ClearLocalTileCount(bool success = true)
+		private void ClearLocalTileCount(bool success = true)
 		{
 			if (success)
 			{
-				foreach (var tile in ShellTile.ActiveTiles)
+				var tile = GetLiveTile();
+				if (tile == null) return;
+				if(TileType == TileType.Iconic && App.IsTargetedVersion)
+				{
+					tile.Update(IconicTileDataReflectionHelper.ClearTile());
+				}
+				else if(TileType == TileType.Flip && App.IsTargetedVersion)
+				{
+					tile.Update(FlipTileDataReflectionHelper.ClearTile());
+				}
+				else
 				{
 					tile.Update(new StandardTileData {Count = 0});
 				}
@@ -395,28 +432,45 @@ namespace IrssiNotifier.Views
 			                            App.AppGuid + "&" + param.ToString().ToLower() + "=" + value + "&version=" + App.Version);
 		}
 
-		private void PinTile(bool value)
+		internal static ShellTile GetLiveTile()
 		{
-			var hiliteTile = ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+			return ShellTile.ActiveTiles.FirstOrDefault(tile => tile.NavigationUri.ToString() == App.Hilitepageurl);
+		}
+
+		internal void PinTile(bool value, TileType previousType = TileType.Wp7)
+		{
+			var hiliteTile = GetLiveTile();
 			if (value && hiliteTile == null)
 			{
 				var answer = MessageBox.Show(AppResources.PinLiveTileText, AppResources.PinLiveTileTitle, MessageBoxButton.OKCancel);
 				if (answer == MessageBoxResult.OK)
 				{
-					UpdateSettings(Settings.Tile, true, success =>
+					var settingValue = "true";
+					if(App.IsTargetedVersion)
+					{
+						settingValue = TileType.ToString();
+					}
+					UpdateSettings(Settings.Tile, settingValue, success =>
 					                             	{
 					                             		if (success)
 					                             		{
                                                             PushContext.Current.IsTileEnabled = true;
                                                             NotifyPropertyChanged("IsTileEnabled");
-					                             			var newTileData = new StandardTileData
-					                             			                  	{
-					                             			                  		BackgroundImage =
-					                             			                  			new Uri("/Images/Tile.png", UriKind.Relative),
-					                             			                  		Count = 0
-					                             			                  	};
-					                             			ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
-					                             			                 newTileData);
+															if (App.IsTargetedVersion)
+															{
+																CreateWp8Tile();
+															}
+															else
+															{
+																var newTileData = new StandardTileData
+																                  	{
+																                  		BackgroundImage =
+																                  			new Uri("/Images/Tile.png", UriKind.Relative),
+																                  		Count = 0
+																                  	};
+																ShellTile.Create(new Uri(App.Hilitepageurl, UriKind.Relative),
+																                 newTileData);
+															}
 					                             		}
 					                             		else
 					                             		{
@@ -433,15 +487,26 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				UpdateSettings(Settings.Tile, value, success =>
+				var settingValue = "true";
+				if (App.IsTargetedVersion)
+				{
+					settingValue = TileType.ToString();
+				}
+				UpdateSettings(Settings.Tile, settingValue, success =>
 				                              	{
 				                              		if (success)
 				                              		{
+														if(value && App.IsTargetedVersion && previousType != TileType && hiliteTile != null)
+														{
+															hiliteTile.Delete();
+															CreateWp8Tile();
+														}
 				                              			PushContext.Current.IsTileEnabled = value;
 				                              		}
 				                              		else
 				                              		{
 				                              			PushContext.Current.IsTileEnabled = !value;
+				                              			TileType = previousType;
 				                              		}
 				                              		NotifyPropertyChanged("IsTileEnabled");
 				                              	});
@@ -455,6 +520,33 @@ namespace IrssiNotifier.Views
 					hiliteTile.Delete();
 				}
 			}*/
+		}
+
+		private void CreateWp8Tile()
+		{
+			TileReflectionHelper tileData;
+			if (TileType == TileType.Iconic)
+			{
+				tileData =
+					new IconicTileDataReflectionHelper
+						{
+							Title = "Irssi Notifier",
+							Count = 0,
+							IconImageUri = App.TileIconicMediumUri,
+							SmallIconImageUri = App.TileIconicSmallUri
+						};
+			}
+			else
+			{
+				tileData = new FlipTileDataReflectionHelper
+				           	{
+				           		SmallBackgroundImageUri = App.TileFlipNormalUri,
+				           		BackgroundImageUri = App.TileFlipNormalUri,
+				           		WideBackgroundImageUri = App.TileFlipWideUri,
+				           		Count = 0
+				           	};
+			}
+			tileData.Create(new Uri(App.Hilitepageurl, UriKind.Relative), true);
 		}
 
 		private void LogoutClick(object sender, RoutedEventArgs e)
@@ -574,5 +666,12 @@ namespace IrssiNotifier.Views
 		Tile,
 		ClearCount,
 		Raw
+	}
+
+	public enum TileType
+	{
+		Wp7,
+		Iconic,
+		Flip
 	}
 }

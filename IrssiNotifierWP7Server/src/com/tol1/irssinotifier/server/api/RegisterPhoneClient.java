@@ -14,6 +14,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.RegisterSuccessMessage;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.OldVersionException;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -40,11 +41,20 @@ public class RegisterPhoneClient extends HttpServlet {
 				IrssiNotifier.printError(resp.getWriter(), "GUID missing");
 				return;
 			}
+			
+			boolean wp8CompliantPhone = Boolean.parseBoolean(req.getParameter("wp8"));
+			
         	String id = user.getUserId();
         	
         	UUID uuid = UUID.randomUUID();
         	
         	IrssiNotifierUser iNUser = new IrssiNotifierUser(id, guid, uuid.toString());
+        	if(wp8CompliantPhone) {
+        		iNUser.tileTemplate = TileType.WP8_FLIP;
+        	}
+        	else{
+        		iNUser.tileTemplate = TileType.WP7;
+        	}
         	
         	dao.ofy().put(iNUser);
         	RegisterSuccessMessage message = new RegisterSuccessMessage(uuid.toString());

@@ -34,3 +34,5 @@ IrssiNotifierWP7Server/war/WEB-INF/classes/
 appengine-generated
 testi/*
 IrssiNotifier/SubmissionInfo/ManualTestResults.xml
+/*.txt
+Ignored/

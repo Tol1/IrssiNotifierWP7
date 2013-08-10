@@ -4,6 +4,46 @@
     <servlet-name>com.tol1.irssinotifier.server.login.LoginUser</servlet-name>
     <servlet-class>com.tol1.irssinotifier.server.login.LoginUser</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.login.LogoutUser</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LogoutUser</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.login.LogoutSuccess</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.login.LogoutSuccess</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageHandler</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.MessageHandler</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.api.MessageList</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.api.MessageList</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.tol1.irssinotifier.server.cron.Clear</servlet-name>
+    <servlet-class>com.tol1.irssinotifier.server.cron.Clear</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>com.google.appengine.tools.appstats.AppstatsServlet</servlet-name>
+    <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.login.LoginUser</servlet-name>
     <url-pattern>/client/login</url-pattern>
@@ -17,10 +57,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.login.LogoutUser</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.login.LogoutUser</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.login.LogoutUser</servlet-name>
     <url-pattern>/client/logout</url-pattern>
@@ -34,10 +70,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.login.LoginSuccess</servlet-name>
     <url-pattern>/client/login/loginsuccess</url-pattern>
@@ -51,10 +83,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.login.LogoutSuccess</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.login.LogoutSuccess</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.login.LogoutSuccess</servlet-name>
     <url-pattern>/client/logout/logoutsuccess</url-pattern>
@@ -68,10 +96,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.api.RegisterPhoneClient</servlet-name>
     <url-pattern>/client/register</url-pattern>
@@ -85,10 +109,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.api.MessageHandler</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.api.MessageHandler</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.api.MessageHandler</servlet-name>
     <url-pattern>/irssi/message</url-pattern>
@@ -102,10 +122,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.api.UpdateChannelUrl</servlet-name>
     <url-pattern>/client/update</url-pattern>
@@ -119,10 +135,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.api.UpdateSettings</servlet-name>
     <url-pattern>/client/settings</url-pattern>
@@ -136,10 +148,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.api.MessageList</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.api.MessageList</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.api.MessageList</servlet-name>
     <url-pattern>/client/messages</url-pattern>
@@ -153,10 +161,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.tol1.irssinotifier.server.cron.Clear</servlet-name>
-    <servlet-class>com.tol1.irssinotifier.server.cron.Clear</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.tol1.irssinotifier.server.cron.Clear</servlet-name>
     <url-pattern>/cron/clear</url-pattern>
@@ -170,10 +174,6 @@
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
-  <servlet>
-    <servlet-name>com.google.appengine.tools.appstats.AppstatsServlet</servlet-name>
-    <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
     <servlet-name>com.google.appengine.tools.appstats.AppstatsServlet</servlet-name>
     <url-pattern>/appstats/*</url-pattern>

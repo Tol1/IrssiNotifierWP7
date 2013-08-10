@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tol1.irssinotifier.server.IrssiNotifier;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages.ChannelStatusMessage;
+import com.tol1.irssinotifier.server.enums.TileType;
 import com.tol1.irssinotifier.server.exceptions.*;
 import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
@@ -29,6 +30,8 @@ public class UpdateChannelUrl extends HttpServlet {
 		String id = req.getParameter("apiToken");
 		String guid = req.getParameter("guid");
 		String newUrl = req.getParameter("newUrl");
+		boolean wp8CompliantPhone = Boolean.parseBoolean(req.getParameter("wp8"));
+		String timeZoneOffset = req.getParameter("timezone");
 		
 		if(newUrl == null){
 			IrssiNotifier.printError(resp.getWriter(), "Anna Url");
@@ -62,6 +65,21 @@ public class UpdateChannelUrl extends HttpServlet {
 					user.tileCount = 0;
 					userSettingsChanged = true;
 					IrssiNotifier.log.info("Käyttäjän "+id+" tile count nollattu");
+				}
+				if(wp8CompliantPhone && (user.tileTemplate != TileType.WP8_FLIP && user.tileTemplate != TileType.WP8_ICONIC)) {
+					user.tileTemplate = TileType.WP8_FLIP;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin on nyt yhteensopiva wp8-tiilien kanssa, siirrytään käyttämään fliptile-templatea");
+				}
+				else if(!wp8CompliantPhone && user.tileTemplate != TileType.WP7){
+					user.tileTemplate = TileType.WP7;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin ei ole (enää) yhteensopiva wp8-tiilien kanssa, käytetään wp7-templatea");
+				}
+				if(timeZoneOffset != null && (user.timeZoneOffset == null || !user.timeZoneOffset.equals(timeZoneOffset))) {
+					user.timeZoneOffset = timeZoneOffset;
+					userSettingsChanged = true;
+					IrssiNotifier.log.info("Käyttäjän "+id+" puhelin on nyt aikavyöhykkeellä GMT"+timeZoneOffset);
 				}
 				if(userSettingsChanged){
 					dao.ofy().put(user);
