@@ -108,18 +108,22 @@ response.addCookie(languageCookie);
 					<fmt:message key="currentStatusTitle"/>
 					<ul>
 						<li>
-							<fmt:message key="toastStatus">
-								<fmt:param>
-									<% if(inUser.sendToastNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
-								</fmt:param>
-							</fmt:message>
+							<span class="white">
+								<fmt:message key="toastStatus">
+									<fmt:param>
+										<% if(inUser.sendToastNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
+									</fmt:param>
+								</fmt:message>
+							</span>
 						</li>
 						<li>
-							<fmt:message key="tileStatus">
-								<fmt:param>
-									<% if(inUser.sendTileNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
-								</fmt:param>
-							</fmt:message>
+							<span class="white">
+								<fmt:message key="tileStatus">
+									<fmt:param>
+										<% if(inUser.sendTileNotifications){ %><fmt:message key="enabledText"/><%}else{ %><fmt:message key="disabledText"/><%} %>
+									</fmt:param>
+								</fmt:message>
+							</span>
 						</li>
 					</ul>
 				<%
@@ -167,19 +171,59 @@ response.addCookie(languageCookie);
 			<fmt:message key="settingsTitle"/>
 		</p>
 		<ul>
-			<li>/set irssinotifierwp_away_only [ON/OFF] - <fmt:message key="awaySettingDescription"/></li>
-			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
-			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
-			<li>/set irssinotifierwp_screen_detached_only [ON/OFF] - <fmt:message key="screenDetachedOnlySettingDescription"/></li>
-			<li>/set irssinotifierwp_ignore_channels [list] - <fmt:message key="channelIgnoreSettingDescription"/></li>
+			<li>
+				<span class="white">
+					/set irssinotifierwp_away_only [ON/OFF]
+				</span>
+				 - <fmt:message key="awaySettingDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/set irssinotifierwp_ignore_active_window [ON/OFF]
+				</span>
+				 - <fmt:message key="activeSettingDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/set irssinotifierwp_require_idle_seconds [num]
+				</span>
+				 - <fmt:message key="idleSettingDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/set irssinotifierwp_screen_detached_only [ON/OFF]
+				</span>
+				 - <fmt:message key="screenDetachedOnlySettingDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/set irssinotifierwp_ignore_channels [list]
+				</span>
+				 - <fmt:message key="channelIgnoreSettingDescription"/>
+			 </li>
 		</ul>
 		<p class="header">
 			<fmt:message key="commandsTitle"/>
 		</p>
 		<ul>
-			<li>/irssinotifierwp_add_ignore_pattern [text] - <fmt:message key="addIgnorePatternDescription"/></li>
-			<li>/irssinotifierwp_list_ignore_patterns - <fmt:message key="listIgnorePatternsDescription"/></li>
-			<li>/irssinotifierwp_delete_ignore_pattern [num] - <fmt:message key="deleteIgnorePatternDescription"/></li>
+			<li>
+				<span class="white">
+					/irssinotifierwp_add_ignore_pattern [text]
+				</span>
+				 - <fmt:message key="addIgnorePatternDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/irssinotifierwp_list_ignore_patterns
+				</span>
+				 - <fmt:message key="listIgnorePatternsDescription"/>
+			</li>
+			<li>
+				<span class="white">
+					/irssinotifierwp_delete_ignore_pattern [num]
+				</span>
+				 - <fmt:message key="deleteIgnorePatternDescription"/>
+			</li>
 		</ul>
 		<p>
 			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>

@@ -15,7 +15,7 @@ a:VISITED {
 	color: #00BBBB;
 }
 
-.root{
+.root {
 	width: 650px;
 	margin-left: 100px;
 	position: relative;
@@ -35,11 +35,15 @@ a:VISITED {
 	padding-top: 15px;
 }
 
-p.header{
+p.header {
 	font-size: larger;
 	margin-bottom: 10px;
 }
 
-span.addition{
+span.addition {
 	font-size: small;
+}
+
+span.white {
+	color: #FFFFFF;
 }
