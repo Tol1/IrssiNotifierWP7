@@ -171,6 +171,15 @@ response.addCookie(languageCookie);
 			<li>/set irssinotifierwp_ignore_active_window [ON/OFF] - <fmt:message key="activeSettingDescription"/></li>
 			<li>/set irssinotifierwp_require_idle_seconds [num] - <fmt:message key="idleSettingDescription"/></li>
 			<li>/set irssinotifierwp_screen_detached_only [ON/OFF] - <fmt:message key="screenDetachedOnlySettingDescription"/></li>
+			<li>/set irssinotifierwp_ignore_channels [list] - <fmt:message key="channelIgnoreSettingDescription"/></li>
+		</ul>
+		<p class="header">
+			<fmt:message key="commandsTitle"/>
+		</p>
+		<ul>
+			<li>/irssinotifierwp_add_ignore_pattern [text] - <fmt:message key="addIgnorePatternDescription"/></li>
+			<li>/irssinotifierwp_list_ignore_patterns - <fmt:message key="listIgnorePatternsDescription"/></li>
+			<li>/irssinotifierwp_delete_ignore_pattern [num] - <fmt:message key="deleteIgnorePatternDescription"/></li>
 		</ul>
 		<p>
 			<a href="/script/irssinotifierwp7.pl"><fmt:message key="downloadScriptText"/></a>
