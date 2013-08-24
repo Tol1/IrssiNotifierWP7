@@ -15,7 +15,7 @@ $VERSION = "2";
 	description	=> "Send notifications about Irssi highlights to server",
 	license		=> "Apache License, version 2.0",
 	url			=> "http://irssinotifierwp.appspot.com",
-	changed		=> "2013-05-18"
+	changed		=> "2013-08-24"
 );
 
 my $settingsfile = Irssi::get_irssi_dir."/irssinotifierwp.conf";
@@ -184,7 +184,8 @@ sub pipe_and_fork {
 		my $data = "--post-data \"apiToken=$api_token\&message=$message\&channel=$target\&nick=$nick\&version=$VERSION\"";
 		
 		my $result = `wget --no-check-certificate --user-agent="irssinotifierWP7script/$VERSION" -qO- /dev/null $data https://irssinotifierwp.appspot.com/irssi/message`;
-		if ($? != 0) {
+		my $statuscode = $? & 255;
+		if ($statuscode != 0) {
 			# Something went wrong, might be network error or authorization issue. Probably no need to alert user, though.
 			# Irssi::print("Irssi Notifier: Sending hilight to server failed, check http://irssinotifierwp.appspot.com for updates");
 			# return;
