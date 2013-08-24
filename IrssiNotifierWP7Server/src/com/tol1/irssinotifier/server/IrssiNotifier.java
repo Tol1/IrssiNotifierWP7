@@ -9,7 +9,6 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.NotFoundException;
-import com.tol1.irssinotifier.server.api.MessageHandler;
 import com.tol1.irssinotifier.server.datamodels.IrssiNotifierUser;
 import com.tol1.irssinotifier.server.datamodels.StatusMessages;
 import com.tol1.irssinotifier.server.exceptions.UserNotFoundException;
@@ -18,6 +17,9 @@ import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 import flexjson.JSONSerializer;
 
 public class IrssiNotifier {
+	
+	public static final int IRSSIAPIVERSION = 1;
+	public static final int PHONEAPIVERSION = 1;
 	
 	public static UserService userService = UserServiceFactory.getUserService();
 	public static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -86,7 +88,7 @@ public class IrssiNotifier {
 			return false;
 		}
 		try{
-			int serviceVersion = script?MessageHandler.VERSION:getCurrentVersion();
+			int serviceVersion = script?IRSSIAPIVERSION:PHONEAPIVERSION;
 			int version = Integer.parseInt(versionString);
 			return serviceVersion <= version;
 		}

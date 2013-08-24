@@ -28,7 +28,6 @@ import com.tol1.irssinotifier.server.utils.ObjectifyDAO;
 
 @SuppressWarnings("serial")
 public class MessageHandler extends HttpServlet {
-	public static final int VERSION = 1;
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -152,7 +151,7 @@ public class MessageHandler extends HttpServlet {
 		queue.add(withUrl(req.getRequestURI()).etaMillis(System.currentTimeMillis()+(60*1000*((int)Math.pow(retries+1, 2))))
 				.param("nick", req.getParameter("nick")).param("channel", req.getParameter("channel"))
 				.param("message", req.getParameter("message")).param("apiToken", id).param("retries", retries+1+"")
-				.param(typeIdentifier, "true").param("version", VERSION+""));
+				.param(typeIdentifier, "true").param("version", IrssiNotifier.IRSSIAPIVERSION+""));
 	}
 	
 	public static HttpURLConnection DoSend(String payload, String type, String notificationClass, URL url) throws IOException{

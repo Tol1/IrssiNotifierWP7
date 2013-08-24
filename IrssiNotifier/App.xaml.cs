@@ -12,7 +12,8 @@ namespace IrssiNotifier
 	public partial class App : Application
 	{
 		public static readonly int Version = 2;
-		public static readonly string Baseaddress = "https://"+Version+"-dot-irssinotifierwp.appspot.com/";
+		//public static readonly string Baseaddress = "https://"+Version+"-dot-irssinotifierwp.appspot.com/";
+		public static readonly string Baseaddress = "https://irssinotifierwp.appspot.com/";
 		public static readonly string Servicename = "appengine.google.com";
 		public static readonly string Channelname = "IrssiNotifier";
 
