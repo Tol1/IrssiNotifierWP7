@@ -487,8 +487,8 @@ namespace IrssiNotifier.Views
 			}
 			else
 			{
-				var settingValue = "true";
-				if (App.IsTargetedVersion)
+				var settingValue = value?"true":"false";
+				if (value && App.IsTargetedVersion)
 				{
 					settingValue = TileType.ToString();
 				}
