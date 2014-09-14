@@ -348,7 +348,7 @@ Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_api_token', '');
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_away_only', false);
 Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_ignore_active_window', false);
 Irssi::settings_add_int('IrssiNotifierWP', 'irssinotifierwp_require_idle_seconds', 0);
-Irssi::settings_add_bool('IrssinotifierWP', 'irssinotifierwp_screen_detached_only', false);
+Irssi::settings_add_bool('IrssiNotifierWP', 'irssinotifierwp_screen_detached_only', false);
 Irssi::settings_add_str('IrssiNotifierWP', 'irssinotifierwp_ignore_channels', '');
 
 Irssi::signal_add('message irc action', 'public');
